@@ -333,3 +333,52 @@ it("keeps a clearly stronger same-family split instead of forced variety", () =>
       ?.question.id,
   ).toBe("strong");
 });
+it("blocks unmarked spelling text and name-property clues without rejecting semantic namesakes", () => {
+  const candidates = rankCandidates(
+    [
+      make("a", { custom: true, named: true }),
+      make("b", { custom: false, named: false }),
+    ],
+    [],
+  );
+  expect(
+    selectQuestion(
+      candidates,
+      [
+        {
+          id: "custom",
+          text: "Does their name contain the letter A?",
+          hint: "",
+        },
+      ],
+      [],
+    ),
+  ).toBeNull();
+  expect(
+    selectQuestion(
+      candidates,
+      [
+        {
+          id: "custom",
+          text: "Is their name long?",
+          hint: "",
+          property: "name",
+        },
+      ],
+      [],
+    ),
+  ).toBeNull();
+  expect(
+    selectQuestion(
+      candidates,
+      [
+        {
+          id: "named",
+          text: "Is this object named after its inventor?",
+          hint: "",
+        },
+      ],
+      [],
+    )?.question.id,
+  ).toBe("named");
+});

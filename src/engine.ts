@@ -69,7 +69,14 @@ export function rankCandidates(
 /** Semantic question selection, retaining the raw five-response information gain. */
 function isSemantic(question: Question): boolean {
   const metadata = question as Question & { kind?: string };
-  return metadata.kind !== "spelling" && !/^name(?:_|-)/i.test(question.id);
+  const orthography =
+    /\bname\b.*\b(?:letters?|contains?|starts?|ends?|length|spelling|spelled)\b|\bspell(?:ing|ed)?\b.*\bname\b/i;
+  return (
+    metadata.kind !== "spelling" &&
+    !/^name(?:_|-)/i.test(question.id) &&
+    question.property !== "name" &&
+    !orthography.test(question.text)
+  );
 }
 function questionFamily(question: Question): string | undefined {
   return (
