@@ -162,3 +162,76 @@ describe("adaptive questions", () => {
     expect(shouldGuess(strong.slice(0, 1), 0)).toBe(true);
   });
 });
+
+describe("aggregated question scoring", () => {
+  it("matches independent response/posterior entropy calculation for sparse weighted catalogs", () => {
+    const choices = [
+      "yes",
+      "probably",
+      "unknown",
+      "probably-not",
+      "no",
+    ] as const;
+    const yes = [0.65, 0.25, 0.05, 0.03, 0.02];
+    const no = [...yes].reverse();
+    const entropy = (weights: number[]) =>
+      weights.reduce((sum, p) => sum - (p > 0 ? p * Math.log2(p) : 0), 0);
+    for (let seed = 0; seed < 12; seed++) {
+      const characters = Array.from({ length: 19 }, (_, i) =>
+        make(
+          `c${i}`,
+          Object.fromEntries(
+            questions.map((q, j) => {
+              const value = (i * 7 + j * 3 + seed) % 4;
+              return [q.id, value < 2 ? null : value === 2];
+            }),
+          ),
+        ),
+      );
+      const candidates = rankCandidates(
+        characters,
+        seed % 2 ? [{ questionId: "a", answer: "probably" }] : [],
+      );
+      const prior = entropy(candidates.map((c) => c.probability));
+      const reference = questions
+        .map((question) => {
+          let expected = 0;
+          choices.forEach((_, index) => {
+            const joints = candidates.map((c) => {
+              const trait = c.character.traits[question.id];
+              return (
+                c.probability *
+                (trait === true
+                  ? yes[index]
+                  : trait === false
+                    ? no[index]
+                    : (yes[index] + no[index]) / 2)
+              );
+            });
+            const total = joints.reduce((a, b) => a + b, 0);
+            expected += total * entropy(joints.map((p) => p / total));
+          });
+          return { question, informationGain: Math.max(0, prior - expected) };
+        })
+        .sort(
+          (a, b) =>
+            b.informationGain - a.informationGain ||
+            a.question.id.localeCompare(b.question.id),
+        );
+      const actual = selectQuestion(candidates, questions, []);
+      expect(actual?.informationGain).toBeCloseTo(
+        reference[0].informationGain,
+        10,
+      );
+      // Equal gains retain lexicographic ID order with the engine's numerical tolerance.
+      const firstBest = questions.find(
+        (q) =>
+          Math.abs(
+            reference.find((r) => r.question.id === q.id)!.informationGain -
+              reference[0].informationGain,
+          ) < 1e-10,
+      );
+      expect(actual?.question.id).toBe(firstBest?.id);
+    }
+  });
+});

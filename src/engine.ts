@@ -74,26 +74,42 @@ export function selectQuestion(
 ): { question: Question; informationGain: number } | null {
   if (candidates.length < 2) return null;
   const asked = new Set(history.map((record) => record.questionId));
-  const priorEntropy = entropy(
-    candidates.map((candidate) => candidate.probability),
-  );
+  // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
+  // true/false/unknown trait share a response distribution, so three masses
+  // are sufficient. This avoids five posterior arrays per question.
+  const responseEntropy = [
+    entropy(positive),
+    entropy(negative),
+    entropy(positive.map((p, i) => (p + negative[i]) / 2)),
+  ];
   let best: { question: Question; informationGain: number } | null = null;
   for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
     if (asked.has(question.id)) continue;
-    let expectedEntropy = 0;
-    for (const answer of answers) {
-      const joint = candidates.map(
-        (candidate) =>
-          candidate.probability *
-          likelihood(candidate.character.traits[question.id], answer),
-      );
-      const responseProbability = joint.reduce((sum, p) => sum + p, 0);
-      if (responseProbability > 0)
-        expectedEntropy +=
-          responseProbability *
-          entropy(joint.map((p) => p / responseProbability));
+    let trueMass = 0;
+    let falseMass = 0;
+    let unknownMass = 0;
+    for (const candidate of candidates) {
+      const trait = candidate.character.traits[question.id];
+      if (trait === true) trueMass += candidate.probability;
+      else if (trait === false) falseMass += candidate.probability;
+      else unknownMass += candidate.probability;
     }
-    const informationGain = Math.max(0, priorEntropy - expectedEntropy);
+    let answerEntropy = 0;
+    for (let index = 0; index < answers.length; index++) {
+      const probability =
+        trueMass * positive[index] +
+        falseMass * negative[index] +
+        (unknownMass * (positive[index] + negative[index])) / 2;
+      if (probability > 0)
+        answerEntropy -= probability * Math.log2(probability);
+    }
+    const informationGain = Math.max(
+      0,
+      answerEntropy -
+        trueMass * responseEntropy[0] -
+        falseMass * responseEntropy[1] -
+        unknownMass * responseEntropy[2],
+    );
     if (
       informationGain > 1e-10 &&
       (!best || informationGain > best.informationGain + 1e-10)
