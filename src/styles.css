@@ -5,7 +5,7 @@
   font-synthesis: none;
   font-weight: 400;
   --ink: #263a34;
-  --muted: #68756e;
+  --muted: #5e6b61;
   --green: #244c40;
   --border: #ddded3;
   --gold: #ead099;
@@ -105,7 +105,7 @@ a {
   font-size: 9px;
   letter-spacing: 1.5px;
   margin-left: 10px;
-  color: #7b857c;
+  color: #5e6b61;
   font-weight: 600;
   align-self: flex-start;
   margin-top: 4px;
@@ -206,7 +206,7 @@ h1 em {
 .orbit-label {
   position: absolute;
   font-size: 9px;
-  color: #778577;
+  color: #5e6b61;
   letter-spacing: 0.4px;
   display: flex;
   align-items: center;
@@ -234,7 +234,7 @@ h1 em {
   gap: 8px;
   margin-top: 19px;
   font-size: 11px;
-  color: #748073;
+  color: #5e6b61;
 }
 .game-wrap {
   padding-top: 7px;
@@ -389,7 +389,7 @@ h1 em {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  color: #85907f;
+  color: #5e6b61;
   font-size: 9px;
   padding: 15px 2px;
 }
@@ -422,7 +422,7 @@ h1 em {
 }
 .feature-number {
   font-size: 11px;
-  color: #8b9987;
+  color: #62725e;
   font-weight: 500;
   letter-spacing: 1px;
 }
@@ -432,7 +432,7 @@ h1 em {
 }
 .feature-strip p {
   font-size: 10px;
-  color: #80887d;
+  color: #5e6b61;
   margin-top: 5px;
 }
 footer {
@@ -443,7 +443,7 @@ footer {
   gap: 24px;
   padding: 24px 0 29px;
   font-size: 9px;
-  color: #7e887b;
+  color: #5e6b61;
 }
 footer .footer-brand {
   display: flex;
@@ -650,7 +650,7 @@ footer a {
 }
 .explain-toggle > span {
   font-size: 9px;
-  color: #929689;
+  color: #5e6b61;
   border-left: 1px solid var(--border);
   padding-left: 12px;
   margin-left: 8px;
@@ -794,7 +794,7 @@ footer a {
 }
 .character-type {
   font-size: 8px;
-  color: #89917d;
+  color: #5e6b61;
   letter-spacing: 1.3px;
 }
 .character-card h2 {
@@ -1144,4 +1144,27 @@ footer a {
     animation: none !important;
     scroll-behavior: auto !important;
   }
+}
+.universe-change {
+  font-size: 9px;
+  background: transparent;
+  color: #526c56;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.result-controls {
+  padding: 0 32px 25px;
+  margin-top: 0;
+}
+.proposal-page select {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #fcfbf4;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 9px;
+  color: var(--ink);
+  font: inherit;
 }

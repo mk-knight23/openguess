@@ -1,0 +1,114 @@
+{
+  "target": "OpenGuess local production build",
+  "referenceTarget": "https://en.akinator.com/",
+  "reaVersion": "6.4.0",
+  "scenario": {
+    "evidenceId": "ev_8a587f936e6afdff1ae24c699a87c29b847f3b4feb96f34217861556b6c9732b",
+    "steps": [
+      {
+        "step": "scenario_start",
+        "status": "completed"
+      },
+      {
+        "step": "start-round",
+        "status": "completed"
+      },
+      {
+        "step": "yes-answer",
+        "status": "completed"
+      },
+      {
+        "step": "undo-answer",
+        "status": "completed"
+      }
+    ],
+    "completeness": {
+      "status": "incomplete",
+      "equality_eligible": false,
+      "missing_sections": ["events"],
+      "truncated_sections": []
+    },
+    "limitation": "All declared actions completed, but requested event capture was marked incomplete. This does not establish complete network-event coverage."
+  },
+  "inspection": {
+    "evidenceId": "ev_b00a70c3b352070dd136108823350dc042a35eba2cfb086e36db505420747f83",
+    "completeness": {
+      "status": "policy_filtered",
+      "conditions": ["attach_limited", "policy_filtered"],
+      "policy_filtered_sections": [
+        "console_text",
+        "json_body_shapes",
+        "metadata",
+        "scripts",
+        "websocket_shapes"
+      ],
+      "attach_limited_sections": [
+        "console_events",
+        "metadata",
+        "network_requests",
+        "websocket_connections",
+        "websocket_frames"
+      ],
+      "truncated_sections": [],
+      "unavailable_sections": [],
+      "excluded": [
+        {
+          "section": "console_text",
+          "reason": "not_approved",
+          "count": null
+        },
+        {
+          "section": "json_body_shapes",
+          "reason": "not_approved",
+          "count": null
+        },
+        {
+          "section": "metadata",
+          "reason": "disallowed_origin",
+          "count": 2
+        },
+        {
+          "section": "scripts",
+          "reason": "unattributed_origin",
+          "count": 14
+        },
+        {
+          "section": "websocket_shapes",
+          "reason": "not_approved",
+          "count": null
+        }
+      ],
+      "dropped_events": {
+        "scripts": 0,
+        "network_requests": 0,
+        "console_events": 0,
+        "websocket_connections": 0,
+        "websocket_frames": 0,
+        "webmcp_tools": 0,
+        "timeline_events": 0,
+        "total": 0
+      }
+    },
+    "limitation": "Passive attachment excludes activity before attachment and unapproved/external-origin material."
+  },
+  "bundle": {
+    "evidenceId": "ev_c659a1b8850079158ab59c19d157548dcb13dacf71b808e93c6d1cb034026f37",
+    "completeness": {
+      "status": "complete",
+      "parsed_scripts": 1,
+      "parse_failures": 0,
+      "visited_ast_nodes": 81157
+    },
+    "scriptsAnalyzed": 1,
+    "sourceArtifacts": [
+      {
+        "sha256": "a0307eed9fc6923376a422173c2d1ef1bb9464d9645ba300ae020391b70ab38c",
+        "bytes": 262064,
+        "media_type": "text/javascript",
+        "charset": "utf-8",
+        "text_available": true
+      }
+    ],
+    "limitation": "Static bundle analysis does not demonstrate execution of every contained function."
+  }
+}

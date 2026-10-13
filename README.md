@@ -4,6 +4,12 @@ An original, free, open-source character guessing game. Think of someone in the 
 
 Version 0.1.0 is a starter release, not a world-scale knowledge database. It can guess only the people and fictional characters listed in its catalog. Uncertain answers and unknown characters can produce an inconclusive result.
 
+[Play OpenGuess](https://mk-knight23.github.io/openguess/) · [Research](docs/research/akinator.md) · [Verification](docs/verification.md) · [Roadmap](docs/roadmap.md)
+
+![OpenGuess desktop interface](docs/screenshots/desktop.png)
+
+The first edition contains **68 characters and 60 questions**. The demo link requires the GitHub Pages deployment to finish.
+
 ## Run locally
 
 Use Node.js **22.19 or later** and npm. CI uses Node.js 24.
@@ -20,9 +26,12 @@ npm test
 npm run typecheck
 npm run build
 npm run preview
+npm run test:e2e
 ```
 
 The production build is in `dist/` and can be hosted as static files. Choose a host that supports your traffic and budget; the application requires no server-side gameplay service.
+
+For browser tests, install Chromium with `npx playwright install chromium`, or set `BROWSER_EXECUTABLE` to an existing Chrome-family executable. The smoke script starts its own preview server on port 4175 and writes reports/screenshots under `/tmp/openguess-qa` (override with `QA_OUTPUT`). For Volta users, this repository pins Node.js 24.19.0 without changing the global default. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; other deployments default to `/`.
 
 ## What v1 does
 
@@ -44,4 +53,4 @@ See [architecture](docs/architecture.md), [scaling](docs/scaling.md), [roadmap](
 
 Akinator inspired the broad game format. REA inspection of its public site encountered a Cloudflare challenge, so live gameplay, private endpoints and its proprietary algorithm were not observed. OpenGuess's inference model, interface and starter catalog are independently authored. It does not call Akinator services or include its source, artwork or database. See the [research notes](docs/research/akinator.md).
 
-The intended public repository is [mk-knight23/openguess](https://github.com/mk-knight23/openguess); publication is planned until verified. Software is free under the [MIT license](LICENSE). Free software does not imply unlimited free hosting.
+The public repository is [mk-knight23/openguess](https://github.com/mk-knight23/openguess). Software is free under the [MIT license](LICENSE); bundled dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not imply unlimited free hosting.

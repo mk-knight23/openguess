@@ -1,0 +1,24 @@
+{
+  "testedAt": "2026-10-13T20:59:06.318Z",
+  "desktop": "1440x1000",
+  "mobile": "375x812",
+  "checks": [
+    "start",
+    "keyboard",
+    "undo",
+    "guess",
+    "reject",
+    "change-universe",
+    "library-scope",
+    "unknown-exhaustion",
+    "proposal-download-and-category",
+    "local-stats-persistence-and-clear",
+    "mobile-overflow",
+    "mobile-answer-undo",
+    "no-page-errors",
+    "axe-wcag2-aa-home-question-result-contribution-mobile",
+    "no-third-party-runtime-requests"
+  ],
+  "passed": true,
+  "harryPotterQuestions": 7
+}

@@ -35,7 +35,13 @@ export function Header({ view, setView, repo }: Props) {
           Library
         </button>
       </nav>
-      <a className="github-link" href={repo} target="_blank" rel="noreferrer">
+      <a
+        className="github-link"
+        aria-label="OpenGuess source on GitHub"
+        href={repo}
+        target="_blank"
+        rel="noreferrer"
+      >
         <Github size={17} />
         <span>Open source</span>
         <ArrowUpRight size={15} />
