@@ -1,23 +1,19 @@
 # Architecture
 
-## Static delivery, local inference
+Vite builds a React/TypeScript static application. A small manifest describes five packs; selecting a theme lazy-loads its finite CC0 dataset. Entity QIDs, source URLs, retrieval timestamps and query metadata preserve provenance. Mammal taxa and vehicle/tool/instrument types are explicit scope boundaries, not all animals or everyday objects.
 
-Vite builds a React and TypeScript application into static assets. The browser loads the versioned catalog and runs the inference engine. No question needs a network request or paid model call. UI components manage navigation and local state; the engine operates on explicit catalog data, answer history and rejected candidates.
+## Inference and worker
 
-The catalog defines characters, questions and boolean or unknown traits. These are authored evidence assumptions, not facts learned automatically during play. A starter catalog limits coverage deliberately and must be shown to players.
+Normalized candidate weights start from a uniform prior. Answers apply soft likelihoods in log space; missing traits stay unknown and “don't know” supplies no evidence. Question selection aggregates true, false and unknown probability masses, then computes expected information gain. This retains O(C × Q) selection while avoiding repeated per-answer candidate arrays. See [engine details](engine-v2.md).
 
-## Inference
+A module worker receives the loaded pack once and subsequent history/exclusion requests with increasing IDs. The hook ignores stale replies, terminates workers on pack changes and exposes busy/error states. A synchronous fallback exists when workers are unavailable and may block large-pack interfaces. Relative weights are heuristic, not calibrated real-world confidence.
 
-Start with normalized candidate weights. For each answered question, multiply a candidate's weight by an answer likelihood derived from its trait, then normalize. The five choices express strong, weak or absent evidence. Unknown answers do not alter relative weights; unknown traits cannot justify certainty.
+Sparse imported facts cannot support reliably broad semantic guessing. Name fallback questions offer additional separation, with the explicit limitation that players must know English entity names. Honest uncertainty, catalog visibility, answer editing and rejected guesses remain essential.
 
-Choose an unasked question by its expected reduction in entropy over the current candidate distribution. This balances useful splits rather than choosing a fixed question order. Relative weights are model outputs and are not calibrated real-world confidence.
+## Progress and optional cloud
 
-Undo reconstructs inference from the remaining history. Rejecting a guess removes that candidate from consideration; it does not fabricate an answer to a trait question. Empty pools, exhausted questions and indistinguishable candidates require honest inconclusive states.
+Local progress includes a nickname, settings, points, collection, recent games and dated daily completions. Imports are size-bounded, validated and reconstructed from allowed fields; no imported text is executed. Daily targets depend on local dates and stable pack IDs. Pack changes can change the daily target set.
 
-## Contributions and persistence
+Optional Supabase integration supplies accounts, explicit cloud save/restore and opt-in public nickname/win totals. Local inference does not depend on this service. Authentication and row access policies belong to the service layer, not to browser trust. A locally editable score is not a server-verified competitive result. Cloud deployment and runtime checks must be recorded separately from source tests.
 
-Local preferences and statistics belong to the current browser. A proposal export produces JSON for a contributor to inspect and submit through a GitHub pull request. Maintainers validate its schema, evidence and impact before updating the catalog. There is no automatic shared learning in v1.
-
-## Boundaries
-
-Akinator is a reference game, not a dependency. REA reached a Cloudflare challenge on its public website. Its runtime guessing behavior and proprietary implementation were not recovered. The Bayesian and information-gain design here is original, not a claim about Akinator's internal algorithm.
+Contribution exports contain proposals for character, question or photo review. Photo URLs require rights confirmation and are not automatically fetched or accepted as catalog assets. Reviewed source/data changes, never an export action, update shared packs.

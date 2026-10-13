@@ -1,22 +1,29 @@
-# Akinator investigation and original reconstruction
+# Akinator public-browser investigation
 
-Research date: 2026-10-14. Target selected by the user: <https://en.akinator.com/>.
+Updated 2026-10-14. Target: <https://en.akinator.com/>. REA is the main inspection tool; findings are scoped to actual captures and publisher material.
 
-## What this investigation can establish
+## V2 observations
 
-This is a public-surface investigation using REA 6.4.0, not access to Akinator's server source or database. The automated browser was served a Cloudflare verification page. We preserved that limitation and stopped expanding the same blocked capture. A functioning original game does not imply that the reference implementation has been recovered.
+A normal Chrome target reached the public home page, settings, theme selection, questions, answer transitions and result views. This supersedes the earlier automated-session barrier for the observed flow, without invalidating the v1 Cloudflare observation.
 
-### Evidence ledger
+| Surface                  | REA evidence                                                          | Observation boundary                                                                                                                                      |
+| ------------------------ | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home                     | `ev_c5e36fc09d455c00d77d5ffe54ff7d09593cd0a52df9bbb00b785d4614358cb4` | Public rendered browser surface                                                                                                                           |
+| Settings                 | `ev_1e353060aefba4e62ce7140b9c43c5776f461fee2f33fd0f27938c52ec61d815` | Captured settings view                                                                                                                                    |
+| Start/theme              | `ev_83ee0eb9a780aad215282221d0d2e648e91387d926d249ee62e0b96f73c74df0` | Observed selection/start surface                                                                                                                          |
+| Round                    | `ev_5835f5e08fac5753072f03951348e8f1591e94828cd76c18fc9514ecf9fca25e` | Captured question interface                                                                                                                               |
+| Answer transition        | `ev_6f7ca252ed39a8c4dcf3ffeae3355a156d2e3737095234dbe76258062516aee1` | Question 1 asked whether the character lives in India; No led to question 2 asking whether the character is a girl. Observed POST `/answer` returned 200. |
+| Static application graph | `ev_b422ec9442238e5ec39cc0c132719d1d4c523b35c65ef09de8fab338ac279512` | Two author scripts (`app-v3`, `animation-v2`), 36,589 parsed bytes, 6,086 AST nodes, nine findings, zero parse failures; 1,370 semantic unknowns          |
 
-| Operation                  | Evidence                                                              | Observed result                                                                      | Boundary                                                                                                         |
-| -------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `list_browser_targets`     | `ev_c25dc86603128a5094b8624b96b6f1a336678d7f6a31a6519b755f5f71fd94e6` | Exact English origin; title “Just a moment...”                                       | Target discovery, not successful gameplay                                                                        |
-| `inspect_web_page`         | `ev_d6bc3343df0c3b5a4cc33399ba4ccc797549a548e5e4b7071a1bea8f1d92f49a` | Accessibility tree says “Performing security verification”; 64 DOM nodes             | Only the challenge document, attach-window network coverage                                                      |
-| `capture_web_screenshot`   | `ev_c33dd2392fca843c9f661f534cb56e27f641446f9322893bd4f3dcd4a322e5ea` | A captured 756 × 469 viewport of the challenge                                       | Not Akinator's game interface                                                                                    |
-| `analyze_web_bundle`       | `ev_922a2793300b42b7f57bc3e16927459fb03028eca8df2b717d49049efbcecf99` | Two challenge-page scripts parsed, zero parse failures                               | No game scripts, no private inference algorithm                                                                  |
-| `capture_browser_scenario` | Partial observation, no complete success Evidence                     | Document returned HTTP 403 and displayed verification; navigation and wait completed | REA reported `cleanup_incomplete` after a 1000ms cleanup timeout; this run is not a successful verified scenario |
+Completed scenario actions did not provide complete requested event-family coverage. Large evidence transport exceeded 10 MB and exported private captures reached approximately 57 MB; raw captures remain outside this repository. Evidence IDs identify scoped observations rather than implying exhaustive reconstruction.
 
-No challenge script source, challenge tokens, cookies, private user profile or reference artwork is included in the repository. The ledger contains scoped observations and hashes rather than redistributing another site's code. REA screenshot/source observations are retained locally during this session; public notes deliberately summarize them.
+Static observations expose Lottie integration, confidence/step states and caching behavior in browser code. They do not identify the private inference algorithm, training process, database contents or server capacity. The observed endpoint is a transport observation, not an authorized dependency for this project. OpenGuess makes no calls to it.
+
+## Tool scope and originality
+
+REA exposes approximately 170 tools across different targets. Applicable browser discovery, DOM/accessibility, screenshots, scenarios, networking, script export and graph analysis were used; at least ten browser-tool capabilities were exercised. Native disassemblers, firmware and managed-binary tools do not answer web-page questions, and no native app binary was supplied. Publisher app features remain reported claims unless observed in this browser investigation.
+
+No Akinator artwork, Lottie files, code, cookies, credentials, challenge payloads or character database is committed. The OpenGuess blue genie is original. Bayesian updates and expected information gain are our implementation decisions, not a claim that Limule uses those techniques. Exact reference parity is not established; see [feature ledger](../feature-ledger.md).
 
 ## Publisher-documented behavior
 
@@ -38,36 +45,6 @@ Stop when a candidate's relative model weight passes a threshold after sufficien
 
 **This mathematics is OpenGuess's design. It is not a verified description of Limule.** Its response constants and confidence threshold are heuristic and require evaluation on human gameplay. Publisher documents do not prove use of Bayesian inference, a neural model, an LLM, entropy selection, a particular backend framework or a particular database.
 
-## Feature mapping
+## Earlier v1 boundary
 
-| Concept                                                 | OpenGuess v1                                                                | Later work                                       |
-| ------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------ |
-| Think of an identity, answer questions, confirm a guess | Implemented against an original starter catalog                             | Broader catalog and empirical evaluation         |
-| Multiple response strengths                             | Five choices, including unknown                                             | Calibrated likelihoods from consented test data  |
-| Adaptive questions                                      | Expected information gain                                                   | Worker execution, quality-aware question ranking |
-| Correction/rejection                                    | Undo answers, exclude rejected guesses                                      | Edit earlier specific answers                    |
-| Knowledge contributions                                 | Download a local proposal for reviewed GitHub contributions                 | Optional moderated shared submission service     |
-| Multiple themes and languages                           | English character/people pack only                                          | Animals, objects, films, localized packs         |
-| Replayability and awards                                | Confirmed local win counter                                                 | Daily challenges and local achievements          |
-| Accounts, global leaderboards                           | Not part of v1                                                              | Only if requested, with privacy and abuse design |
-| Monetization                                            | No ads, paid API or pricing                                                 | Keep software and gameplay free                  |
-| Explainability                                          | Optional candidate weights, answer trail and next-question information gain | Evaluation dashboards and data provenance        |
-
-## REA capability coverage
-
-REA is the main reference-investigation tool and also verifies our own built application. Its tools are selected by target and unanswered question. Calling native disassemblers, Android, firmware, SQLite or crash tools on a web page would not reveal its private backend.
-
-Browser discovery, DOM/accessibility inspection, screenshots, static bundle analysis and a controlled browser scenario were exercised against the requested target. Script export, application graph analysis, feature tracing, runtime/static reconciliation and source-map tracing require actual game source bytes or map/capture pairs. The challenge did not supply them; these remain unavailable rather than being inferred from unrelated scripts. Captured networking cannot recover requests made before attachment. Additional navigation observation would repeat the same blocked surface without answering a new question.
-
-If the user later supplies a normal playable browser session or an authorized exported gameplay capture, use REA to observe that exact target, capture game scripts, export their verified bytes, inspect application structure, trace selected question/guess handlers, and reconcile observed requests with static call sites. Record endpoint names and response shapes without exposing credentials or replacing the private server with a scraped database.
-
-## Completion checklist
-
-- Public surface identified and observed: **answered**, verification page only.
-- Publisher feature set and proprietary-algorithm boundary: **answered**, primary sources above.
-- Actual live English gameplay, game endpoints and question sequence: **unresolved**, bot-verification barrier.
-- Exact backend algorithm, database and production capacity: **unknown**, not exposed by this investigation.
-- Independent implementation design: **answered**, [plan](../plans/v1.md) and [architecture](../architecture.md).
-- Sustainable scaling: **designed**, [scaling](../scaling.md); worldwide traffic capacity is not yet demonstrated.
-
-The research is sufficient to build an original first version of this genre. It is not “everything about Akinator,” and does not claim hidden internals or worldwide parity.
+The first automated visit encountered Cloudflare verification and HTTP 403. Its challenge-only inspection informed the original release but did not reveal live gameplay. The normal-browser captures above provide additional public-flow evidence for v2. Neither investigation recovered private server internals.
