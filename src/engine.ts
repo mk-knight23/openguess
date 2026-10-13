@@ -66,7 +66,16 @@ export function rankCandidates(
     );
 }
 
-/** Expected entropy reduction across the five possible responses. */
+/** Semantic question selection, retaining the raw five-response information gain. */
+function isSemantic(question: Question): boolean {
+  const metadata = question as Question & { kind?: string };
+  return metadata.kind !== "spelling" && !/^name(?:_|-)/i.test(question.id);
+}
+function questionFamily(question: Question): string | undefined {
+  return (
+    (question as Question & { family?: string }).family ?? question.property
+  );
+}
 export function selectQuestion(
   candidates: Candidate[],
   questions: Question[],
@@ -83,8 +92,14 @@ export function selectQuestion(
     entropy(positive.map((p, i) => (p + negative[i]) / 2)),
   ];
   const eligible = new Set(
-    questions.filter((q) => !asked.has(q.id)).map((q) => q.id),
+    questions.filter((q) => !asked.has(q.id) && isSemantic(q)).map((q) => q.id),
   );
+  const previousQuestion = questions.find(
+    (q) => q.id === history.at(-1)?.questionId,
+  );
+  const previousFamily = previousQuestion
+    ? questionFamily(previousQuestion)
+    : undefined;
   const masses = new Map<string, { positive: number; negative: number }>();
   let totalMass = 0;
   for (const candidate of candidates) {
@@ -101,8 +116,9 @@ export function selectQuestion(
     }
   }
   let best: { question: Question; informationGain: number } | null = null;
+  let bestScore = 0;
   for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
-    if (asked.has(question.id)) continue;
+    if (!eligible.has(question.id)) continue;
     const mass = masses.get(question.id);
     const trueMass = mass?.positive ?? 0;
     const falseMass = mass?.negative ?? 0;
@@ -125,11 +141,20 @@ export function selectQuestion(
         falseMass * responseEntropy[1] -
         unknownMass * responseEntropy[2],
     );
-    if (
-      informationGain > 1e-10 &&
-      (!best || informationGain > best.informationGain + 1e-10)
-    )
+    const coverage =
+      totalMass > 0 ? Math.min(1, (trueMass + falseMass) / totalMass) : 0;
+    // Broad, documented splits are more useful than a rare known claim among
+    // mostly unknown profiles. A modest family cost breaks near-equal choices;
+    // it cannot turn an irrelevant question into an informative one.
+    const sameFamily =
+      previousFamily !== undefined &&
+      questionFamily(question) === previousFamily;
+    const score =
+      informationGain * Math.sqrt(coverage) * (sameFamily ? 0.9 : 1);
+    if (informationGain > 1e-10 && score > bestScore + 1e-10) {
       best = { question, informationGain };
+      bestScore = score;
+    }
   }
   return best;
 }

@@ -253,3 +253,83 @@ it("ignores unrelated sparse traits and zero-weight members when selecting evide
   ];
   expect(selectQuestion(allMissing, questions, [])).toBeNull();
 });
+describe("semantic question policy", () => {
+  it("excludes legacy spelling questions even when they perfectly split the pool", () => {
+    const candidates = rankCandidates(
+      [
+        make("a", { name_letter_a: true, occupation: true }),
+        make("b", { name_letter_a: false, occupation: false }),
+        make("c", { name_letter_a: true, occupation: false }),
+        make("d", { name_letter_a: false, occupation: false }),
+      ],
+      [],
+    );
+    const semantic = {
+      id: "occupation",
+      text: "Do they perform for an audience?",
+      hint: "",
+    };
+    const spelling = {
+      id: "name_letter_a",
+      text: "Does the name contain A?",
+      hint: "",
+    };
+    expect(
+      selectQuestion(candidates, [spelling, semantic], [])?.question.id,
+    ).toBe("occupation");
+    expect(selectQuestion(candidates, [spelling], [])).toBeNull();
+  });
+  it("prefers known broad evidence over a sparsely documented identity clue", () => {
+    const candidates = rankCandidates(
+      Array.from({ length: 10 }, (_, n) =>
+        make(String(n), {
+          broad: n < 3,
+          sparse: n < 3 ? true : null,
+        }),
+      ),
+      [],
+    );
+    const qs = [
+      { id: "broad", text: "Is it a living thing?", hint: "" },
+      { id: "sparse", text: "Was it created in 1893?", hint: "" },
+    ];
+    expect(selectQuestion(candidates, qs, [])?.question.id).toBe("broad");
+  });
+  it("varies equally informative families without choosing an irrelevant question", () => {
+    const candidates = rankCandidates(
+      [
+        make("a", { a: true, b: true, weak: true }),
+        make("b", { a: false, b: false, weak: true }),
+      ],
+      [],
+    );
+    const qs = [
+      { id: "previous", text: "Previous", hint: "", property: "occupation" },
+      { id: "a", text: "Same family", hint: "", property: "occupation" },
+      { id: "b", text: "Other family", hint: "", property: "appearance" },
+      { id: "weak", text: "Irrelevant", hint: "", property: "origin" },
+    ];
+    expect(
+      selectQuestion(candidates, qs, [
+        { questionId: "previous", answer: "yes" },
+      ])?.question.id,
+    ).toBe("b");
+  });
+});
+it("keeps a clearly stronger same-family split instead of forced variety", () => {
+  const candidates = rankCandidates(
+    Array.from({ length: 10 }, (_, n) =>
+      make(String(n), { strong: n < 5, weak: n < 1 }),
+    ),
+    [],
+  );
+  const qs = [
+    { id: "previous", text: "Previous", hint: "", property: "occupation" },
+    { id: "strong", text: "Performing arts", hint: "", property: "occupation" },
+    { id: "weak", text: "Rare birthplace", hint: "", property: "birthplace" },
+  ];
+  expect(
+    selectQuestion(candidates, qs, [{ questionId: "previous", answer: "yes" }])
+      ?.question.id,
+  ).toBe("strong");
+});

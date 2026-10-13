@@ -39,7 +39,7 @@ for (const theme of themes) {
     questions: pack.questions.length,
     samples: targets.length,
     correctFirstGuess: 0,
-    lowConfidenceFirstGuesses: 0,
+    unresolved: 0,
     totalNameSpellingAnswers: 0,
     wrongFirstGuess: 0,
     ambiguous: 0,
@@ -52,7 +52,7 @@ for (const theme of themes) {
   for (const target of targets) {
     const history = [];
     let unknown = 0;
-    let resolved = false;
+
     for (;;) {
       const candidates = rankCandidates(pack.characters, history);
       const start = performance.now();
@@ -61,29 +61,31 @@ for (const theme of themes) {
       const informative = history.filter(
         (record) => record.answer !== "unknown",
       ).length;
-      if (
-        shouldGuess(candidates, informative) ||
-        (informative > 0 && (!next || history.length >= maximumQuestions))
-      ) {
-        if (!shouldGuess(candidates, informative))
-          row.lowConfidenceFirstGuesses++;
+      if (shouldGuess(candidates, informative)) {
         if (candidates[0]?.character.id === target.id) row.correctFirstGuess++;
         else row.wrongFirstGuess++;
-        resolved = true;
         break;
       }
       if (!next) {
         row.exhausted++;
+        row.unresolved++;
         break;
       }
       if (history.length >= maximumQuestions) {
         row.questionLimit++;
+        row.unresolved++;
         break;
       }
       const fact = target.traits[next.question.id];
       const answer = fact === true ? "yes" : fact === false ? "no" : "unknown";
       if (answer === "unknown") unknown++;
-      if (next.question.id.startsWith("name_")) row.totalNameSpellingAnswers++;
+      if (
+        /^name(?:_|-)/i.test(next.question.id) ||
+        next.question.kind === "spelling"
+      )
+        throw new Error(
+          `Spelling question leaked into semantic play: ${next.question.id}`,
+        );
       history.push({ questionId: next.question.id, answer });
     }
     // An indistinguishable evidence tie is reported separately, including any
@@ -97,8 +99,6 @@ for (const theme of themes) {
     row.totalUnknownAnswers += unknown;
     if (unknown) row.roundsWithUnknownAnswers++;
     row.questionCounts.push(history.length);
-    if (!resolved && !row.exhausted && !row.questionLimit)
-      throw new Error("Unclassified round");
   }
   row.medianQuestions = quantile(row.questionCounts, 0.5);
   row.maxQuestions = Math.max(...row.questionCounts);
@@ -112,7 +112,7 @@ const report = {
   measuredAt: new Date().toISOString(),
   node: process.version,
   methodology:
-    "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 questions; unknown for absent/null facts. Not human accuracy.",
+    "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 semantic questions; unknown for absent/null facts; no forced low-confidence guesses. Not human accuracy.",
   results,
 };
 await writeFile(
