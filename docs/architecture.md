@@ -8,7 +8,7 @@ Normalized candidate weights start from a uniform prior. Answers apply soft like
 
 A module worker receives the loaded pack once and subsequent history/exclusion requests with increasing IDs. The hook ignores stale replies, terminates workers on pack changes and exposes busy/error states. A synchronous fallback exists when workers are unavailable and may block large-pack interfaces. Relative weights are heuristic, not calibrated real-world confidence.
 
-Sparse imported facts cannot support reliably broad semantic guessing. Name fallback questions offer additional separation, with the explicit limitation that players must know English entity names. Honest uncertainty, catalog visibility, answer editing and rejected guesses remain essential.
+The central interaction is semantic: infer a thought subject through meaningful adaptive facts. The selector excludes spelling/name-letter questions. Raw information gain is weighted by the current candidate mass with known facts, with a small penalty for repeating a question family; this favors useful covered evidence over obscure sparse properties. Exhausted semantic evidence must produce uncertainty rather than a forced low-confidence guess. Sparse imported facts still limit coverage, so catalog visibility, answer editing and rejected guesses remain essential.
 
 ## Progress and optional cloud
 

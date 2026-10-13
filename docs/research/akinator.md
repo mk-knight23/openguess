@@ -19,6 +19,16 @@ Completed scenario actions did not provide complete requested event-family cover
 
 Static observations expose Lottie integration, confidence/step states and caching behavior in browser code. They do not identify the private inference algorithm, training process, database contents or server capacity. The observed endpoint is a transport observation, not an authorized dependency for this project. OpenGuess makes no calls to it.
 
+## Properly waited semantic question sequence
+
+Fresh REA capture `ev_7118d160752783da590df41491a154cfcff724645ad1e0ff2f415ef588eaeff6` waited for the actual question state and observed successive questions about being Indian, being female, really existing, being Japanese, appearing in a popular movie and originating in a video game. The exploratory answers were fixed No responses; they did not describe a consistent intended character and are not an accuracy test.
+
+An earlier capture beginning `ev_cc2411` ran before animation transitions settled and lacked question text. It cannot support a missing-question conclusion; the waited capture corrects that timing error. Browser state must be observed after transitions, rather than inferred from an animation frame.
+
+This provides a concrete product lesson: the game adapts meaningful subject properties. OpenGuess's earlier spelling-heavy replay (50 rounds with 614 spelling answers) failed that purpose despite favorable ID-selection counts. The corrected implementation excludes spelling questions and requires fresh semantic evaluation.
+
+The public browser uses an answer endpoint; the private Limule server implementation remains unknown. A browser fetch of the publisher FAQ returned 403 in the later investigation, so its previously cited description is a source attribution, not newly observed server evidence. No native application binary was available for core-binary analysis.
+
 ## Tool scope and originality
 
 REA exposes approximately 170 tools across different targets. Applicable browser discovery, DOM/accessibility, screenshots, scenarios, networking, script export and graph analysis were used; at least ten browser-tool capabilities were exercised. Native disassemblers, firmware and managed-binary tools do not answer web-page questions, and no native app binary was supplied. Publisher app features remain reported claims unless observed in this browser investigation.

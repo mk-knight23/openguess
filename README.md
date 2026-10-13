@@ -6,9 +6,9 @@ A free, open-source guessing game with an original blue genie, adaptive question
 
 ## Version 0.2
 
-Five lazy-loaded Wikidata CC0 packs contain **5,478 entities**: 1,100 people, 1,078 fictional characters, 1,100 mammal taxa, 1,100 vehicle/tool/instrument types and 1,100 films. These finite catalogs have sparse facts; they are not worldwide coverage. Name-based fallback questions can help distinguish entries when semantic facts run out, but require knowledge of the entity's English name. See [provenance and quality limits](docs/data-provenance.md).
+Five lazy-loaded Wikidata CC0 packs contain **5,478 entities**: 1,100 people, 1,078 fictional characters, 1,100 mammal taxa, 1,100 vehicle/tool/instrument types and 1,100 films. These finite catalogs have sparse facts; they are not worldwide coverage. Gameplay asks about meaningful properties of the subject, not letters in its name. Spelling questions are excluded; when semantic evidence cannot distinguish candidates, the round must remain inconclusive. See [provenance and quality limits](docs/data-provenance.md).
 
-- Five answer strengths, answer correction, undo, rejection and restart.
+- Five answer strengths, semantic adaptive questions, answer correction, undo, rejection and restart.
 - Original animated genie interface, transparent candidate weights and a visible library.
 - Five daily discoveries per selected theme, local points, awards, collection and streaks.
 - Validated progress backup/restore, local profile, sound and reduced-motion settings.
@@ -33,9 +33,11 @@ npm run preview
 
 For production-browser checks, install Chromium with `npx playwright install chromium` and run `npm run test:e2e`; an installed Chrome can be selected with `BROWSER_EXECUTABLE`. Consult [verification](docs/verification.md) for current commands and results.
 
-Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; root-path deployments default to `/`. Optional cloud configuration uses public client environment variables and a separately provisioned database with access policies; never put service-role secrets in a browser build. See the cloud setup documentation shipped with the implementation.
+Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; root-path deployments default to `/`. Optional cloud configuration uses public client environment variables and a separately provisioned database with access policies; never put service-role secrets in a browser build. See [cloud setup and verification](docs/cloud.md).
 
 ## How it works
+
+The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. Corrected semantic-pack evaluation and actual human gameplay are needed before broad accuracy claims.
 
 Bayesian updates rank candidates from authored/imported traits. Information gain chooses unasked questions. A worker keeps larger-pack inference off the interface thread. “Don't know” adds no evidence; absent Wikidata claims remain unknown. Model percentages are relative weights within the chosen pack, not calibrated chances of a correct answer.
 
