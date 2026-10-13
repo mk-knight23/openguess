@@ -360,6 +360,26 @@ it("blocks unmarked spelling text and name-property clues without rejecting sema
       [
         {
           id: "custom",
+          text: "Is the first letter of their name S?",
+          hint: "",
+        },
+      ],
+      [],
+    ),
+  ).toBeNull();
+  expect(
+    selectQuestion(
+      candidates,
+      [{ id: "custom", text: "Do they have a short name?", hint: "" }],
+      [],
+    ),
+  ).toBeNull();
+  expect(
+    selectQuestion(
+      candidates,
+      [
+        {
+          id: "custom",
           text: "Is their name long?",
           hint: "",
           property: "name",

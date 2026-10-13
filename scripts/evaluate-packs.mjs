@@ -1,8 +1,19 @@
 /** Ideal catalog-answer evaluation, not measured human accuracy. Node 24+. */
 import { readFile, writeFile } from "node:fs/promises";
 import { rankCandidates, selectQuestion, shouldGuess } from "../src/engine.ts";
-const themes = ["people", "fictional", "animals", "objects", "movies"];
+const availableThemes = ["people", "fictional", "animals", "objects", "movies"];
+const themes = process.env.EVALUATION_THEMES
+  ? process.env.EVALUATION_THEMES.split(",")
+  : availableThemes;
+if (themes.some((theme) => !availableThemes.includes(theme)))
+  throw new Error("Unknown evaluation theme");
 const samples = Number(process.env.EVALUATION_SAMPLES || 30);
+const mode = process.env.EVALUATION_MODE || "full";
+if (!["full", "core"].includes(mode))
+  throw new Error("Evaluation mode must be full or core");
+const unknownDates = process.env.EVALUATION_UNKNOWN_DATES === "1";
+if (!Number.isInteger(samples) || samples < 1)
+  throw new Error("Samples must be a positive integer");
 const maximumQuestions = 40;
 const quantile = (values, fraction) =>
   [...values].sort((a, b) => a - b)[
@@ -16,6 +27,14 @@ for (const theme of themes) {
       "utf8",
     ),
   );
+  const databaseEntities = pack.characters.length;
+  if (mode === "core") {
+    pack.characters = pack.characters.filter(
+      (character) => character.featured === true,
+    );
+    if (!pack.characters.length)
+      throw new Error(`No featured core in ${theme}`);
+  }
   // Sort by factual coverage then take equally spaced quantiles: sparse profiles
   // and complete profiles both appear. IDs break coverage ties reproducibly.
   const coverage = (character) =>
@@ -26,16 +45,18 @@ for (const theme of themes) {
       (a, b) =>
         a.coverage - b.coverage || a.character.id.localeCompare(b.character.id),
     );
+  const targetCount = Math.min(samples, stratified.length);
   const targets = Array.from(
-    { length: Math.min(samples, stratified.length) },
+    { length: targetCount },
     (_, n) =>
-      stratified[Math.floor(((n + 0.5) * stratified.length) / samples)]
+      stratified[Math.floor(((n + 0.5) * stratified.length) / targetCount)]
         .character,
   );
   const durations = [];
   const row = {
     theme,
     entities: pack.characters.length,
+    databaseEntities,
     questions: pack.questions.length,
     samples: targets.length,
     correctFirstGuess: 0,
@@ -48,9 +69,11 @@ for (const theme of themes) {
     totalUnknownAnswers: 0,
     roundsWithUnknownAnswers: 0,
     questionCounts: [],
+    exampleRounds: [],
   };
   for (const target of targets) {
     const history = [];
+    const transcript = [];
     let unknown = 0;
 
     for (;;) {
@@ -77,7 +100,24 @@ for (const theme of themes) {
         break;
       }
       const fact = target.traits[next.question.id];
-      const answer = fact === true ? "yes" : fact === false ? "no" : "unknown";
+      const dateUnavailable =
+        unknownDates &&
+        (["P569", "P570", "P577"].includes(next.question.property) ||
+          /^(?:birth|release|death)[_-](?:year|era|before|after)/i.test(
+            next.question.id,
+          ));
+      const answer = dateUnavailable
+        ? "unknown"
+        : fact === true
+          ? "yes"
+          : fact === false
+            ? "no"
+            : "unknown";
+      transcript.push({
+        question: next.question.text,
+        answer,
+        family: next.question.family ?? next.question.property ?? null,
+      });
       if (answer === "unknown") unknown++;
       if (
         /^name(?:_|-)/i.test(next.question.id) ||
@@ -99,6 +139,13 @@ for (const theme of themes) {
     row.totalUnknownAnswers += unknown;
     if (unknown) row.roundsWithUnknownAnswers++;
     row.questionCounts.push(history.length);
+    if (row.exampleRounds.length < 3)
+      row.exampleRounds.push({
+        target: target.name,
+        topMatch: final[0]?.character.name ?? null,
+        topWeight: Number((final[0]?.probability ?? 0).toFixed(4)),
+        transcript,
+      });
   }
   row.medianQuestions = quantile(row.questionCounts, 0.5);
   row.maxQuestions = Math.max(...row.questionCounts);
@@ -106,16 +153,22 @@ for (const theme of themes) {
   row.maxSelectionMs = Number(Math.max(...durations).toFixed(2));
   delete row.questionCounts;
   results.push(row);
-  console.info(JSON.stringify(row));
+  const { exampleRounds, ...summary } = row;
+  console.info(JSON.stringify(summary));
 }
 const report = {
   measuredAt: new Date().toISOString(),
   node: process.version,
+  mode,
+  unknownDates,
   methodology:
     "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 semantic questions; unknown for absent/null facts; no forced low-confidence guesses. Not human accuracy.",
   results,
 };
 await writeFile(
-  new URL("../docs/pack-evaluation.json", import.meta.url),
+  new URL(
+    `../docs/pack-evaluation${mode === "core" ? "-core" : ""}${unknownDates ? "-unknown-dates" : ""}.json`,
+    import.meta.url,
+  ),
   JSON.stringify(report, null, 2) + "\n",
 );

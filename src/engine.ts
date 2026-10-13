@@ -70,7 +70,7 @@ export function rankCandidates(
 function isSemantic(question: Question): boolean {
   const metadata = question as Question & { kind?: string };
   const orthography =
-    /\bname\b.*\b(?:letters?|contains?|starts?|ends?|length|spelling|spelled)\b|\bspell(?:ing|ed)?\b.*\bname\b/i;
+    /\bname\b.*\b(?:letters?|contains?|starts?|ends?|length|spelling|spelled|short|long)\b|\b(?:letters?|initials?|length|spell(?:ing|ed)?)\b.*\bname\b|\b(?:short|long)\s+name\b/i;
   return (
     metadata.kind !== "spelling" &&
     !/^name(?:_|-)/i.test(question.id) &&
