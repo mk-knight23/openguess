@@ -1,0 +1,104 @@
+.cloud-panel {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #d7c5a8;
+  border-radius: 1rem;
+  background: #fff9ed;
+  color: #382b22;
+}
+.cloud-panel h2,
+.cloud-panel h3 {
+  margin-top: 0;
+}
+.cloud-panel p {
+  line-height: 1.6;
+}
+.cloud-actions,
+.cloud-auth-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.cloud-panel button {
+  background: #f2dfba;
+  border: 1px solid #b89a67;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  color: #382b22;
+  cursor: pointer;
+  font: inherit;
+  min-height: 44px;
+}
+.cloud-panel button:hover {
+  background: #ead09e;
+}
+.cloud-panel button:focus-visible,
+.cloud-panel input:focus-visible {
+  outline: 3px solid #145f94;
+  outline-offset: 3px;
+}
+.cloud-panel button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.cloud-auth {
+  max-width: 440px;
+  display: grid;
+  gap: 0.9rem;
+}
+.cloud-auth label {
+  display: grid;
+  gap: 0.35rem;
+}
+.cloud-auth input {
+  font: inherit;
+  padding: 0.7rem;
+  border: 1px solid #927b59;
+  border-radius: 0.4rem;
+  background: white;
+  color: #382b22;
+  min-width: 0;
+}
+.cloud-auth-mode button[aria-pressed="true"] {
+  background: #d9b96f;
+}
+.cloud-small {
+  font-size: 0.9rem;
+}
+.cloud-message {
+  min-height: 1.5rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.cloud-restore {
+  padding: 1rem;
+  margin-top: 1rem;
+  background: #f1e4c8;
+  border-radius: 0.5rem;
+}
+.cloud-restore button {
+  margin: 0.3rem;
+}
+.cloud-leaderboard {
+  padding-inline-start: 1.4rem;
+}
+.cloud-leaderboard li {
+  padding: 0.6rem 0;
+}
+.cloud-leaderboard strong {
+  float: inline-end;
+  margin-inline-start: 1rem;
+}
+@media (max-width: 500px) {
+  .cloud-panel {
+    padding: 1rem;
+  }
+  .cloud-actions {
+    display: grid;
+  }
+  .cloud-leaderboard strong {
+    float: none;
+    display: block;
+    margin: 0;
+  }
+}
