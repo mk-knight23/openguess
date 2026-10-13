@@ -235,3 +235,21 @@ describe("aggregated question scoring", () => {
     }
   });
 });
+it("ignores unrelated sparse traits and zero-weight members when selecting evidence", () => {
+  const candidates = [
+    { character: make("a", { a: true, unrelated: true }), probability: 0.5 },
+    { character: make("b", { a: false, unrelated: false }), probability: 0.5 },
+    { character: make("zero", { a: null, b: true }), probability: 0 },
+  ];
+  expect(selectQuestion(candidates, questions, [])?.question.id).toBe("a");
+  expect(
+    selectQuestion(candidates, questions, [
+      { questionId: "a", answer: "unknown" },
+    ]),
+  ).toBeNull();
+  const allMissing = [
+    { character: make("a", {}), probability: 0.1 },
+    { character: make("b", { a: null }), probability: 0.9 },
+  ];
+  expect(selectQuestion(allMissing, questions, [])).toBeNull();
+});

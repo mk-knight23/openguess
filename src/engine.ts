@@ -82,18 +82,33 @@ export function selectQuestion(
     entropy(negative),
     entropy(positive.map((p, i) => (p + negative[i]) / 2)),
   ];
+  const eligible = new Set(
+    questions.filter((q) => !asked.has(q.id)).map((q) => q.id),
+  );
+  const masses = new Map<string, { positive: number; negative: number }>();
+  let totalMass = 0;
+  for (const candidate of candidates) {
+    totalMass += candidate.probability;
+    for (const [id, trait] of Object.entries(candidate.character.traits)) {
+      if (!eligible.has(id) || (trait !== true && trait !== false)) continue;
+      let mass = masses.get(id);
+      if (!mass) {
+        mass = { positive: 0, negative: 0 };
+        masses.set(id, mass);
+      }
+      if (trait === true) mass.positive += candidate.probability;
+      else mass.negative += candidate.probability;
+    }
+  }
   let best: { question: Question; informationGain: number } | null = null;
   for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
     if (asked.has(question.id)) continue;
-    let trueMass = 0;
-    let falseMass = 0;
-    let unknownMass = 0;
-    for (const candidate of candidates) {
-      const trait = candidate.character.traits[question.id];
-      if (trait === true) trueMass += candidate.probability;
-      else if (trait === false) falseMass += candidate.probability;
-      else unknownMass += candidate.probability;
-    }
+    const mass = masses.get(question.id);
+    const trueMass = mass?.positive ?? 0;
+    const falseMass = mass?.negative ?? 0;
+    // Missing and null facts belong to the same uncertain response group.
+    // Roundoff can make an otherwise empty unknown group slightly negative.
+    const unknownMass = Math.max(0, totalMass - trueMass - falseMass);
     let answerEntropy = 0;
     for (let index = 0; index < answers.length; index++) {
       const probability =
