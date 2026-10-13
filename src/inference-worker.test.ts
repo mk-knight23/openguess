@@ -2,14 +2,39 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { useInference } from "./useInference";
 import type { DataPack } from "./types";
-const pack = {
+const pack: DataPack = {
   theme: "people",
+  version: "test",
+  source: {
+    url: "https://example.com",
+    license: "CC0",
+    retrievedAt: "2026-10-14",
+  },
+  quality: {},
   characters: [
-    { id: "a", name: "A", traits: { q: true } },
-    { id: "b", name: "B", traits: { q: false } },
+    {
+      id: "a",
+      name: "A",
+      traits: { q: true },
+      category: "real",
+      description: "",
+      tags: [],
+      color: "#fff",
+      initials: "A",
+    },
+    {
+      id: "b",
+      name: "B",
+      traits: { q: false },
+      category: "real",
+      description: "",
+      tags: [],
+      color: "#fff",
+      initials: "B",
+    },
   ],
   questions: [{ id: "q", text: "Q", hint: "" }],
-} as DataPack;
+};
 class FakeWorker {
   static instances: FakeWorker[] = [];
   messages: any[] = [];
