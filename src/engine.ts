@@ -1,0 +1,58 @@
+import type { Answer, AnswerRecord, Candidate, Character, Question, TraitValue } from './types';
+
+// An original, deliberately soft response model. These are design constants,
+// not learned/calibrated probabilities or facts about another game's algorithm.
+const answers: Answer[] = ['yes', 'probably', 'unknown', 'probably-not', 'no'];
+const positive = [0.65, 0.25, 0.05, 0.03, 0.02];
+const negative = [...positive].reverse();
+const byId = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
+function likelihood(trait: TraitValue | undefined, answer: Answer): number {
+  const index = answers.indexOf(answer);
+  if (trait === true) return positive[index];
+  if (trait === false) return negative[index];
+  return (positive[index] + negative[index]) / 2;
+}
+function entropy(weights: number[]): number {
+  return weights.reduce((sum, p) => p > 0 ? sum - p * Math.log2(p) : sum, 0);
+}
+
+/** Replay all evidence from a uniform prior; rejection is a separate exclusion. */
+export function rankCandidates(characters: Character[], history: AnswerRecord[], rejectedIds: string[] = []): Candidate[] {
+  const rejected = new Set(rejectedIds);
+  const scored = characters.filter(character => !rejected.has(character.id)).map(character => ({
+    character,
+    logWeight: history.reduce((weight, record) => record.answer === 'unknown' ? weight : weight + Math.log(likelihood(character.traits[record.questionId], record.answer)), 0),
+  }));
+  if (!scored.length) return [];
+  const maxLog = scored.reduce((max, candidate) => Math.max(max, candidate.logWeight), -Infinity);
+  // Preserve nonzero alternatives even for extremely long histories.
+  const weights = scored.map(candidate => Math.max(1e-300, Math.exp(candidate.logWeight - maxLog)));
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  return scored.map((candidate, i) => ({ character: candidate.character, probability: weights[i] / total }))
+    .sort((a, b) => b.probability - a.probability || byId(a.character.id, b.character.id));
+}
+
+/** Expected entropy reduction across the five possible responses. */
+export function selectQuestion(candidates: Candidate[], questions: Question[], history: AnswerRecord[]): { question: Question; informationGain: number } | null {
+  if (candidates.length < 2) return null;
+  const asked = new Set(history.map(record => record.questionId));
+  const priorEntropy = entropy(candidates.map(candidate => candidate.probability));
+  let best: { question: Question; informationGain: number } | null = null;
+  for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
+    if (asked.has(question.id)) continue;
+    let expectedEntropy = 0;
+    for (const answer of answers) {
+      const joint = candidates.map(candidate => candidate.probability * likelihood(candidate.character.traits[question.id], answer));
+      const responseProbability = joint.reduce((sum, p) => sum + p, 0);
+      if (responseProbability > 0) expectedEntropy += responseProbability * entropy(joint.map(p => p / responseProbability));
+    }
+    const informationGain = Math.max(0, priorEntropy - expectedEntropy);
+    if (informationGain > 1e-10 && (!best || informationGain > best.informationGain + 1e-10)) best = { question, informationGain };
+  }
+  return best;
+}
+
+/** answeredCount must count informative answers, excluding "unknown". */
+export function shouldGuess(candidates: Candidate[], answeredCount: number): boolean {
+  return candidates.length === 1 || (candidates.length > 1 && answeredCount >= 3 && candidates[0].probability >= 0.85);
+}
