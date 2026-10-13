@@ -5,10 +5,7 @@ import type { AnswerRecord, DataPack } from "./types";
 for (const theme of ["people", "fictional", "animals", "objects", "movies"]) {
   it(`asks only meaningful adaptive questions in the actual ${theme} pack`, () => {
     const pack = JSON.parse(
-      readFileSync(
-        new URL(`./data/packs/${theme}.json`, import.meta.url),
-        "utf8",
-      ),
+      readFileSync(`${process.cwd()}/src/data/packs/${theme}.json`, "utf8"),
     ) as DataPack;
     const target = pack.characters[Math.floor(pack.characters.length / 2)];
     const history: AnswerRecord[] = [];
