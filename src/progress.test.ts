@@ -71,7 +71,7 @@ describe("private local progress", () => {
         ...createProgress(),
         profile: { nickname: "https://evil.test" },
       }),
-      "x".repeat(1_000_001),
+      "x".repeat(10_000_001),
     ])
       expect(() => parseProgress(text)).toThrow();
   });
@@ -99,6 +99,34 @@ describe("private local progress", () => {
     expect(next.settings.familyMode).toBe(true);
     expect(p.profile.nickname).toBe("Guest");
     expect(() => updateProgress(p, { nickname: "x".repeat(41) })).toThrow();
+  });
+  it("unlocks the explorer medal only after all five themes", () => {
+    let p = createProgress();
+    for (const theme of ["people", "fictional", "animals", "objects"])
+      p = recordWin(p, { id: theme, name: theme, theme, questionCount: 12 });
+    expect(
+      getAchievements(p).find((a) => a.id === "world-explorer")?.unlocked,
+    ).toBe(false);
+    p = recordWin(p, {
+      id: "movies",
+      name: "Movie",
+      theme: "movies",
+      questionCount: 12,
+    });
+    expect(
+      getAchievements(p).find((a) => a.id === "world-explorer")?.unlocked,
+    ).toBe(true);
+  });
+  it("roundtrips a collection of six thousand entries", () => {
+    const p = createProgress();
+    p.collection = Array.from({ length: 6000 }, (_, i) => ({
+      entityId: `Q${i}`,
+      name: `Entity ${i}`,
+      theme: "people",
+      collectedAt: "2026-10-14T10:00:00.000Z",
+      bestQuestions: 15,
+    }));
+    expect(parseProgress(exportProgress(p)).collection).toHaveLength(6000);
   });
   it("handles unavailable and corrupted storage", () => {
     const storage = {

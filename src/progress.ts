@@ -99,7 +99,7 @@ function fail(): never {
   throw new Error("Invalid OpenGuess progress file.");
 }
 export function parseProgress(input: string): Progress {
-  if (input.length > 1_000_000) fail();
+  if (input.length > 10_000_000) fail();
   const p: unknown = JSON.parse(input, (key, value) => {
     if (["__proto__", "constructor", "prototype"].includes(key)) fail();
     return value;
