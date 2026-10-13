@@ -7,6 +7,7 @@ export type WorkerRequest =
       requestId: number;
       history: AnswerRecord[];
       rejected: string[];
+      roundSeed?: number;
     };
 export interface WorkerResult {
   requestId: number;
@@ -29,7 +30,12 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
       request.history,
       request.rejected,
     );
-    const next = selectQuestion(candidates, pack.questions, request.history);
+    const next = selectQuestion(
+      candidates,
+      pack.questions,
+      request.history,
+      request.roundSeed,
+    );
     self.postMessage({
       requestId: request.requestId,
       candidates: candidates.map((c) => ({

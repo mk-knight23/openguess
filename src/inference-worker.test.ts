@@ -140,3 +140,27 @@ it("hides preceding inference during the render before new input effects run", a
     true,
   );
 });
+it("sends a changed round seed without rehydrating and hides the previous round", () => {
+  vi.stubGlobal("Worker", FakeWorker);
+  const { result, rerender } = renderHook(
+    ({ seed }) => useInference(pack, [], [], seed),
+    { initialProps: { seed: 1 } },
+  );
+  const worker = FakeWorker.instances[0];
+  const first = worker.messages.find((message) => message.type === "compute");
+  expect(first.roundSeed).toBe(1);
+  act(() => worker.reply(first.requestId));
+  expect(result.current.busy).toBe(false);
+  rerender({ seed: 2 });
+  expect(result.current.busy).toBe(true);
+  expect(result.current.next).toBeNull();
+  expect(
+    worker.messages.filter((message) => message.type === "hydrate"),
+  ).toHaveLength(1);
+  expect(
+    worker.messages.filter((message) => message.type === "compute").at(-1)
+      .roundSeed,
+  ).toBe(2);
+  act(() => worker.reply(first.requestId));
+  expect(result.current.busy).toBe(true);
+});

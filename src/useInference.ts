@@ -18,6 +18,7 @@ export function useInference(
   pack: DataPack | null,
   history: AnswerRecord[],
   rejected: string[],
+  roundSeed = 0,
 ): Inference {
   const [stored, setStored] = useState<{
     pack: DataPack | null;
@@ -33,7 +34,7 @@ export function useInference(
   const currentPack = useRef<DataPack | null>(null);
   const historyKey = JSON.stringify(history);
   const rejectedKey = JSON.stringify(rejected);
-  const inputKey = `${historyKey}:${rejectedKey}`;
+  const inputKey = `${historyKey}:${rejectedKey}:${roundSeed}`;
   function setState(value: Inference, input = { pack, key: inputKey }) {
     setStored({ ...input, value });
   }
@@ -119,6 +120,7 @@ export function useInference(
         requestId,
         history: evidence,
         rejected: rejectedIds,
+        roundSeed,
       });
     else if (typeof Worker === "undefined") {
       try {
@@ -129,7 +131,7 @@ export function useInference(
         );
         setState({
           candidates,
-          next: selectQuestion(candidates, pack.questions, evidence),
+          next: selectQuestion(candidates, pack.questions, evidence, roundSeed),
           busy: false,
           error: null,
         });
@@ -146,7 +148,7 @@ export function useInference(
         error:
           "The game could not start its calculation worker. Please reload the page.",
       });
-  }, [pack, historyKey, rejectedKey]);
+  }, [pack, historyKey, rejectedKey, roundSeed]);
   // Passive effects run after render. Never expose the preceding question during
   // that interval: keyboard or rapid clicks must see the current inputs as busy.
   if (stored.pack !== pack || stored.key !== inputKey)

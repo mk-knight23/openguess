@@ -87,6 +87,7 @@ export function selectQuestion(
   candidates: Candidate[],
   questions: Question[],
   history: AnswerRecord[],
+  roundSeed = 0,
 ): { question: Question; informationGain: number } | null {
   if (candidates.length < 2) return null;
   const asked = new Set(history.map((record) => record.questionId));
@@ -124,6 +125,11 @@ export function selectQuestion(
   }
   let best: { question: Question; informationGain: number } | null = null;
   let bestScore = 0;
+  const nearEqual: {
+    question: Question;
+    informationGain: number;
+    score: number;
+  }[] = [];
   for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
     if (!eligible.has(question.id)) continue;
     const mass = masses.get(question.id);
@@ -158,12 +164,39 @@ export function selectQuestion(
       questionFamily(question) === previousFamily;
     const score =
       informationGain * Math.sqrt(coverage) * (sameFamily ? 0.9 : 1);
+    if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
+      nearEqual.push({ question, informationGain, score });
     if (informationGain > 1e-10 && score > bestScore + 1e-10) {
       best = { question, informationGain };
       bestScore = score;
     }
   }
+  if (best && roundSeed !== 0) {
+    const context = `${roundSeed}:${history.map((record) => `${record.questionId}:${record.answer}`).join("|")}`;
+    let priority = -1;
+    for (const option of nearEqual) {
+      if (option.score < bestScore * 0.95) continue;
+      const value = seededPriority(`${context}:${option.question.id}`);
+      if (value > priority) {
+        best = {
+          question: option.question,
+          informationGain: option.informationGain,
+        };
+        priority = value;
+      }
+    }
+  }
   return best;
+}
+
+// A reproducible hash for variety, not security or likelihood estimation.
+function seededPriority(value: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index++)
+    hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
+  hash = Math.imul(hash ^ (hash >>> 16), 0x85ebca6b);
+  hash = Math.imul(hash ^ (hash >>> 13), 0xc2b2ae35);
+  return (hash ^ (hash >>> 16)) >>> 0;
 }
 
 /** answeredCount must count informative answers, excluding "unknown". */

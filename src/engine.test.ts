@@ -402,3 +402,55 @@ it("blocks unmarked spelling text and name-property clues without rejecting sema
     )?.question.id,
   ).toBe("named");
 });
+describe("seeded near-equal semantic variety", () => {
+  const candidates = rankCandidates(
+    [
+      make("a", { a: true, b: true, c: false, d: false }),
+      make("b", { a: false, b: false, c: true, d: true }),
+    ],
+    [],
+  );
+  const qs = ["a", "b", "c", "d"].map((id) => ({
+    id,
+    text: `Semantic ${id}`,
+    hint: "",
+  }));
+  it("varies equally useful questions across seeds while replaying the same seed and undo", () => {
+    const picks = new Set(
+      Array.from(
+        { length: 20 },
+        (_, seed) => selectQuestion(candidates, qs, [], seed + 1)?.question.id,
+      ),
+    );
+    expect(picks.size).toBeGreaterThan(1);
+    const first = selectQuestion(candidates, qs, [], 42);
+    const history: AnswerRecord[] = [
+      { questionId: first!.question.id, answer: "yes" },
+    ];
+    expect(selectQuestion(candidates, qs, history, 42)?.question.id).not.toBe(
+      first?.question.id,
+    );
+    expect(selectQuestion(candidates, qs, history.slice(0, -1), 42)).toEqual(
+      first,
+    );
+    expect(selectQuestion(candidates, [...qs].reverse(), [], 42)).toEqual(
+      first,
+    );
+  });
+  it("never trades a strong question for a weak question just to vary a round", () => {
+    const pool = rankCandidates(
+      Array.from({ length: 10 }, (_, n) =>
+        make(String(n), { strong: n < 5, weak: n === 0 }),
+      ),
+      [],
+    );
+    const available = [
+      { id: "strong", text: "A useful broad clue", hint: "" },
+      { id: "weak", text: "A rare clue", hint: "" },
+    ];
+    for (let seed = 1; seed < 20; seed++)
+      expect(selectQuestion(pool, available, [], seed)?.question.id).toBe(
+        "strong",
+      );
+  });
+});
