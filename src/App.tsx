@@ -1,473 +1,1363 @@
-import { Header } from "./components/Header";
-import { DetectiveNotes } from "./components/DetectiveNotes";
-import { FeatureStrip } from "./components/FeatureStrip";
-import { Introduction } from "./components/Introduction";
-import { ContributionView } from "./components/ContributionView";
-import { AboutView } from "./components/AboutView";
-import { LibraryView } from "./components/LibraryView";
-import { Avatar } from "./components/Artwork";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Sparkles,
+  Settings,
+  BookOpen,
+  Trophy,
+  CalendarDays,
+  Github,
   ArrowRight,
-  ArrowUpRight,
   ArrowLeft,
+  RotateCcw,
   Check,
   X,
-  RotateCcw,
+  Search,
+  Download,
+  Upload,
+  Eye,
+  Globe2,
   ShieldCheck,
-  WandSparkles,
+  Star,
   Plus,
-  ChevronRight,
-  Orbit,
-  Lightbulb,
+  UserRound,
+  Film,
+  PawPrint,
+  Box,
+  Users,
+  Info,
+  Volume2,
 } from "lucide-react";
-import { characters, questions, CATALOG_VERSION } from "./data/catalog";
-import { rankCandidates, selectQuestion, shouldGuess } from "./engine";
-import type { Answer, AnswerRecord } from "./types";
+import { Genie } from "./components/Genie";
+import { Avatar } from "./components/Artwork";
+import { themeManifest } from "./data/manifest";
+import { loadTheme } from "./data/loadTheme";
+import { useInference } from "./useInference";
+import { shouldGuess } from "./engine";
+import {
+  readProgress,
+  saveProgress,
+  recordWin,
+  recordGame,
+  updateProgress,
+  exportProgress,
+  parseProgress,
+  dailyTargets,
+  localDateKey,
+  getAchievements,
+} from "./progress";
+import { languages, translate } from "./i18n";
+import type { Progress } from "./progress";
+import type { Answer, AnswerRecord, DataPack, Theme } from "./types";
 
 const REPO = "https://github.com/mk-knight23/openguess";
-const options: { value: Answer; label: string; key: string }[] = [
-  { value: "yes", label: "Yes", key: "1" },
-  { value: "probably", label: "Probably", key: "2" },
-  { value: "unknown", label: "Don't know", key: "3" },
-  { value: "probably-not", label: "Probably not", key: "4" },
-  { value: "no", label: "No", key: "5" },
+const MAX_QUESTIONS = 40;
+const choices: {
+  value: Answer;
+  key: "yes" | "no" | "dontKnow" | "probably" | "probablyNot";
+  number: string;
+}[] = [
+  { value: "yes", key: "yes", number: "1" },
+  { value: "no", key: "no", number: "2" },
+  { value: "unknown", key: "dontKnow", number: "3" },
+  { value: "probably", key: "probably", number: "4" },
+  { value: "probably-not", key: "probablyNot", number: "5" },
 ];
-type Scope = "all" | "fictional" | "real";
-type View = "play" | "library" | "about" | "contribute";
-type Stats = { wins: number; rounds: number };
-function readStats(): Stats {
-  try {
-    const x = JSON.parse(localStorage.getItem("openguess.stats") ?? "{}");
-    return {
-      wins: Number.isSafeInteger(x.wins) && x.wins >= 0 ? x.wins : 0,
-      rounds: Number.isSafeInteger(x.rounds) && x.rounds >= 0 ? x.rounds : 0,
-    };
-  } catch {
-    return { wins: 0, rounds: 0 };
-  }
+const icons = {
+  people: Users,
+  fictional: UserRound,
+  animals: PawPrint,
+  objects: Box,
+  movies: Film,
+};
+type View =
+  | "home"
+  | "game"
+  | "library"
+  | "collection"
+  | "daily"
+  | "settings"
+  | "about"
+  | "contribute";
+type Phase = "question" | "won" | "stumped";
+function download(name: string, value: unknown) {
+  const url = URL.createObjectURL(
+    new Blob([JSON.stringify(value, null, 2)], { type: "application/json" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function safePack(pack: DataPack, enabled: boolean): DataPack {
+  if (!enabled) return pack;
+  const adult =
+    /\b(pornograph(?:y|ic|er|ers)?|pornstars?|adult films?|sex toys?|sexual fetish(?:es)?|erotic|prostitutes?|prostitution)\b/i;
+  return {
+    ...pack,
+    characters: pack.characters.filter(
+      (c) => !adult.test(`${c.name} ${c.description} ${c.tags.join(" ")}`),
+    ),
+  };
 }
 
 export default function App() {
-  const [view, setView] = useState<View>("play");
-  const [scope, setScope] = useState<Scope>("all");
-  const [round, setRound] = useState<
-    "idle" | "playing" | "guess" | "won" | "exhausted"
-  >("idle");
+  const [view, setView] = useState<View>("home");
+  const [theme, setTheme] = useState<Theme>("people");
+  const [pack, setPack] = useState<DataPack | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [history, setHistory] = useState<AnswerRecord[]>([]);
   const [rejected, setRejected] = useState<string[]>([]);
+  const [phase, setPhase] = useState<Phase>("question");
   const [pausedAt, setPausedAt] = useState(-1);
+  const [progress, setProgress] = useState<Progress>(readProgress);
   const [explain, setExplain] = useState(false);
   const [search, setSearch] = useState("");
-  const [stats, setStats] = useState<Stats>(readStats);
-  const [proposalName, setProposalName] = useState("");
-  const [proposalDescription, setProposalDescription] = useState("");
-  const [proposalCategory, setProposalCategory] = useState<
-    "real" | "fictional"
-  >("fictional");
-  const [exported, setExported] = useState(false);
-  const focusRef = useRef<HTMLHeadingElement>(null);
-  const pool = useMemo(
-    () => characters.filter((c) => scope === "all" || c.category === scope),
-    [scope],
+  const [page, setPage] = useState(0);
+  const [notice, setNotice] = useState("");
+  const [nickname, setNickname] = useState(progress.profile.nickname);
+  const [proposal, setProposal] = useState({
+    kind: "character",
+    name: "",
+    description: "",
+    category: "people",
+    photoUrl: "",
+    rights: false,
+  });
+  const focus = useRef<HTMLHeadingElement>(null);
+  const importRef = useRef<HTMLInputElement>(null);
+  const generation = useRef(0);
+  const lang = progress.settings.language;
+  const t = (key: Parameters<typeof translate>[1]) => translate(lang, key);
+  const locale = languages.find((l) => l.code === lang) ?? languages[0];
+  const activePack = useMemo(
+    () => (pack ? safePack(pack, progress.settings.familyMode) : null),
+    [pack, progress.settings.familyMode],
   );
-  const candidates = useMemo(
-    () => rankCandidates(pool, history, rejected),
-    [pool, history, rejected],
-  );
-  const next = useMemo(
-    () => selectQuestion(candidates, questions, history),
-    [candidates, history],
-  );
+  const inference = useInference(activePack, history, rejected);
+  const { candidates, next, busy, error } = inference;
   const informative = history.filter((h) => h.answer !== "unknown").length;
-  const guessVisible =
-    round === "guess" ||
-    round === "won" ||
-    (round === "playing" &&
-      candidates.length > 0 &&
-      ((history.length > pausedAt && shouldGuess(candidates, informative)) ||
-        (informative > 0 && (!next || history.length >= 25))));
   const exhausted =
-    round === "exhausted" ||
-    (round === "playing" &&
-      (!candidates.length ||
-        (informative === 0 && (!next || history.length >= 25))));
+    !busy &&
+    !loading &&
+    activePack &&
+    (candidates.length === 0 ||
+      (!next && informative === 0) ||
+      (history.length >= MAX_QUESTIONS && informative === 0));
+  const guess =
+    !busy &&
+    !error &&
+    candidates.length > 0 &&
+    phase === "question" &&
+    ((history.length > pausedAt && shouldGuess(candidates, informative)) ||
+      (informative > 0 && (!next || history.length >= MAX_QUESTIONS)));
   const top = candidates[0];
-  const question = next?.question;
-  const filtered = characters.filter((c) =>
-    `${c.name} ${c.description} ${c.tags.join(" ")}`
-      .toLowerCase()
-      .includes(search.toLowerCase()),
+  const meta = themeManifest.find((m) => m.id === theme)!;
+  const total = themeManifest.reduce((n, m) => n + m.count, 0);
+  const visible = useMemo(
+    () =>
+      activePack?.characters.filter((c) =>
+        `${c.name} ${c.description}`
+          .toLowerCase()
+          .includes(search.toLowerCase()),
+      ) ?? [],
+    [activePack, search],
   );
-  function begin() {
+  const today = localDateKey(new Date());
+  const daily = useMemo(
+    () =>
+      activePack
+        ? dailyTargets(
+            `${today}:${theme}:${activePack.version}`,
+            activePack.characters.map((c) => c.id),
+            5,
+          )
+        : [],
+    [today, theme, activePack],
+  );
+  const solved = new Set(progress.daily[`${today}:${theme}`] ?? []);
+  const achievements = getAchievements(progress);
+  useEffect(() => {
+    const ticket = ++generation.current;
+    setLoading(true);
+    setPack(null);
+    setLoadError("");
+    loadTheme(theme)
+      .then((p) => {
+        if (ticket === generation.current) {
+          setPack(p);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (ticket === generation.current) {
+          setLoadError("This universe could not be loaded. Please try again.");
+          setLoading(false);
+        }
+      });
+    return () => {
+      generation.current++;
+    };
+  }, [theme, loadAttempt]);
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = locale.dir;
+  }, [lang, locale.dir]);
+  useEffect(() => {
+    if (view === "game") focus.current?.focus();
+  }, [history.length, view, phase, guess, busy]);
+  function persist(p: Progress) {
+    setProgress(p);
+    if (!saveProgress(p))
+      setNotice(
+        "Your browser could not save progress. Export a backup to keep it.",
+      );
+  }
+  function start() {
+    if (!activePack || loading) return;
     setHistory([]);
     setRejected([]);
     setPausedAt(-1);
-    setRound("playing");
+    setPhase("question");
     setExplain(false);
-    setView("play");
+    setNotice("");
+    setView("game");
+  }
+  function retry() {
+    setHistory([]);
+    setRejected([]);
+    setPhase("question");
+    setPausedAt(-1);
+    setLoadAttempt((n) => n + 1);
+  }
+  function changeTheme(id: Theme) {
+    setTheme(id);
+    setHistory([]);
+    setRejected([]);
+    setPhase("question");
+    setPausedAt(-1);
+    setSearch("");
+    setPage(0);
   }
   function answer(value: Answer) {
-    if (round === "playing" && !guessVisible && !exhausted && question)
-      setHistory((h) => [...h, { questionId: question.id, answer: value }]);
+    if (busy || guess || exhausted || !next || phase !== "question") return;
+    setHistory((h) => [...h, { questionId: next.question.id, answer: value }]);
   }
   function undo() {
     setHistory((h) => h.slice(0, -1));
-    setRound("playing");
     setPausedAt(history.length - 1);
+    setPhase("question");
   }
   function reject() {
     if (!top) return;
     setRejected((r) => [...r, top.character.id]);
     setPausedAt(history.length);
-    setRound("playing");
+    setPhase("question");
   }
   function confirm() {
-    const updated = { wins: stats.wins + 1, rounds: stats.rounds + 1 };
-    setStats(updated);
-    try {
-      localStorage.setItem("openguess.stats", JSON.stringify(updated));
-    } catch {
-      /* Play remains available when storage is disabled. */
-    }
-    setRound("won");
-  }
-  function clearStats() {
-    setStats({ wins: 0, rounds: 0 });
-    try {
-      localStorage.removeItem("openguess.stats");
-    } catch {
-      /* Ignore unavailable local storage. */
-    }
-  }
-  function contribute() {
-    setProposalCategory(scope === "real" ? "real" : "fictional");
-    setExported(false);
-    setView("contribute");
-  }
-  function downloadProposal() {
-    const payload = {
-      schema: "openguess.proposal/v1",
-      catalogVersion: CATALOG_VERSION,
-      name: proposalName.trim(),
-      description: proposalDescription.trim(),
-      category: proposalCategory,
-      answers: history,
-      notice: "Unreviewed proposal; not an automatic catalog update.",
-    };
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(payload, null, 2)], {
-        type: "application/json",
+    if (!top || phase === "won") return;
+    persist(
+      recordWin(progress, {
+        id: top.character.id,
+        name: top.character.name,
+        theme,
+        questionCount: history.length,
       }),
     );
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "openguess-proposal.json";
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setExported(true);
+    setPhase("won");
+    if (progress.settings.sound) playTone();
+  }
+  function surrender() {
+    if (top)
+      persist(
+        recordGame(progress, {
+          entityId: top.character.id,
+          name: top.character.name,
+          theme,
+          questions: history.length,
+          won: false,
+          playedAt: new Date().toISOString(),
+        }),
+      );
+    setPhase("stumped");
+  }
+  function setting(patch: Parameters<typeof updateProgress>[1]) {
+    try {
+      persist(updateProgress(progress, patch));
+      setNotice("");
+    } catch {
+      setNotice(
+        "Please enter a valid nickname with 1–40 plain-text characters.",
+      );
+    }
+  }
+  function playTone() {
+    try {
+      const context = new AudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      gain.gain.setValueAtTime(0.035, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.3);
+      oscillator.frequency.value = 660;
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.3);
+      oscillator.onended = () => void context.close();
+    } catch {
+      /* Sound is optional and must never block gameplay. */
+    }
+  }
+  async function importBackup(file?: File) {
+    if (!file) return;
+    if (file.size > 10_000_000) {
+      setNotice("The backup is too large. Limit: 10 MB.");
+      return;
+    }
+    try {
+      const p = parseProgress(await file.text());
+      persist(p);
+      setNickname(p.profile.nickname);
+      setNotice(
+        "Progress imported. This replaces the progress on this browser.",
+      );
+    } catch {
+      setNotice(
+        "That file is not a valid OpenGuess progress backup. Nothing was changed.",
+      );
+    }
   }
   useEffect(() => {
-    if (round !== "idle" || view !== "play") focusRef.current?.focus();
-  }, [history.length, view, round, rejected.length]);
-  useEffect(() => {
-    const listener = (event: KeyboardEvent) => {
+    const key = (e: KeyboardEvent) => {
       if (
-        view !== "play" ||
-        round !== "playing" ||
-        guessVisible ||
-        exhausted ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement
+        view !== "game" ||
+        e.altKey ||
+        e.ctrlKey ||
+        e.metaKey ||
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement
       )
         return;
-      const choice = options.find((o) => o.key === event.key);
-      if (choice) {
-        event.preventDefault();
-        answer(choice.value);
+      const c = choices.find((c) => c.number === e.key);
+      if (c) {
+        e.preventDefault();
+        answer(c.value);
       }
     };
-    window.addEventListener("keydown", listener);
-    return () => window.removeEventListener("keydown", listener);
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
   });
+  const mood =
+    phase === "won"
+      ? "celebrate"
+      : phase === "stumped" || exhausted
+        ? "stumped"
+        : busy
+          ? "thinking"
+          : guess
+            ? "confident"
+            : "idle";
+  const themePicker = (
+    <div className="theme-picker" aria-label="Choose a universe">
+      {themeManifest.map((m) => {
+        const Icon = icons[m.id];
+        return (
+          <button
+            key={m.id}
+            className={theme === m.id ? "selected" : ""}
+            aria-pressed={theme === m.id}
+            onClick={() => changeTheme(m.id)}
+          >
+            <Icon size={20} />
+            <span>{m.label}</span>
+            <small>{m.count.toLocaleString()}</small>
+          </button>
+        );
+      })}
+    </div>
+  );
+  const loadingView = (
+    <div className="loading-state" role="status">
+      <Sparkles className="loading-spark" size={27} />
+      <h2>{loading ? "Opening your universe…" : "Connecting the clues…"}</h2>
+      <p>The knowledge stays on your device.</p>
+    </div>
+  );
 
   return (
-    <div className="app-shell">
+    <div
+      className={`v2-shell${progress.settings.reducedMotion ? " motion-off" : ""}`}
+      data-testid="app-shell"
+      dir={locale.dir}
+    >
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <Header view={view} setView={setView} repo={REPO} />
+      <div className="sky-shapes" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+      </div>
+      <header className="v2-header">
+        <button
+          className="v2-logo"
+          onClick={() => setView("home")}
+          aria-label="OpenGuess home"
+        >
+          <Sparkles size={29} />
+          <span>
+            Open<span>Guess</span>
+          </span>
+          <sup>2</sup>
+        </button>
+        <nav aria-label="Main navigation">
+          <button onClick={() => setView("home")}>{t("play")}</button>
+          <button onClick={() => setView("library")}>
+            <BookOpen size={16} />
+            <span>Library</span>
+          </button>
+          <button onClick={() => setView("daily")}>
+            <CalendarDays size={16} />
+            <span>Daily challenge</span>
+          </button>
+          <button onClick={() => setView("collection")}>
+            <Trophy size={16} />
+            <span>Collection</span>
+          </button>
+        </nav>
+        <div className="header-tools">
+          <span className="stardust">
+            <Star size={15} />
+            {progress.points.toLocaleString()}
+          </span>
+          <button
+            className="settings-button"
+            aria-label="Settings"
+            onClick={() => setView("settings")}
+          >
+            <Settings size={21} />
+          </button>
+        </div>
+      </header>
       <main id="main">
-        {view === "play" && (
+        {view === "home" && (
           <>
-            <section className="play-layout">
-              <Introduction />
-              <div className="game-wrap">
-                <div className="game-panel">
-                  <div className="panel-top">
-                    <span>
-                      <span className="live-dot" /> THE GUESSING ROOM
-                    </span>
-                    <span className="panel-version">V.01</span>
+            <div className="home-topline">
+              <span className="edition">
+                <Globe2 size={14} /> THE OPEN-SOURCE GUESSING GENIE
+              </span>
+              <span>
+                {total.toLocaleString()} sourced entries · five universes · free
+                to play
+              </span>
+            </div>
+            <section className="genie-stage home-stage">
+              <aside className="recent-panel">
+                <h2>
+                  Last 10 games <span>ON THIS DEVICE</span>
+                </h2>
+                {progress.recent.length ? (
+                  <ol>
+                    {progress.recent.slice(0, 10).map((r, i) => (
+                      <li key={r.playedAt + i}>
+                        {r.name}
+                        <span>
+                          {r.won ? <Check size={13} /> : <X size={13} />}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p>Your next mystery starts this story.</p>
+                )}
+                <div className="local-profile">
+                  <UserRound size={16} />
+                  {progress.profile.nickname}
+                  <small>
+                    {progress.wins} solved · {progress.streak} day streak
+                  </small>
+                </div>
+              </aside>
+              <div className="genie-holder">
+                <Genie
+                  mood={mood}
+                  reducedMotion={progress.settings.reducedMotion}
+                  theme={theme}
+                />
+                <span className="original-art">
+                  Your curious companion. Original OpenGuess artwork.
+                </span>
+              </div>
+              <div className="home-content">
+                <div className="speech-bubble">
+                  <span className="bubble-star">
+                    <Sparkles size={18} />
+                  </span>
+                  <h1>
+                    Hello, I am <em>OpenGuess.</em>
+                  </h1>
+                  <p>
+                    Think of a real person, a fictional character,
+                    <br />
+                    an animal, an object, or a film.
+                    <br />
+                    <strong>I’ll try to guess what’s on your mind.</strong>
+                  </p>
+                </div>
+                <h2 className="theme-caption">Select your next universe</h2>
+                {themePicker}
+                <p className="pack-scope">{meta.description}</p>
+                <button
+                  className="big-play"
+                  onClick={start}
+                  disabled={loading || !activePack}
+                >
+                  {loading ? "Loading universe…" : "Start guessing"}
+                  <ArrowRight size={22} />
+                </button>
+                <div>
+                  {loadError && (
+                    <>
+                      <button onClick={retry}>Retry universe</button>
+                    </>
+                  )}
+                </div>
+                <button
+                  className="link-button"
+                  onClick={() => setView("library")}
+                >
+                  Not sure what to choose? Explore the library{" "}
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </section>
+            <section className="free-ribbon">
+              <span>
+                <ShieldCheck size={18} /> No ads. No subscriptions. No paid AI.
+              </span>
+              <button onClick={() => setView("about")}>
+                How does the magic work? <Info size={16} />
+              </button>
+              <a href={REPO} target="_blank" rel="noreferrer">
+                <Github size={16} /> Build it with us
+              </a>
+            </section>
+          </>
+        )}
+        {view === "game" && (
+          <section className="genie-stage game-stage">
+            <div className="genie-holder">
+              <Genie
+                mood={mood}
+                reducedMotion={progress.settings.reducedMotion}
+              />
+              <span className="game-universe">
+                <span>{meta.label}</span> ·{" "}
+                {activePack?.characters.length.toLocaleString()} entries
+              </span>
+            </div>
+            <div className="game-content">
+              <div className="round-header">
+                <button onClick={() => setView("home")}>
+                  <ArrowLeft size={16} /> Change universe
+                </button>
+                <span>
+                  {history.length}/{MAX_QUESTIONS} clues
+                </span>
+              </div>
+              {loadError || error ? (
+                <div className="speech-bubble">
+                  <h2 ref={focus} tabIndex={-1}>
+                    The magic paused.
+                  </h2>
+                  <p role="alert">{loadError || error}</p>
+                  <button className="big-play" onClick={retry}>
+                    Retry universe
+                  </button>
+                  <button onClick={() => setView("home")}>
+                    Return to setup
+                  </button>
+                </div>
+              ) : loading || busy ? (
+                loadingView
+              ) : phase === "stumped" || exhausted ? (
+                <div className="speech-bubble result-bubble">
+                  <span className="result-label">YOU WON THIS ROUND</span>
+                  <h2 ref={focus} tabIndex={-1}>
+                    You stumped me!
+                  </h2>
+                  <p>
+                    {informative === 0
+                      ? "I need a few known clues to make a useful guess."
+                      : "Your thought may be outside this pack, or the source facts may be incomplete."}
+                  </p>
+                  <div className="result-actions">
+                    <button className="big-play" onClick={start}>
+                      Play again <RotateCcw size={17} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setProposal((p) => ({ ...p, category: theme }));
+                        setView("contribute");
+                      }}
+                    >
+                      Add a new possibility <Plus size={17} />
+                    </button>
                   </div>
-                  {round === "idle" ? (
-                    <div className="welcome-state">
-                      <span className="mini-icon">
-                        <WandSparkles size={26} />
-                      </span>
-                      <h2>
-                        Got someone
-                        <br />
-                        in mind?
-                      </h2>
-                      <p>
-                        A superhero, a scientist, a familiar face.
-                        <br />
-                        Pick someone from our starter library.
-                      </p>
-                      <div className="scope-title">CHOOSE YOUR UNIVERSE</div>
-                      <div className="scope-options">
-                        {(["all", "fictional", "real"] as Scope[]).map((s) => (
-                          <button
-                            key={s}
-                            aria-pressed={scope === s}
-                            onClick={() => setScope(s)}
-                          >
-                            {s === "all"
-                              ? "Everyone"
-                              : s === "fictional"
-                                ? "Fictional"
-                                : "Real people"}
-                          </button>
-                        ))}
-                      </div>
-                      <button className="primary start" onClick={begin}>
-                        Start guessing <ArrowRight size={19} />
-                      </button>
-                      <span className="small-note">
-                        {pool.length} characters · five simple answers
-                      </span>
-                      <div className="starter-preview">
-                        <span>Need inspiration?</span>
-                        <button onClick={() => setView("library")}>
-                          Peek at the library <ArrowUpRight size={13} />
-                        </button>
-                      </div>
-                    </div>
-                  ) : exhausted ? (
-                    <div className="result-state">
-                      <span className="mini-icon">
-                        <Lightbulb size={26} />
-                      </span>
-                      <h2 ref={focusRef} tabIndex={-1}>
-                        You stumped me.
-                      </h2>
-                      <p>
-                        {informative === 0
-                          ? "I need a few clues to make a useful guess."
-                          : "Your character may be outside my starter library, or I need better clues."}
-                      </p>
-                      <button className="primary" onClick={begin}>
-                        Try another round <ArrowRight size={17} />
-                      </button>
-                      <button className="secondary" onClick={contribute}>
-                        Suggest a character <Plus size={16} />
-                      </button>
-                    </div>
-                  ) : guessVisible && top ? (
-                    <div className="result-state">
-                      <span className="result-kicker">
-                        {round === "won"
-                          ? "MYSTERY SOLVED"
-                          : "THE CLUES POINT TO…"}
-                      </span>
+                </div>
+              ) : guess || phase === "won" ? (
+                <div className="speech-bubble result-bubble">
+                  <span className="result-label">
+                    {phase === "won" ? "MYSTERY SOLVED" : "I THINK OF"}
+                  </span>
+                  {top && (
+                    <>
                       <Avatar character={top.character} />
-                      <h2 ref={focusRef} tabIndex={-1}>
+                      <h2 ref={focus} tabIndex={-1}>
                         {top.character.name}
                       </h2>
                       <p>{top.character.description}</p>
-                      <span className="model-note">
-                        {Math.round(top.probability * 100)}% relative model
-                        weight · {history.length} clues
-                        <br />A best match in this library, not a guarantee.
-                      </span>
-                      {round === "won" ? (
+                      <div className="confidence-pill">
+                        {Math.round(top.probability * 100)}% relative weight in
+                        this pack
+                      </div>
+                      <p className="honest-note">
+                        A best match among sourced entries. It can be wrong.
+                      </p>
+                      {top.character.source && (
+                        <a
+                          className="source-link"
+                          href={top.character.source.url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View source facts <ArrowRight size={13} />
+                        </a>
+                      )}
+                      {phase === "won" ? (
                         <>
-                          <div className="solved">
-                            <Check size={17} /> A good bit of detective work.
+                          <div className="win-message">
+                            <Star size={18} /> Collected! +
+                            {100 + Math.max(0, 20 - history.length) * 5}{" "}
+                            stardust
                           </div>
-                          <button className="primary" onClick={begin}>
+                          <button className="big-play" onClick={start}>
                             One more mystery <ArrowRight size={17} />
                           </button>
                         </>
                       ) : (
-                        <>
-                          <button className="primary" onClick={confirm}>
-                            <Check size={17} /> That’s my character
+                        <div className="guess-choices">
+                          <button onClick={confirm}>
+                            <Check size={19} /> That’s correct
                           </button>
-                          <button className="secondary" onClick={reject}>
-                            <X size={16} /> Not this time — keep going
+                          <button onClick={reject}>
+                            <X size={19} /> No — keep going
                           </button>
-                          <button
-                            className="text-button"
-                            onClick={() => {
-                              setRound("exhausted");
-                              contribute();
-                            }}
-                          >
-                            It’s not in the library
+                          <button className="link-button" onClick={surrender}>
+                            My answer isn’t here
                           </button>
-                        </>
+                        </div>
                       )}
-                    </div>
-                  ) : question ? (
-                    <div className="question-state">
-                      <div className="question-count">
-                        QUESTION{" "}
-                        <strong>
-                          {String(history.length + 1).padStart(2, "0")}
-                        </strong>
-                        <span>up to 25 clues</span>
-                      </div>
-                      <div className="progress-track">
-                        <span
-                          style={{ width: `${(history.length / 25) * 100}%` }}
-                        />
-                      </div>
-                      <h2
-                        data-testid="question-text"
-                        ref={focusRef}
-                        tabIndex={-1}
-                      >
-                        {question.text}
-                      </h2>
-                      <p className="question-hint">{question.hint}</p>
-                      <div className="answer-options">
-                        {options.map((o) => (
-                          <button
-                            key={o.value}
-                            onClick={() => answer(o.value)}
-                            aria-keyshortcuts={o.key}
-                            className={`answer answer-${o.value}`}
-                          >
-                            <span>{o.label}</span>
-                            <kbd aria-hidden="true">{o.key}</kbd>
-                            {o.value === "yes" ? (
-                              <Check size={18} />
-                            ) : o.value === "no" ? (
-                              <X size={18} />
-                            ) : (
-                              <ChevronRight size={17} />
-                            )}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="round-controls">
-                        <button onClick={undo} disabled={!history.length}>
-                          <ArrowLeft size={15} /> Undo
-                        </button>
-                        <button onClick={begin}>
-                          <RotateCcw size={14} /> Restart
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
-                  {round !== "idle" &&
-                    round !== "won" &&
-                    (guessVisible || exhausted) && (
-                      <div className="result-controls round-controls">
-                        <button onClick={undo} disabled={!history.length}>
-                          <ArrowLeft size={15} /> Undo last answer
-                        </button>
-                        <button onClick={begin}>
-                          <RotateCcw size={14} /> Restart
-                        </button>
-                      </div>
-                    )}
-                </div>
-                <div className="panel-under">
-                  <span>
-                    <ShieldCheck size={14} /> Your answers stay on this device.
-                  </span>
-                  {round === "idle" ? (
-                    <span>Built to be curious.</span>
-                  ) : (
-                    <button
-                      className="universe-change"
-                      onClick={() => {
-                        setRound("idle");
-                        setExplain(false);
-                      }}
-                    >
-                      Change universe
-                    </button>
+                    </>
                   )}
                 </div>
+              ) : next ? (
+                <>
+                  <div className="question-bubble speech-bubble">
+                    <span className="question-number">
+                      {String(history.length + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <span className="result-label">{t("question")}</span>
+                      <h2 data-testid="question-text" ref={focus} tabIndex={-1}>
+                        {next.question.text}
+                      </h2>
+                      <p>{next.question.hint}</p>
+                    </div>
+                  </div>
+                  <div className="answer-card">
+                    {choices.map((c) => (
+                      <button
+                        key={c.value}
+                        disabled={busy}
+                        onClick={() => answer(c.value)}
+                        aria-keyshortcuts={c.number}
+                      >
+                        <span>{t(c.key)}</span>
+                        <kbd aria-hidden="true">{c.number}</kbd>
+                        <span className="answer-chevron" aria-hidden="true">
+                          »
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                loadingView
+              )}
+              <div className="round-bottom">
+                {history.length > 0 && phase !== "won" && (
+                  <button onClick={undo} disabled={busy}>
+                    <ArrowLeft size={16} />
+                    {guess || phase === "stumped" || exhausted
+                      ? "Undo last answer"
+                      : "Undo"}
+                  </button>
+                )}
+                <button onClick={start} disabled={loading}>
+                  <RotateCcw size={15} /> Restart
+                </button>
+                {phase === "question" &&
+                  !guess &&
+                  !exhausted &&
+                  history.length > 0 && (
+                    <button onClick={surrender}>Give up</button>
+                  )}
+                <button
+                  aria-expanded={explain}
+                  onClick={() => setExplain(!explain)}
+                >
+                  <Eye size={16} /> Detective notes
+                </button>
               </div>
-            </section>
-            {round !== "idle" && (
-              <DetectiveNotes
-                explain={explain}
-                setExplain={setExplain}
-                next={next}
-                candidates={candidates}
-                history={history}
-                questions={questions}
-                options={options}
-              />
-            )}
-            <FeatureStrip />
-          </>
+              {explain && (
+                <div className="v2-notes">
+                  <p>
+                    These are model weights, not calibrated real-world accuracy.
+                    Missing source facts remain unknown; spelling questions help
+                    distinguish sparse entries.
+                  </p>
+                  <div>
+                    {candidates.slice(0, 5).map((c) => (
+                      <p key={c.character.id}>
+                        <span>{c.character.name}</span>
+                        <meter
+                          aria-label={`${c.character.name} relative weight`}
+                          min={0}
+                          max={1}
+                          value={c.probability}
+                        />
+                        <strong>{Math.round(c.probability * 100)}%</strong>
+                      </p>
+                    ))}
+                  </div>
+                  <ol>
+                    {history.map((h, i) => (
+                      <li key={h.questionId}>
+                        <span>
+                          {
+                            activePack?.questions.find(
+                              (q) => q.id === h.questionId,
+                            )?.text
+                          }
+                        </span>
+                        <strong>
+                          {choices.find((c) => c.value === h.answer)?.key}
+                        </strong>
+                        <button
+                          onClick={() => {
+                            setHistory(history.slice(0, i));
+                            setPhase("question");
+                            setPausedAt(i);
+                          }}
+                        >
+                          Correct from here
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          </section>
         )}
         {view === "library" && (
-          <LibraryView
-            search={search}
-            setSearch={setSearch}
-            filtered={filtered}
-            contribute={contribute}
-            focusRef={focusRef}
-            begin={() => {
-              setScope("all");
-              begin();
-            }}
-          />
+          <section className="hub-page">
+            <div className="page-heading">
+              <span>FIVE WORLDS OF POSSIBILITIES</span>
+              <h1>The knowledge library</h1>
+              <p>
+                {total.toLocaleString()} sourced records. Browse a pack before
+                choosing your secret.
+              </p>
+            </div>
+            {themePicker}
+            <p className="pack-scope">{meta.description}</p>
+            <div className="library-bar">
+              <label>
+                <Search size={19} />
+                <input
+                  type="search"
+                  aria-label="Search entries"
+                  placeholder="Search a name or description…"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(0);
+                  }}
+                />
+              </label>
+              <button
+                className="solid-button"
+                onClick={start}
+                disabled={loading}
+              >
+                Play this universe <ArrowRight size={18} />
+              </button>
+            </div>
+            {loading ? (
+              loadingView
+            ) : loadError ? (
+              <p role="alert">{loadError}</p>
+            ) : (
+              <>
+                <p className="result-count">
+                  {visible.length.toLocaleString()} entries · source: Wikidata /
+                  CC0 · some questions use name spelling
+                </p>
+                <div className="v2-library-grid">
+                  {visible.slice(page * 24, (page + 1) * 24).map((c) => (
+                    <article key={c.id}>
+                      <Avatar character={c} />
+                      <div>
+                        <h2>{c.name}</h2>
+                        <p>{c.description}</p>
+                        {c.source && (
+                          <a
+                            href={c.source.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Source facts
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                {visible.length === 0 && <p>No entries match this search.</p>}
+                <div className="pagination">
+                  <button
+                    onClick={() => setPage((p) => p - 1)}
+                    disabled={!page}
+                  >
+                    <ArrowLeft size={16} /> Previous
+                  </button>
+                  <span>
+                    Page {page + 1} of{" "}
+                    {Math.max(1, Math.ceil(visible.length / 24))}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => p + 1)}
+                    disabled={(page + 1) * 24 >= visible.length}
+                  >
+                    Next <ArrowRight size={16} />
+                  </button>
+                </div>
+              </>
+            )}
+            <button
+              className="link-button"
+              onClick={() => {
+                setProposal((p) => ({ ...p, category: theme }));
+                setView("contribute");
+              }}
+            >
+              Suggest an entry, a question, or a licensed photo{" "}
+              <Plus size={16} />
+            </button>
+          </section>
         )}
-        {view === "about" && (
-          <AboutView
-            stats={stats}
-            clearStats={clearStats}
-            focusRef={focusRef}
-          />
+        {view === "collection" && (
+          <section className="hub-page">
+            <div className="page-heading">
+              <span>YOUR HALL OF DISCOVERIES · LOCAL TO THIS BROWSER</span>
+              <h1>Your collection</h1>
+              <p>
+                {progress.profile.nickname}, you’ve solved {progress.wins}{" "}
+                mysteries and earned {progress.points.toLocaleString()}{" "}
+                stardust.
+              </p>
+            </div>
+            <div className="achievement-grid">
+              {achievements.map((a) => (
+                <article key={a.id} className={a.unlocked ? "unlocked" : ""}>
+                  <Trophy size={25} />
+                  <h2>{a.title}</h2>
+                  <p>{a.description}</p>
+                  <span>{a.unlocked ? "Unlocked" : "Keep exploring"}</span>
+                </article>
+              ))}
+            </div>
+            <div className="collection-summary">
+              <span>{progress.collection.length} unique discoveries</span>
+              <span>{progress.streak} day streak</span>
+            </div>
+            {progress.collection.length ? (
+              <div className="v2-library-grid">
+                {progress.collection
+                  .slice(-48)
+                  .reverse()
+                  .map((c) => (
+                    <article key={`${c.theme}:${c.entityId}`}>
+                      <Star size={25} />
+                      <div>
+                        <h2>{c.name}</h2>
+                        <p>
+                          {c.theme} · best in {c.bestQuestions} clues
+                        </p>
+                      </div>
+                    </article>
+                  ))}
+              </div>
+            ) : (
+              <div className="empty-collection">
+                <Sparkles size={40} />
+                <h2>Your collection is waiting.</h2>
+                <p>Confirm a correct guess to collect your first discovery.</p>
+                <button
+                  className="solid-button"
+                  onClick={() => setView("home")}
+                >
+                  Find a mystery
+                </button>
+              </div>
+            )}
+            <p className="honest-note">
+              This is your personal collection. No worldwide ranking is invented
+              from local scores.
+            </p>
+          </section>
+        )}
+        {view === "daily" && (
+          <section className="hub-page">
+            <div className="page-heading">
+              <span>{today} · A NEW SET EVERY DAY</span>
+              <h1>Five mysteries. One curious mind.</h1>
+              <p>
+                Use each clue to choose a thought, then get the genie to
+                identify it. Daily targets are deterministic for this pack and
+                date.
+              </p>
+            </div>
+            {themePicker}
+            {loading ? (
+              loadingView
+            ) : (
+              <>
+                <div className="daily-progress">
+                  {daily.filter((id) => solved.has(id)).length}/5 discoveries
+                  found · {meta.label}
+                </div>
+                <div className="daily-grid">
+                  {daily.map((id, i) => {
+                    const c = activePack!.characters.find((c) => c.id === id)!;
+                    const found = solved.has(id);
+                    return (
+                      <article key={id}>
+                        <span className="daily-number">0{i + 1}</span>
+                        <span className="daily-status">
+                          {found ? "Solved" : "MYSTERY CLUE"}
+                        </span>
+                        <h2>{found ? c.name : c.description}</h2>
+                        <p>
+                          {found
+                            ? "Collected in your personal hall."
+                            : `Name clue: ${c.name[0]}… · ${c.name.replace(/\s/g, "").length} characters without spaces`}
+                        </p>
+                        {found ? (
+                          <Check size={22} />
+                        ) : (
+                          <details>
+                            <summary>Reveal identity</summary>
+                            <p>{c.name}</p>
+                            <small>
+                              Revealing is a hint; it does not automatically
+                              complete the challenge.
+                            </small>
+                          </details>
+                        )}
+                        <button className="solid-button" onClick={start}>
+                          Play the clue <ArrowRight size={15} />
+                        </button>
+                      </article>
+                    );
+                  })}
+                </div>
+                <p className="honest-note">
+                  Confirming one of today’s five targets marks it solved.
+                  Challenges and rewards are local and have no monetary value.
+                </p>
+              </>
+            )}
+          </section>
+        )}
+        {view === "settings" && (
+          <section className="hub-page settings-page">
+            <div className="page-heading">
+              <span>MAKE THE MAGIC YOURS</span>
+              <h1>Settings & profile</h1>
+              <p>
+                Play freely as a guest. Your profile, settings and discoveries
+                are stored on this browser.
+              </p>
+            </div>
+            <div className="settings-grid">
+              <section className="settings-card">
+                <h2>
+                  <UserRound size={21} /> Your local profile
+                </h2>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setting({ nickname });
+                  }}
+                >
+                  <label>
+                    Nickname
+                    <input
+                      value={nickname}
+                      maxLength={40}
+                      onChange={(e) => setNickname(e.target.value)}
+                    />
+                  </label>
+                  <button className="solid-button" type="submit">
+                    Save profile
+                  </button>
+                </form>
+                <p>No email is needed for local play.</p>
+              </section>
+              <section className="settings-card">
+                <h2>
+                  <Globe2 size={21} /> Language
+                </h2>
+                <label>
+                  Interface language
+                  <select
+                    value={lang}
+                    onChange={(e) => setting({ language: e.target.value })}
+                  >
+                    {languages.map((l) => (
+                      <option value={l.code} key={l.code}>
+                        {l.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p>
+                  18 interface languages. Catalog descriptions, questions and
+                  some controls remain in English; full translation is still in
+                  progress.
+                </p>
+              </section>
+              <section className="settings-card">
+                <h2>
+                  <Settings size={21} /> Gameplay
+                </h2>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={!progress.settings.reducedMotion}
+                    onChange={(e) =>
+                      setting({ reducedMotion: !e.target.checked })
+                    }
+                  />{" "}
+                  Genie animations
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={progress.settings.sound}
+                    onChange={(e) => setting({ sound: e.target.checked })}
+                  />{" "}
+                  Celebration sound
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={progress.settings.familyMode}
+                    onChange={(e) => {
+                      setting({ familyMode: e.target.checked });
+                      setView("home");
+                      setHistory([]);
+                      setRejected([]);
+                    }}
+                  />{" "}
+                  Sensitive content filter
+                </label>
+                <p>
+                  Best-effort filtering of explicit adult wording. Source data
+                  is not fully moderated; this is not a child-safety guarantee.
+                  System reduced-motion preferences are always respected.
+                </p>
+              </section>
+              <section className="settings-card">
+                <h2>
+                  <ShieldCheck size={21} /> Keep your discoveries
+                </h2>
+                <button
+                  className="outline-button"
+                  onClick={() =>
+                    download(
+                      "openguess-progress.json",
+                      JSON.parse(exportProgress(progress)),
+                    )
+                  }
+                >
+                  <Download size={17} /> Export progress
+                </button>
+                <label className="outline-button upload-button">
+                  <Upload size={17} /> Import progress
+                  <input
+                    ref={importRef}
+                    type="file"
+                    accept="application/json,.json"
+                    onChange={(e) => void importBackup(e.target.files?.[0])}
+                  />
+                </label>
+                <p>
+                  Imports replace this browser’s progress. Review the backup
+                  before sharing it.
+                </p>
+                <button
+                  className="danger-link"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Clear your local collection, profile and settings? This cannot be undone without a backup.",
+                      )
+                    ) {
+                      const p = readProgress({
+                        getItem: () => null,
+                      } as unknown as Storage);
+                      persist(p);
+                      setNickname(p.profile.nickname);
+                      setNotice("Local progress cleared.");
+                    }
+                  }}
+                >
+                  Clear local progress
+                </button>
+              </section>
+            </div>
+          </section>
         )}
         {view === "contribute" && (
-          <ContributionView
-            proposalName={proposalName}
-            setProposalName={setProposalName}
-            proposalDescription={proposalDescription}
-            setProposalDescription={setProposalDescription}
-            proposalCategory={proposalCategory}
-            setProposalCategory={setProposalCategory}
-            exported={exported}
-            historyCount={history.length}
-            downloadProposal={downloadProposal}
-            back={() => setView("play")}
-            focusRef={focusRef}
-          />
+          <section className="hub-page contribution-page">
+            <div className="page-heading">
+              <span>MAKE THE KNOWLEDGE BETTER</span>
+              <h1>Add a little possibility.</h1>
+              <p>
+                Suggest an entry, a better question, or a licensed photo. Export
+                a proposal and submit it for review. Nothing is uploaded
+                automatically.
+              </p>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (
+                  proposal.kind === "photo" &&
+                  (!proposal.rights || !/^https:\/\//i.test(proposal.photoUrl))
+                ) {
+                  setNotice(
+                    "Photo proposals need an HTTPS URL and a rights confirmation.",
+                  );
+                  return;
+                }
+                download("openguess-proposal.json", {
+                  schema: "openguess.proposal/v2",
+                  ...proposal,
+                  answers: history,
+                  packVersion: pack?.version,
+                  notice: "Unreviewed; no live data changed.",
+                });
+                setNotice(
+                  "Proposal exported. Review the file, then submit it on GitHub.",
+                );
+              }}
+            >
+              <label>
+                Proposal type
+                <select
+                  value={proposal.kind}
+                  onChange={(e) =>
+                    setProposal((p) => ({ ...p, kind: e.target.value }))
+                  }
+                >
+                  <option value="character">New entry / correction</option>
+                  <option value="question">New question</option>
+                  <option value="photo">Licensed photo</option>
+                </select>
+              </label>
+              <label>
+                Universe
+                <select
+                  value={proposal.category}
+                  onChange={(e) =>
+                    setProposal((p) => ({ ...p, category: e.target.value }))
+                  }
+                >
+                  {themeManifest.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                {proposal.kind === "question" ? "Question text" : "Entry name"}
+                <input
+                  required
+                  maxLength={160}
+                  value={proposal.name}
+                  onChange={(e) =>
+                    setProposal((p) => ({ ...p, name: e.target.value }))
+                  }
+                />
+              </label>
+              <label>
+                Description, source facts and evidence
+                <textarea
+                  required
+                  maxLength={2000}
+                  value={proposal.description}
+                  onChange={(e) =>
+                    setProposal((p) => ({ ...p, description: e.target.value }))
+                  }
+                />
+              </label>
+              {proposal.kind === "photo" && (
+                <>
+                  <label>
+                    HTTPS photo URL
+                    <input
+                      type="url"
+                      required
+                      value={proposal.photoUrl}
+                      onChange={(e) =>
+                        setProposal((p) => ({ ...p, photoUrl: e.target.value }))
+                      }
+                    />
+                  </label>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={proposal.rights}
+                      onChange={(e) =>
+                        setProposal((p) => ({ ...p, rights: e.target.checked }))
+                      }
+                    />{" "}
+                    I have checked the image license and can share it.
+                  </label>
+                </>
+              )}
+              <p>
+                Export includes {history.length} answers. Public figures or
+                fictional characters only; do not add private individuals.
+              </p>
+              <button className="solid-button" type="submit">
+                <Download size={17} /> Export proposal
+              </button>
+              <a
+                className="outline-button"
+                href={`${REPO}/issues/new`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github size={17} /> Submit for review
+              </a>
+            </form>
+          </section>
+        )}
+        {view === "about" && (
+          <section className="hub-page about-page">
+            <div className="page-heading">
+              <span>OPEN CODE, OPEN KNOWLEDGE</span>
+              <h1>The magic is a question.</h1>
+              <p>
+                OpenGuess weighs possibilities from your answers and asks the
+                question expected to reduce uncertainty most. It runs in a
+                browser worker so the interface stays responsive.
+              </p>
+            </div>
+            <div className="settings-grid">
+              <section className="settings-card">
+                <h2>Thousands of real records</h2>
+                <p>
+                  Five CC0 Wikidata packs contain {total.toLocaleString()}{" "}
+                  distinct-per-theme entities. Public facts are incomplete.
+                  Mammal taxa and vehicle/tool/instrument types broaden the
+                  animal and object packs, including many specialized entries.
+                </p>
+              </section>
+              <section className="settings-card">
+                <h2>Honest guessing</h2>
+                <p>
+                  Missing facts remain unknown. A percentage is a relative model
+                  weight, not a certified probability of being correct. Spelling
+                  questions are a fallback when facts cannot distinguish
+                  entries. It can still guess incorrectly.
+                </p>
+              </section>
+              <section className="settings-card">
+                <h2>Free, by design</h2>
+                <p>
+                  No advertisements, payment gates or paid AI. Core inference
+                  happens locally. Source code is MIT licensed; Wikidata
+                  structured records are CC0. Hosting and online-service free
+                  tiers have limits.
+                </p>
+              </section>
+              <section className="settings-card">
+                <h2>Original OpenGuess</h2>
+                <p>
+                  The genie, motion and interface are independently created in
+                  the classic genie-game direction. OpenGuess is not affiliated
+                  with Akinator or Elokence. REA research observes public
+                  behavior, not the private algorithm or database.
+                </p>
+              </section>
+            </div>
+            <a
+              className="solid-button"
+              href={`${REPO}/tree/main/docs`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Research, data quality & scaling <ArrowRight size={17} />
+            </a>
+          </section>
+        )}
+        {loadError && view === "home" && (
+          <p className="v2-notice" role="alert">
+            {loadError}
+          </p>
+        )}
+        {notice && (
+          <p className="v2-notice" role="status">
+            {notice}
+          </p>
         )}
       </main>
-      <footer>
-        <span className="footer-brand">
-          <Orbit size={18} /> An open experiment in curiosity.
-        </span>
+      <footer className="v2-footer">
         <span>
-          {characters.length} characters · catalog {CATALOG_VERSION}
+          <Sparkles size={16} /> OpenGuess · version 0.2
         </span>
+        <button onClick={() => setView("about")}>About & data sources</button>
         <a href={`${REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">
-          Free, forever. MIT licensed. <ArrowUpRight size={13} />
+          MIT licensed
         </a>
+        <a href={REPO} target="_blank" rel="noreferrer">
+          <Github size={16} /> GitHub
+        </a>
+        <span>Made for curiosity. Always free.</span>
       </footer>
     </div>
   );
