@@ -19,12 +19,24 @@ export function useInference(
   history: AnswerRecord[],
   rejected: string[],
 ): Inference {
-  const [state, setState] = useState<Inference>(empty);
+  const [stored, setStored] = useState<{
+    pack: DataPack | null;
+    key: string;
+    value: Inference;
+  }>({ pack: null, key: "", value: empty });
+  const pendingInput = useRef<{ pack: DataPack | null; key: string }>({
+    pack: null,
+    key: "",
+  });
   const worker = useRef<Worker | null>(null);
   const sequence = useRef(0);
   const currentPack = useRef<DataPack | null>(null);
   const historyKey = JSON.stringify(history);
   const rejectedKey = JSON.stringify(rejected);
+  const inputKey = `${historyKey}:${rejectedKey}`;
+  function setState(value: Inference, input = { pack, key: inputKey }) {
+    setStored({ ...input, value });
+  }
   useEffect(() => {
     currentPack.current = pack;
     sequence.current++;
@@ -63,23 +75,29 @@ export function useInference(
       const question = result.questionId
         ? questions.get(result.questionId)
         : null;
-      setState({
-        candidates,
-        next: question
-          ? { question, informationGain: result.informationGain }
-          : null,
-        busy: false,
-        error: result.error ?? null,
-      });
+      setState(
+        {
+          candidates,
+          next: question
+            ? { question, informationGain: result.informationGain }
+            : null,
+          busy: false,
+          error: result.error ?? null,
+        },
+        pendingInput.current,
+      );
     };
     instance.onerror = () => {
       if (instance !== worker.current || currentPack.current !== pack) return;
       sequence.current++;
-      setState({
-        ...empty,
-        error:
-          "The game could not calculate its next question. Please restart or reload the page.",
-      });
+      setState(
+        {
+          ...empty,
+          error:
+            "The game could not calculate its next question. Please restart or reload the page.",
+        },
+        pendingInput.current,
+      );
     };
     instance.postMessage({ type: "hydrate", pack });
     return () => {
@@ -91,6 +109,7 @@ export function useInference(
   useEffect(() => {
     if (!pack) return;
     const requestId = ++sequence.current;
+    pendingInput.current = { pack, key: inputKey };
     setState({ ...empty, busy: true });
     const evidence = JSON.parse(historyKey) as AnswerRecord[];
     const rejectedIds = JSON.parse(rejectedKey) as string[];
@@ -128,5 +147,9 @@ export function useInference(
           "The game could not start its calculation worker. Please reload the page.",
       });
   }, [pack, historyKey, rejectedKey]);
-  return state;
+  // Passive effects run after render. Never expose the preceding question during
+  // that interval: keyboard or rapid clicks must see the current inputs as busy.
+  if (stored.pack !== pack || stored.key !== inputKey)
+    return pack ? { ...empty, busy: true } : empty;
+  return stored.value;
 }

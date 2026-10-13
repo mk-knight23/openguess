@@ -114,3 +114,29 @@ it("terminates the previous pack worker and ignores its late results", async () 
   await waitFor(() => expect(result.current.error).toContain("restart"));
   expect(result.current.busy).toBe(false);
 });
+it("hides preceding inference during the render before new input effects run", async () => {
+  vi.stubGlobal("Worker", FakeWorker);
+  const observed: { busy: boolean; next: string | null }[] = [];
+  const { rerender } = renderHook(
+    ({ history }) => {
+      const inference = useInference(pack, history, []);
+      observed.push({
+        busy: inference.busy,
+        next: inference.next?.question.id ?? null,
+      });
+      return inference;
+    },
+    { initialProps: { history: [] as import("./types").AnswerRecord[] } },
+  );
+  const worker = FakeWorker.instances[0];
+  act(() =>
+    worker.reply(worker.messages.find((m) => m.type === "compute").requestId),
+  );
+  expect(observed.at(-1)?.busy).toBe(false);
+  observed.length = 0;
+  rerender({ history: [{ questionId: "q", answer: "yes" }] });
+  expect(observed.length).toBeGreaterThan(0);
+  expect(observed.every((value) => value.busy && value.next === null)).toBe(
+    true,
+  );
+});
