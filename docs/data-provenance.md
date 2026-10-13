@@ -12,7 +12,7 @@ This is a finite, curated-by-query catalog, not all people or all animals worldw
 
 The engine also uses explicit English-name spelling questions. These are known true or false from the displayed label and provide a fallback when source facts are sparse. Spelling is not a substitute for a rich semantic database. Each pack reports distinct full trait signatures and collisions, but that metric includes spelling; it does not imply every entity has a distinctive factual biography. Two entities with identical signatures cannot be separated by the current questions.
 
-Birth and release dates become year-level questions; taxon discovery dates follow the source's discovery/described date property. Names and descriptions are retained as data, without copying article prose or reference-site artwork. No photos are imported, avoiding separate photo-license obligations.
+Birth and release dates become year-level questions; taxon discovery dates follow the source's time-of-discovery property. Names and descriptions are retained as data, without copying article prose or reference-site artwork. No photos are imported, avoiding separate photo-license obligations.
 
 ## Updating and contributing
 
