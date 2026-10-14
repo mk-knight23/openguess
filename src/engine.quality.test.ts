@@ -223,7 +223,7 @@ it("unknown or missing signature facts preserve supported confirmation", () => {
   for (const fact of [null, undefined]) {
     const profiles = characters.map((c) => ({
       ...c,
-      traits: { ...c.traits, u: fact },
+      traits: fact === null ? { ...c.traits, u: null } : { ...c.traits },
     }));
     const evidence: AnswerRecord[] = [
       ...history,
