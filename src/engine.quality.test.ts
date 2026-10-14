@@ -218,3 +218,25 @@ it("posterior corroboration can recover from a mistaken prerequisite answer", ()
     )?.question.id,
   ).toBe("s");
 });
+
+it("unknown or missing signature facts preserve supported confirmation", () => {
+  for (const fact of [null, undefined]) {
+    const profiles = characters.map((c) => ({
+      ...c,
+      traits: { ...c.traits, u: fact },
+    }));
+    const evidence: AnswerRecord[] = [
+      ...history,
+      { questionId: "s", answer: "yes" },
+      { questionId: "u", answer: "no" },
+    ];
+    const questions = [...broad, signature, { ...signature, id: "u" }];
+    expect(
+      getRoundReadiness(
+        rankCandidates(profiles, evidence, [], questions),
+        evidence,
+        questions,
+      ).ready,
+    ).toBe(true);
+  }
+});

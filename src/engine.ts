@@ -331,8 +331,10 @@ export function getRoundReadiness(
     const positiveAnswer =
       record.answer === "yes" || record.answer === "probably";
     if (typeof fact !== "boolean" || fact !== positiveAnswer) {
-      if (typeof fact === "boolean") contradictions++;
-      if (q.tier === "signature") signatureGroups.clear();
+      if (typeof fact === "boolean") {
+        contradictions++;
+        if (q.tier === "signature") signatureGroups.clear();
+      }
       continue;
     }
     const group = evidenceGroup(q);
