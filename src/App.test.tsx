@@ -27,6 +27,16 @@ afterEach(() => {
   localStorage.clear();
 });
 describe("OpenGuess v2", () => {
+  it("keeps question guidance optional and reveals it on request", async () => {
+    const u = userEvent.setup();
+    render(<App />);
+    await u.click(await screen.findByRole("button", { name: "Start guessing" }));
+    const text = (await screen.findByTestId("question-text")).textContent;
+    const question = questions.find((q) => q.text === text)!;
+    expect(screen.getByText(question.hint)).not.toBeVisible();
+    await u.click(screen.getByText("Help with this clue"));
+    expect(screen.getByText(question.hint)).toBeVisible();
+  });
   it("offers five separate universes and starts an adaptive round", async () => {
     const u = userEvent.setup();
     render(<App />);

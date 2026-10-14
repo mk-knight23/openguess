@@ -738,12 +738,15 @@ export default function App() {
                     <span className="question-number">
                       {String(history.length + 1).padStart(2, "0")}
                     </span>
-                    <div>
+                    <div className="question-transition" key={next.question.id}>
                       <span className="result-label">{t("question")}</span>
                       <h2 data-testid="question-text" ref={focus} tabIndex={-1}>
                         {next.question.text}
                       </h2>
-                      <p>{next.question.hint}</p>
+                      <details className="clue-help">
+                        <summary>Help with this clue</summary>
+                        <p>{next.question.hint}</p>
+                      </details>
                     </div>
                   </div>
                   <div className="answer-card">
