@@ -99,8 +99,38 @@ export function selectQuestion(
     entropy(negative),
     entropy(positive.map((p, i) => (p + negative[i]) / 2)),
   ];
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const usedEquivalence = new Set(
+    history
+      .map((r) => questionMap.get(r.questionId)?.equivalenceGroup)
+      .filter(Boolean),
+  );
   const eligible = new Set(
-    questions.filter((q) => !asked.has(q.id) && isSemantic(q)).map((q) => q.id),
+    questions
+      .filter(
+        (q) =>
+          !asked.has(q.id) &&
+          isSemantic(q) &&
+          (!q.equivalenceGroup || !usedEquivalence.has(q.equivalenceGroup)) &&
+          (q.prerequisites ?? []).every((p) => {
+            const observed = history.find((r) => r.questionId === p.questionId);
+            if (observed && observed.answer !== "unknown")
+              return p.value
+                ? ["yes", "probably"].includes(observed.answer)
+                : ["no", "probably-not"].includes(observed.answer);
+            return (
+              candidates.reduce(
+                (sum, c) =>
+                  sum +
+                  (c.character.traits[p.questionId] === p.value
+                    ? c.probability
+                    : 0),
+                0,
+              ) >= 0.8
+            );
+          }),
+      )
+      .map((q) => q.id),
   );
   const previousQuestion = questions.find(
     (q) => q.id === history.at(-1)?.questionId,
@@ -163,7 +193,23 @@ export function selectQuestion(
       previousFamily !== undefined &&
       questionFamily(question) === previousFamily;
     const score =
-      informationGain * Math.sqrt(coverage) * (sameFamily ? 0.9 : 1);
+      informationGain *
+      Math.sqrt(coverage) *
+      (sameFamily ? 0.9 : 1) *
+      (history.slice(-3).some((r) => {
+        const previous = questionMap.get(r.questionId);
+        return (
+          r.answer === "unknown" &&
+          previous &&
+          ((questionFamily(question) !== undefined &&
+            questionFamily(previous) === questionFamily(question)) ||
+            (question.relatedGroup &&
+              previous.relatedGroup === question.relatedGroup))
+        );
+      })
+        ? 0.45
+        : 1) *
+      (question.answerability === "specialist" ? 0.85 : 1);
     if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
       nearEqual.push({ question, informationGain, score });
     if (informationGain > 1e-10 && score > bestScore + 1e-10) {

@@ -33,3 +33,60 @@ for (const theme of ["people", "fictional", "animals", "objects", "movies"]) {
     }
   });
 }
+
+it("suppresses equivalent clues and signatures without supported prerequisites", () => {
+  const characters = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "real" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { a: value, b: value, parent: false, signature: value },
+  }));
+  const questions = [
+    { id: "a", text: "A", hint: "", equivalenceGroup: "same" },
+    { id: "b", text: "B", hint: "", equivalenceGroup: "same" },
+    { id: "parent", text: "Parent", hint: "" },
+    {
+      id: "signature",
+      text: "Signature",
+      hint: "",
+      tier: "signature" as const,
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "a", answer: "unknown" }];
+  expect(
+    selectQuestion(rankCandidates(characters, history), questions, history),
+  ).toBeNull();
+});
+it("avoids an uncertain topic when another useful topic remains", () => {
+  const characters = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "real" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { a: value, b: value, z: value },
+  }));
+  const questions = [
+    { id: "a", text: "A", hint: "", family: "science" },
+    { id: "b", text: "B", hint: "", family: "science" },
+    { id: "z", text: "Z", hint: "", family: "appearance" },
+  ];
+  expect(
+    selectQuestion(
+      rankCandidates(characters, []),
+      questions,
+      [
+        { questionId: "a", answer: "unknown" },
+        { questionId: "unrelated", answer: "yes" },
+      ],
+      0,
+    )?.question.id,
+  ).toBe("z");
+});
