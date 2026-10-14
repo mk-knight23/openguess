@@ -86,3 +86,16 @@ it("prioritizes a distinctive confirmation after broad narrowing", () => {
     )?.question.id,
   ).toBe("s");
 });
+it("a later contradictory confirmation clears an earlier confirmation", () => {
+  const evidence: AnswerRecord[] = [
+    ...history,
+    { questionId: "s", answer: "yes" },
+    { questionId: "s", answer: "no" },
+  ];
+  expect(
+    shouldGuess(rankCandidates(characters, evidence), 5, evidence, [
+      ...broad,
+      signature,
+    ]),
+  ).toBe(false);
+});

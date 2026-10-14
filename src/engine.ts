@@ -322,7 +322,10 @@ export function getRoundReadiness(
     const fact = leader.character.traits[q.id];
     const positiveAnswer =
       record.answer === "yes" || record.answer === "probably";
-    if (typeof fact !== "boolean" || fact !== positiveAnswer) continue;
+    if (typeof fact !== "boolean" || fact !== positiveAnswer) {
+      if (q.tier === "signature") confirmed = false;
+      continue;
+    }
     const group = evidenceGroup(q);
     if (
       !groups.has(group) &&
