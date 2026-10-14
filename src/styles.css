@@ -1,10 +1,15 @@
 :root {
   font-family: "DM Sans", Arial, sans-serif;
   color: #123e56;
-  background: #c8eaf1;
+  background: #cadcf0;
   font-synthesis: none;
-  --ink: #123e56;
-  --muted: #426678;
+  --ink: #163858;
+  --surface: #f5f8ff;
+  --surface-glass: rgb(249 251 255 / 92%);
+  --surface-border: #b5c7e0;
+  --accent: #244e83;
+  --surface-shadow: 0 14px 36px rgb(35 62 112 / 10%);
+  --muted: #3d5778;
   --teal: #07556b;
   --paper: #f7fcfd;
   --border: #b4d7e0;
@@ -62,7 +67,7 @@ a svg {
   flex-shrink: 0;
 }
 button {
-  min-height: 40px;
+  min-height: 44px;
 }
 input,
 select,
@@ -76,9 +81,9 @@ textarea {
   overflow: hidden;
   background: radial-gradient(
     ellipse at 70% 28%,
-    #e6f8fa 0%,
-    #cbeaf1 42%,
-    #a5d7e4 100%
+    #f0f2fc 0%,
+    #d5e3f5 42%,
+    #b2cdea 100%
   );
   padding: 0 max(30px, calc((100vw - 1320px) / 2));
 }
@@ -95,7 +100,7 @@ textarea {
   height: 65vw;
   background: #fff;
   opacity: 0.12;
-  clip-path: polygon(0 0, 100% 25%, 40% 100%);
+  border-radius: 48% 52% 67% 33%;
   transform: rotate(-20deg);
   left: -35vw;
   top: 0;
@@ -115,14 +120,14 @@ textarea {
 .sky-shapes i:nth-child(4) {
   left: -20%;
   top: 60%;
-  background: #529cc1;
+  background: #8d89c5;
   opacity: 0.1;
 }
 .sky-shapes i:nth-child(5) {
   left: 70%;
   top: 70%;
   transform: rotate(170deg);
-  background: #2e94b6;
+  background: #607daa;
   opacity: 0.08;
 }
 .v2-header {
@@ -298,9 +303,10 @@ textarea {
 }
 .speech-bubble {
   position: relative;
-  border: 1px solid #fff;
-  background: linear-gradient(135deg, #fff, #eaf6fa);
-  box-shadow: 0 12px 24px #317b9514;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--surface-shadow);
   border-radius: 8px;
   padding: 35px 38px;
   margin-bottom: 24px;
@@ -455,9 +461,9 @@ textarea {
   font-size: inherit;
 }
 .game-stage {
-  grid-template-columns: minmax(240px, 400px) minmax(350px, 620px);
+  grid-template-columns: minmax(280px, 460px) minmax(350px, 620px);
   justify-content: center;
-  gap: 70px;
+  gap: 38px;
   padding-top: 38px;
   align-items: start;
   min-height: calc(100vh - 190px);
@@ -502,12 +508,17 @@ textarea {
   margin-bottom: 26px;
 }
 .question-number {
-  font-size: 47px;
-  letter-spacing: -2px;
-  font-weight: 400;
-  color: #6b9fb3;
-  border-inline-end: 1px solid #bedde5;
-  padding-inline-end: 22px;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  min-width: 64px;
+  font-family: Georgia, serif;
+  font-size: 38px;
+  color: white;
+  background: var(--accent);
+  padding: 12px;
+  border-radius: 3px;
 }
 .result-label {
   font-size: 9px;
@@ -516,7 +527,9 @@ textarea {
   color: #46738a;
 }
 .question-bubble h2 {
-  font-size: 23px;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  font-size: 27px;
   font-weight: 600;
   line-height: 1.45;
   letter-spacing: -0.4px;
@@ -528,16 +541,18 @@ textarea {
   line-height: 1.7;
 }
 .answer-card {
-  background: #07556b;
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(12px);
   border-radius: 6px;
   overflow: hidden;
   padding: 7px 0;
   box-shadow: 0 8px 22px #175f7826;
-  max-width: 380px;
+  max-width: 420px;
   margin: 0 auto;
 }
 .answer-card button {
-  background: #07556b;
+  background: transparent;
   display: flex;
   align-items: center;
   width: 100%;
@@ -545,23 +560,24 @@ textarea {
   position: relative;
   min-height: 56px;
   padding: 12px 40px;
-  color: #f4fcff;
+  color: var(--ink);
   font-size: 17px;
-  border-bottom: 1px solid #ffffff14;
+  border-bottom: 1px solid #b5c7e06b;
 }
 .answer-card button:last-child {
   border-bottom: 0;
 }
-.answer-card button:hover {
-  background: #176d86;
+.answer-card button:hover,
+.answer-card button:focus-visible {
+  background: #e2eafa;
 }
 .answer-card kbd {
   position: absolute;
   left: 20px;
   font: inherit;
   font-size: 10px;
-  color: #c1e4ee;
-  border: 1px solid #70acba;
+  color: var(--muted);
+  border: 1px solid #849cbb;
   padding: 2px 5px;
   border-radius: 3px;
 }
@@ -990,8 +1006,8 @@ textarea {
   gap: 20px;
 }
 .settings-card {
-  background: #f5fbfddd;
-  border: 1px solid #a9cfdc;
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-border);
   border-radius: 7px;
   padding: 28px;
 }
@@ -1418,17 +1434,17 @@ textarea {
     min-height: calc(100vh - 210px);
   }
   .game-stage .genie-holder {
-    position: absolute;
-    right: -28px;
-    top: 39px;
-    width: 130px;
+    position: relative;
+    width: 154px;
+    height: 155px;
+    margin: 0 auto 14px;
+    overflow: hidden;
     padding: 0;
-    z-index: -1;
-    opacity: 0.65;
+    opacity: 1;
   }
   .game-stage .genie-art {
-    width: 130px;
-    transform: translateY(-22px);
+    width: 154px;
+    transform: translateY(-27px);
   }
   .game-universe {
     display: none;
@@ -1444,16 +1460,16 @@ textarea {
     font-size: 10px;
   }
   .question-bubble {
-    margin-inline-end: 50px;
+    margin-inline-end: 0;
     min-height: 155px;
     padding: 20px;
     gap: 13px;
   }
   .question-bubble:before {
-    left: auto;
-    right: -16px;
-    top: 45px;
-    transform: rotate(180deg);
+    left: calc(50% - 12px);
+    right: auto;
+    top: -18px;
+    transform: rotate(135deg);
   }
   .question-bubble h2 {
     font-size: 19px;
@@ -1473,7 +1489,7 @@ textarea {
   }
   .answer-card {
     max-width: 100%;
-    margin-inline: 20px;
+    margin-inline: 0;
   }
   .answer-card button {
     font-size: 16px;
@@ -1663,4 +1679,114 @@ textarea {
   line-height: 1.7;
   margin-top: 7px;
   color: #315f75;
+}
+
+/* Round motion is keyed to new question identity by the orchestration layer. */
+.question-transition {
+  animation: question-arrive 190ms ease-out both;
+}
+@keyframes question-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.question-help {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.question-help summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.round-phase {
+  font-weight: 600;
+  color: var(--accent);
+}
+.answer-card button:active,
+.answer-card button[aria-pressed="true"] {
+  background: #cdddf4;
+}
+.answer-card button:focus-visible {
+  outline-offset: -4px;
+}
+.answer-card button:focus-visible .answer-chevron {
+  opacity: 1;
+}
+.game-stage .genie-art {
+  max-width: 460px;
+}
+.settings-card {
+  box-shadow: var(--surface-shadow);
+}
+@supports not (backdrop-filter: blur(12px)) {
+  .speech-bubble,
+  .answer-card,
+  .settings-card {
+    background: var(--surface);
+  }
+}
+@media (max-width: 850px) and (min-width: 621px) {
+  .game-stage {
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 620px) {
+  .question-bubble {
+    padding: 18px;
+    gap: 16px;
+  }
+  .question-number {
+    min-width: 46px;
+    font-size: 29px;
+    padding: 10px;
+  }
+  .question-bubble h2 {
+    font-size: 23px;
+    overflow-wrap: anywhere;
+  }
+  .game-stage .genie-holder .original-art {
+    display: none;
+  }
+  .round-header {
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .round-bottom button {
+    font-size: 12px;
+  }
+}
+.motion-off .question-transition {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .question-transition {
+    animation: none;
+  }
+}
+.answer-card button:disabled {
+  opacity: 1;
+  color: #526780;
+  cursor: wait;
+}
+.answer-card button:disabled:hover {
+  background: transparent;
+}
+.answer-card button:disabled[aria-pressed="true"] {
+  color: var(--ink);
+  background: #cdddf4;
+  font-weight: 700;
+}
+.game-content[aria-busy="true"] .question-bubble {
+  opacity: 0.85;
 }
