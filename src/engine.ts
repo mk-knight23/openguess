@@ -28,20 +28,34 @@ export function rankCandidates(
   characters: Character[],
   history: AnswerRecord[],
   rejectedIds: string[] = [],
+  questions: Question[] = [],
 ): Candidate[] {
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const seen = new Map<string, number>();
+  const discounted = history.map((record) => {
+    const q = questionMap.get(record.questionId);
+    const group = q?.equivalenceGroup ?? q?.relatedGroup;
+    const count = group ? (seen.get(group) ?? 0) : 0;
+    if (group && record.answer !== "unknown") seen.set(group, count + 1);
+    return { record, discount: 1 / (count + 1) };
+  });
   const rejected = new Set(rejectedIds);
   const scored = characters
     .filter((character) => !rejected.has(character.id))
     .map((character) => ({
       character,
-      logWeight: history.reduce(
-        (weight, record) =>
+      logWeight: discounted.reduce(
+        (weight, { record, discount }) =>
           record.answer === "unknown"
             ? weight
             : weight +
-              Math.log(
-                likelihood(character.traits[record.questionId], record.answer),
-              ),
+              discount *
+                Math.log(
+                  likelihood(
+                    character.traits[record.questionId],
+                    record.answer,
+                  ),
+                ),
         0,
       ),
     }));
@@ -89,7 +103,7 @@ export function selectQuestion(
   history: AnswerRecord[],
   roundSeed = 0,
 ): { question: Question; informationGain: number } | null {
-  if (candidates.length < 2) return null;
+  if (!candidates.length) return null;
   const asked = new Set(history.map((record) => record.questionId));
   // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
   // true/false/unknown trait share a response distribution, so three masses
@@ -155,6 +169,9 @@ export function selectQuestion(
   }
   let best: { question: Question; informationGain: number } | null = null;
   let bestScore = 0;
+  const confirming =
+    candidates[0].probability >= 0.7 &&
+    !getRoundReadiness(candidates, history, questions).confirmed;
   const nearEqual: {
     question: Question;
     informationGain: number;
@@ -209,7 +226,8 @@ export function selectQuestion(
       })
         ? 0.45
         : 1) *
-      (question.answerability === "specialist" ? 0.85 : 1);
+      (question.answerability === "specialist" ? 0.85 : 1) *
+      (confirming && isDistinctiveSignature(question, candidates) ? 3 : 1);
     if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
       nearEqual.push({ question, informationGain, score });
     if (informationGain > 1e-10 && score > bestScore + 1e-10) {
@@ -249,11 +267,88 @@ function seededPriority(value: string): number {
 export function shouldGuess(
   candidates: Candidate[],
   answeredCount: number,
+  history?: AnswerRecord[],
+  questions?: Question[],
 ): boolean {
+  if (history && questions)
+    return getRoundReadiness(candidates, history, questions).ready;
   return (
     candidates.length === 1 ||
     (candidates.length > 1 &&
       answeredCount >= 3 &&
       candidates[0].probability >= 0.85)
   );
+}
+
+export interface RoundReadiness {
+  phase: "discovery" | "narrowing" | "confirming" | "ready" | "unresolved";
+  ready: boolean;
+  independentEvidence: number;
+  confirmed: boolean;
+}
+function evidenceGroup(q: Question): string {
+  return q.equivalenceGroup ?? q.relatedGroup ?? q.id;
+}
+function isDistinctiveSignature(q: Question, candidates: Candidate[]): boolean {
+  if (
+    q.tier !== "signature" ||
+    q.answerability === "specialist" ||
+    candidates[0]?.character.traits[q.id] !== true
+  )
+    return false;
+  return candidates.slice(1).some((c) => c.character.traits[q.id] === false);
+}
+/** Readiness is evidence based: neither exclusion nor exhaustion proves identity. */
+export function getRoundReadiness(
+  candidates: Candidate[],
+  history: AnswerRecord[],
+  questions: Question[],
+): RoundReadiness {
+  const leader = candidates[0];
+  if (!leader)
+    return {
+      phase: "unresolved",
+      ready: false,
+      independentEvidence: 0,
+      confirmed: false,
+    };
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const groups = new Set<string>();
+  let confirmed = false;
+  for (const record of history) {
+    if (record.answer === "unknown") continue;
+    const q = questionMap.get(record.questionId);
+    if (!q) continue;
+    const fact = leader.character.traits[q.id];
+    const positiveAnswer =
+      record.answer === "yes" || record.answer === "probably";
+    if (typeof fact !== "boolean" || fact !== positiveAnswer) continue;
+    const group = evidenceGroup(q);
+    if (
+      !groups.has(group) &&
+      positiveAnswer &&
+      isDistinctiveSignature(q, candidates)
+    )
+      confirmed = true;
+    groups.add(group);
+  }
+  const independentEvidence = groups.size;
+  const margin = leader.probability - (candidates[1]?.probability ?? 0);
+  const ready =
+    leader.probability >= 0.85 &&
+    margin >= 0.65 &&
+    independentEvidence >= 3 &&
+    confirmed;
+  return {
+    phase: ready
+      ? "ready"
+      : leader.probability >= 0.7
+        ? "confirming"
+        : independentEvidence >= 2
+          ? "narrowing"
+          : "discovery",
+    ready,
+    independentEvidence,
+    confirmed,
+  };
 }
