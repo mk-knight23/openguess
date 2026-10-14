@@ -1,56 +1,48 @@
 # OpenGuess
 
-An original, free, open-source character guessing game. Think of someone in the supported catalog, answer five-choice questions, and watch OpenGuess narrow its candidates using Bayesian updates and information gain.
+A free, open-source guessing game with an original blue genie, adaptive questions and explainable local inference.
 
-Version 0.1.0 is a starter release, not a world-scale knowledge database. It can guess only the people and fictional characters listed in its catalog. Uncertain answers and unknown characters can produce an inconclusive result.
+[Play](https://mk-knight23.github.io/openguess/) · [Source](https://github.com/mk-knight23/openguess) · [Research](docs/research/akinator.md) · [Verification](docs/verification.md)
 
-[Play OpenGuess](https://mk-knight23.github.io/openguess/) · [Research](docs/research/akinator.md) · [Verification](docs/verification.md) · [Roadmap](docs/roadmap.md)
+## Version 0.2
 
-![OpenGuess desktop interface](docs/screenshots/desktop.png)
+Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,584 records** (1,123 people, 1,114 fictional characters and 1,120 each in animals and objects, and 1,107 films) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
 
-The first edition contains **68 characters and 60 questions**. The demo link requires the GitHub Pages deployment to finish.
+Gameplay asks about meaningful properties, not letters in a name. Spelling questions are excluded. When semantic evidence cannot distinguish candidates, the round remains inconclusive. Raw Wikidata statements are CC0; independently authored semantic annotations are MIT and carry separate provenance. See [data provenance](docs/data-provenance.md).
+
+- Five answer strengths, semantic adaptive questions, answer correction, undo, rejection and restart.
+- Original animated genie interface, transparent candidate weights and a visible library.
+- Five daily discoveries per selected theme, local points, awards, collection and streaks.
+- Validated progress backup/restore, local profile, sound and reduced-motion settings.
+- Eighteen **partial interface** languages; questions and catalog descriptions remain English.
+- Character, question and photo proposals exported for manual review; no automatic shared learning.
+- Optional Supabase account, cloud backup/restore and opt-in public nickname/win totals when a deployment is configured. Gameplay remains available without an account. Cloud verification is recorded separately in [verification](docs/verification.md).
+
+No ads, subscriptions, paid AI or gameplay pricing. Local scores are editable and are not competition-grade rankings. A family setting cannot guarantee that every imported entity is suitable for every child.
 
 ## Run locally
 
-Use Node.js **22.19 or later** and npm. CI uses Node.js 24.
+Use **Node.js 24** and npm.
 
 ```sh
 npm ci
 npm run dev
-```
-
-Open the local address printed by the development server.
-
-```sh
 npm test
 npm run typecheck
 npm run build
 npm run preview
-npm run test:e2e
 ```
 
-The production build is in `dist/` and can be hosted as static files. Choose a host that supports your traffic and budget; the application requires no server-side gameplay service.
+For production-browser checks, install Chromium with `npx playwright install chromium` and run `npm run test:e2e`; an installed Chrome can be selected with `BROWSER_EXECUTABLE`. Consult [verification](docs/verification.md) for current commands and results.
 
-For browser tests, install Chromium with `npx playwright install chromium`, or set `BROWSER_EXECUTABLE` to an existing Chrome-family executable. The smoke script starts its own preview server on port 4175 and writes reports/screenshots under `/tmp/openguess-qa` (override with `QA_OUTPUT`). For Volta users, this repository pins Node.js 24.19.0 without changing the global default. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; other deployments default to `/`.
-
-## What v1 does
-
-- Five answers: yes, probably, don't know, probably not, and no.
-- Undo, restart, confirmation and rejection of guesses.
-- A visible supported catalog and optional inference explanations.
-- Local browser preferences and statistics.
-- Contribution proposals exported as JSON for human review.
-
-No accounts, advertising, subscriptions, paid APIs or remote learning are required. Browser storage is local to the browser and may be cleared by its owner. Exporting a proposal does not add it to anyone's catalog; submit it through a reviewed contribution.
+Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; root-path deployments default to `/`. Optional cloud configuration uses public client environment variables and a separately provisioned database with access policies; never put service-role secrets in a browser build. See [cloud setup and verification](docs/cloud.md).
 
 ## How it works
 
-A pure client-side engine starts with candidate weights, updates them from answers, and chooses questions by expected entropy reduction. A “don't know” answer supplies no evidence. The probability shown describes the model's relative candidate weights, not independently calibrated confidence that a real person has been identified.
+The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The corrected featured-profile oracle recovered 128/128 targets with zero wrong or unresolved rounds and at most ten questions. This tests closed authored facts, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
 
-See [architecture](docs/architecture.md), [scaling](docs/scaling.md), [roadmap](docs/roadmap.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
+Bayesian updates rank candidates from authored/imported traits. Information gain chooses unasked questions. A worker keeps larger-pack inference off the interface thread. “Don't know” adds no evidence; absent Wikidata claims remain unknown. Model percentages are relative weights within the chosen pack, not calibrated chances of a correct answer.
 
-## Research and originality
+See [architecture](docs/architecture.md), [scaling](docs/scaling.md), [feature ledger](docs/feature-ledger.md), [roadmap](docs/roadmap.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 
-Akinator inspired the broad game format. REA inspection of its public site encountered a Cloudflare challenge, so live gameplay, private endpoints and its proprietary algorithm were not observed. OpenGuess's inference model, interface and starter catalog are independently authored. It does not call Akinator services or include its source, artwork or database. See the [research notes](docs/research/akinator.md).
-
-The public repository is [mk-knight23/openguess](https://github.com/mk-knight23/openguess). Software is free under the [MIT license](LICENSE); bundled dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not imply unlimited free hosting.
+REA investigation observed Akinator's public browser interface, including question/answer transitions. Its server algorithm and database remain unknown. OpenGuess includes no Akinator code, assets or scraped database. Application code is [MIT licensed](LICENSE); raw imported structured data is CC0 and original semantic annotations are MIT and dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not mean unlimited free hosting.

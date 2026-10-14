@@ -1,7 +1,11 @@
-# Interface direction
+# Design direction
 
-OpenGuess is an observatory for small mysteries: a warm paper background, forest-green ink, a dark guessing room, and soft gold highlights. Orbit is an original SVG companion with a friendly face and an orbital ring; no reference-game art is used. Self-hosted DM Sans and Playfair Display fonts keep runtime assets local.
+Version 0.2 uses an original blue-and-gold genie on a light sky-blue stage, with a clear question card and distinct answer controls. The artwork is authored for OpenGuess; no reference-game genie image, animation file or branding is reused.
 
-The desktop interface pairs a brief introduction and companion with a focused game card. The mobile interface stacks these sections. Answers use native buttons with number shortcuts, generous target sizes and visible keyboard focus. Focus moves to the question or result after a transition. A reduced-motion preference disables transitions. Navigation opens simple page sections rather than trapping players inside a modal.
+Theme selection and supported-library access communicate the finite dataset before play. Model-relative weights, semantic-only boundaries and uncertain outcomes and incomplete outcomes should remain visible without spoiling candidates by default. Daily discoveries and local awards provide replay goals without paid gates.
 
-Library browsing precedes play when a player needs inspiration. The game discloses its limited catalog and offers real-person, fictional and combined scopes. Explanations are optional and marked as potentially spoiling the answer. Results use “clues point to” language and relative model weights rather than claiming mind reading. Contribution UI explicitly explains export, review and the absence of automatic uploads.
+Keyboard answers, answer correction and visible focus support desktop play. Mobile layouts must retain reachable navigation, controls and overflow-free cards. Reduced-motion settings respect user preferences; optional sound should not be needed to understand state changes.
+
+Eighteen interface dictionaries translate selected navigation and answer controls. English questions, names, descriptions and some explanatory copy remain; right-to-left interface metadata does not imply a fully translated catalog. Family mode is a preference and filter boundary, not parental-control certification.
+
+Automated accessibility checks cover measured states only. Final browser findings and screenshots belong in [verification](verification.md).

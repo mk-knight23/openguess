@@ -1,0 +1,3225 @@
+{
+  "measuredAt": "2026-10-14T05:15:31.199Z",
+  "node": "v24.19.0",
+  "mode": "full",
+  "unknownDates": false,
+  "roundSeed": 0,
+  "methodology": "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 semantic questions; unknown for absent/null facts; no forced low-confidence guesses. Not human accuracy.",
+  "results": [
+    {
+      "theme": "people",
+      "entities": 1123,
+      "databaseEntities": 1123,
+      "questions": 2071,
+      "samples": 10,
+      "correctFirstGuess": 0,
+      "unresolved": 10,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 8,
+      "exhausted": 0,
+      "questionLimit": 10,
+      "totalUnknownAnswers": 354,
+      "roundsWithUnknownAnswers": 10,
+      "exampleRounds": [
+        {
+          "target": "Scott Loach",
+          "topMatch": "David Beckham",
+          "topWeight": 0.003,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "yes",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person associated with the occupation politician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of United States?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation writer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of France?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation association football player?",
+              "answer": "yes",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of United Kingdom?",
+              "answer": "yes",
+              "family": "P27"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person associated with the occupation association football coach?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation poet?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Germany?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation university teacher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation lawyer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation composer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation screenwriter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation jurist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation television actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation singer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film director?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation musician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation autobiographer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation computer scientist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Ancient Rome?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation military personnel?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation athletics competitor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation diplomat?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Was your person born in 1985?",
+              "answer": "unknown",
+              "family": "P569"
+            },
+            {
+              "question": "Is your person associated with the occupation journalist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film producer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation businessperson?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation engineer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation philosopher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation voice actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Was your person born in 1987?",
+              "answer": "unknown",
+              "family": "P569"
+            },
+            {
+              "question": "Is your person associated with the occupation translator?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Was your person born in 1980?",
+              "answer": "unknown",
+              "family": "P569"
+            },
+            {
+              "question": "Is your person associated with the occupation painter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Was your person born in London?",
+              "answer": "unknown",
+              "family": "P19"
+            }
+          ]
+        },
+        {
+          "target": "Mike Hawthorn",
+          "topMatch": "Nigel Mansell",
+          "topWeight": 0.0033,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "yes",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person associated with the occupation politician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of United States?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation writer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of France?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation association football player?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person a citizen of United Kingdom?",
+              "answer": "yes",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation film actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation poet?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Germany?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation university teacher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation lawyer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation association football coach?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation composer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation screenwriter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation jurist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation singer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation television actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation computer scientist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film director?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation musician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Ancient Rome?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation autobiographer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation military personnel?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation athletics competitor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation diplomat?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation journalist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation engineer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation philosopher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film producer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation businessperson?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation voice actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation translator?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation painter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation novelist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation singer-songwriter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation Formula One driver?",
+              "answer": "yes",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation racing automobile driver?",
+              "answer": "unknown",
+              "family": "P106"
+            }
+          ]
+        },
+        {
+          "target": "Fernando Alonso",
+          "topMatch": "Yevgeny Chernyaev",
+          "topWeight": 0.001,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "yes",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person associated with the occupation politician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of United States?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation writer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of France?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation association football player?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your person a citizen of United Kingdom?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation poet?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Germany?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation lawyer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation university teacher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation composer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation screenwriter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation jurist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation association football coach?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Ancient Rome?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation singer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation military personnel?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation television actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation musician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation computer scientist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film director?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation athletics competitor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation diplomat?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation autobiographer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation journalist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation philosopher?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation engineer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation businessperson?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation translator?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation painter?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation voice actor?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation film producer?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation novelist?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person associated with the occupation mathematician?",
+              "answer": "unknown",
+              "family": "P106"
+            },
+            {
+              "question": "Is your person a citizen of Chile?",
+              "answer": "unknown",
+              "family": "P27"
+            },
+            {
+              "question": "Is your person associated with the occupation singer-songwriter?",
+              "answer": "unknown",
+              "family": "P106"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 40,
+      "maxQuestions": 40,
+      "p95SelectionMs": 2.92,
+      "maxSelectionMs": 8.68
+    },
+    {
+      "theme": "fictional",
+      "entities": 1114,
+      "databaseEntities": 1114,
+      "questions": 820,
+      "samples": 10,
+      "correctFirstGuess": 0,
+      "unresolved": 10,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 10,
+      "exhausted": 0,
+      "questionLimit": 10,
+      "totalUnknownAnswers": 390,
+      "roundsWithUnknownAnswers": 10,
+      "exampleRounds": [
+        {
+          "target": "Konrad Wolf",
+          "topMatch": "Ivan Platkin",
+          "topWeight": 0.0009,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your choice classified as television character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Does your character appear in One-Punch Man?",
+              "answer": "unknown",
+              "family": "P1441"
+            },
+            {
+              "question": "Is your choice classified as literary character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as comics character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character originate in a Japanese story or game?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Does the character use magic or supernatural powers?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "unknown",
+              "family": "gender"
+            },
+            {
+              "question": "Is the fictional character usually a hero?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known mainly from films?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character famously use a sword?",
+              "answer": "unknown",
+              "family": "equipment"
+            },
+            {
+              "question": "Did the character originate in a video game?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is red a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in comic books?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is extraordinary strength a defining ability?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character an animal or animal-like creature?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is blue a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in a novel or literary story?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character have a major connection to outer space?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Can the character fly without a vehicle?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Does the character usually wear a mask or helmet?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the fictional character royalty?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is the character known from anime or manga?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character wear notable armor?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is attending school central to the character’s story?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Is a cape a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character strongly associated with Britain?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is green a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character an extraterrestrial?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is yellow a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known for detective work?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known for inventing technology?",
+              "answer": "unknown",
+              "family": "occupation"
+            },
+            {
+              "question": "Is a moustache a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known from a television series?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is the character a wizard or witch?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Does the character famously use a bow and arrows?",
+              "answer": "unknown",
+              "family": "equipment"
+            },
+            {
+              "question": "Does the character have electrical powers?",
+              "answer": "unknown",
+              "family": "abilities"
+            }
+          ]
+        },
+        {
+          "target": "Martin Krpan",
+          "topMatch": "Ivan Platkin",
+          "topWeight": 0.0012,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "yes",
+              "family": "P21"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Does your character appear in One-Punch Man?",
+              "answer": "unknown",
+              "family": "P1441"
+            },
+            {
+              "question": "Is your choice classified as television character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as literary character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as comics character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as film character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as fictional human?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character originate in a Japanese story or game?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Does the character use magic or supernatural powers?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "unknown",
+              "family": "gender"
+            },
+            {
+              "question": "Is the fictional character usually a hero?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known mainly from films?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character famously use a sword?",
+              "answer": "unknown",
+              "family": "equipment"
+            },
+            {
+              "question": "Did the character originate in a video game?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is red a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in comic books?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is extraordinary strength a defining ability?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character an animal or animal-like creature?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is blue a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in a novel or literary story?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character have a major connection to outer space?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Can the character fly without a vehicle?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Does the character usually wear a mask or helmet?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the fictional character royalty?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is the character known from anime or manga?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character wear notable armor?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is attending school central to the character’s story?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Is a cape a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character strongly associated with Britain?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is green a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character an extraterrestrial?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is yellow a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known for detective work?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known for inventing technology?",
+              "answer": "unknown",
+              "family": "occupation"
+            },
+            {
+              "question": "Is a moustache a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known from a television series?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is the character a wizard or witch?",
+              "answer": "unknown",
+              "family": "role"
+            }
+          ]
+        },
+        {
+          "target": "Suzume Sakurajosui",
+          "topMatch": "Olga Petrovna",
+          "topWeight": 0.0014,
+          "transcript": [
+            {
+              "question": "Is your character described as male?",
+              "answer": "unknown",
+              "family": "P21"
+            },
+            {
+              "question": "Is your character described as female?",
+              "answer": "yes",
+              "family": "P21"
+            },
+            {
+              "question": "Is your choice classified as television character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Does your character appear in One-Punch Man?",
+              "answer": "unknown",
+              "family": "P1441"
+            },
+            {
+              "question": "Is your choice classified as literary character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as comics character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as film character?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your choice classified as fictional human?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character originate in a Japanese story or game?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Does the character use magic or supernatural powers?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "unknown",
+              "family": "gender"
+            },
+            {
+              "question": "Is the fictional character usually a hero?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known mainly from films?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character famously use a sword?",
+              "answer": "unknown",
+              "family": "equipment"
+            },
+            {
+              "question": "Did the character originate in a video game?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is red a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in comic books?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is extraordinary strength a defining ability?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is the character an animal or animal-like creature?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is blue a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Did the character originate in a novel or literary story?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character have a major connection to outer space?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Can the character fly without a vehicle?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Does the character usually wear a mask or helmet?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the fictional character royalty?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is the character known from anime or manga?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Does the character wear notable armor?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is attending school central to the character’s story?",
+              "answer": "unknown",
+              "family": "setting"
+            },
+            {
+              "question": "Is a cape a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character strongly associated with Britain?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is green a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character an extraterrestrial?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is yellow a prominent part of the character’s design?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known for detective work?",
+              "answer": "unknown",
+              "family": "role"
+            },
+            {
+              "question": "Is the character known for inventing technology?",
+              "answer": "unknown",
+              "family": "occupation"
+            },
+            {
+              "question": "Is a moustache a familiar part of the character’s appearance?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known from a television series?",
+              "answer": "unknown",
+              "family": "media"
+            },
+            {
+              "question": "Is the character a wizard or witch?",
+              "answer": "unknown",
+              "family": "role"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 40,
+      "maxQuestions": 40,
+      "p95SelectionMs": 0.95,
+      "maxSelectionMs": 1.44
+    },
+    {
+      "theme": "animals",
+      "entities": 1120,
+      "databaseEntities": 1120,
+      "questions": 286,
+      "samples": 10,
+      "correctFirstGuess": 0,
+      "unresolved": 10,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 10,
+      "exhausted": 0,
+      "questionLimit": 10,
+      "totalUnknownAnswers": 383,
+      "roundsWithUnknownAnswers": 10,
+      "exampleRounds": [
+        {
+          "target": "Ashokia",
+          "topMatch": "Gobiconodon",
+          "topWeight": 0.0012,
+          "transcript": [
+            {
+              "question": "Is your animal classified at the rank genus?",
+              "answer": "yes",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank species?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank subfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank family?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Vespertilionidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodinae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Molossidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mylodontidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Hipposideros?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Dugongidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Hipposideridae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Emballonuridae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group otter?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Amphicyonidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Phyllostomidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Megalonychidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Paulchoffatiidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Molossinae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank superfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mormopterus?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Macroscelididae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Megatheriidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is it a mammal?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "unknown",
+              "family": "habitat"
+            },
+            {
+              "question": "Is it famous for a black-and-white coat or plumage?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the cat family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have hooves?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a member of the bear family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does the adult have wings?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a bird?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have feathers?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the dog family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Can the adult fly under its own power?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is it a member of the horse family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for hopping or jumping?",
+              "answer": "unknown",
+              "family": "movement"
+            },
+            {
+              "question": "Are adult males famous for a mane?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a reptile?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have scales?",
+              "answer": "unknown",
+              "family": "appearance"
+            }
+          ]
+        },
+        {
+          "target": "Adelonycteris",
+          "topMatch": "Vesperus",
+          "topWeight": 0.0022,
+          "transcript": [
+            {
+              "question": "Is your animal classified at the rank genus?",
+              "answer": "yes",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank species?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank subfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank family?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Vespertilionidae?",
+              "answer": "yes",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodinae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Molossidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mylodontidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Hipposideros?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Dugongidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Hipposideridae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Emballonuridae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group otter?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Amphicyonidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Phyllostomidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Megalonychidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Paulchoffatiidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Molossinae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank superfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mormopterus?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Macroscelididae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Megatheriidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is it a mammal?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "unknown",
+              "family": "habitat"
+            },
+            {
+              "question": "Is it famous for a black-and-white coat or plumage?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the cat family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have hooves?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a member of the bear family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does the adult have wings?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a bird?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have feathers?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the dog family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Can the adult fly under its own power?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is it a member of the horse family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for hopping or jumping?",
+              "answer": "unknown",
+              "family": "movement"
+            },
+            {
+              "question": "Are adult males famous for a mane?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a reptile?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have scales?",
+              "answer": "unknown",
+              "family": "appearance"
+            }
+          ]
+        },
+        {
+          "target": "Southern African hedgehog",
+          "topMatch": "Bharatisiren indica",
+          "topWeight": 0.0014,
+          "transcript": [
+            {
+              "question": "Is your animal classified at the rank genus?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank species?",
+              "answer": "yes",
+              "family": "P105"
+            },
+            {
+              "question": "Is your animal classified at the rank subfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Hipposideros?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank family?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mormopterus?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Dermanura?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Vespertilionidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Myotis?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Pteropodinae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Mylodontidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Molossidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is your animal classified at the rank superfamily?",
+              "answer": "unknown",
+              "family": "P105"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group three-toed sloth?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Dugongidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Does your animal belong to the taxonomic group Phyllostomidae?",
+              "answer": "unknown",
+              "family": "P171"
+            },
+            {
+              "question": "Is it a mammal?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "unknown",
+              "family": "habitat"
+            },
+            {
+              "question": "Is it famous for a black-and-white coat or plumage?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the cat family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have hooves?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a member of the bear family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does the adult have wings?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a bird?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have feathers?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a member of the dog family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Can the adult fly under its own power?",
+              "answer": "unknown",
+              "family": "abilities"
+            },
+            {
+              "question": "Is it a member of the horse family?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for hopping or jumping?",
+              "answer": "unknown",
+              "family": "movement"
+            },
+            {
+              "question": "Are adult males famous for a mane?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it a reptile?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Does it have scales?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Does it normally walk on two legs?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it famous for a striped body?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it an amphibian?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for long ears?",
+              "answer": "unknown",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it an insect?",
+              "answer": "unknown",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for a very long neck?",
+              "answer": "unknown",
+              "family": "anatomy"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 40,
+      "maxQuestions": 40,
+      "p95SelectionMs": 0.53,
+      "maxSelectionMs": 2.23
+    },
+    {
+      "theme": "objects",
+      "entities": 1120,
+      "databaseEntities": 1120,
+      "questions": 491,
+      "samples": 10,
+      "correctFirstGuess": 0,
+      "unresolved": 10,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 10,
+      "exhausted": 0,
+      "questionLimit": 10,
+      "totalUnknownAnswers": 387,
+      "roundsWithUnknownAnswers": 10,
+      "exampleRounds": [
+        {
+          "target": "contra-drone keyed fiddle",
+          "topMatch": "shoot-to-kill",
+          "topWeight": 0.0009,
+          "transcript": [
+            {
+              "question": "Is your object a kind of musical instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as type of musical instrument?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of string instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of Membranophone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as microphone model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of drum?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of electric guitar?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as musical instrument model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of condenser microphone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as family of musical instruments?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object made by Georg Neumann?",
+              "answer": "unknown",
+              "family": "P176"
+            },
+            {
+              "question": "Is your object a kind of necked box lute played with a bow?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Can the ordinary version fit in a clothing pocket?",
+              "answer": "unknown",
+              "family": "size"
+            },
+            {
+              "question": "Is it mainly used for eating or preparing food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a piece of furniture?",
+              "answer": "unknown",
+              "family": "type"
+            },
+            {
+              "question": "Is it used inside the mouth?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a kitchen appliance?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is it mainly used for cleaning?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have strings used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it used for electronic communication?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have cutting blades?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a musical instrument?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a small bowl used to scoop food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it mainly used to wash clothes?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a keyboard used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to keep things cold?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have prongs used to spear food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it designed to cut things?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it normally have wheels?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to heat food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "unknown",
+              "family": "energy"
+            },
+            {
+              "question": "Is it mainly used to produce light?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is your object a kind of percussion instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is it designed to protect against rain?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for reading?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for sitting?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it commonly used for playing sports?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used to tell the time?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for transportation?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it normally worn on the body?",
+              "answer": "unknown",
+              "family": "use"
+            }
+          ]
+        },
+        {
+          "target": "tanbou",
+          "topMatch": "ESP Tom Araya",
+          "topWeight": 0.0011,
+          "transcript": [
+            {
+              "question": "Is your object a kind of musical instrument?",
+              "answer": "yes",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as type of musical instrument?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of string instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of Membranophone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as microphone model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of drum?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of electric guitar?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as musical instrument model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of percussion instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as family of musical instruments?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of condenser microphone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object made by Georg Neumann?",
+              "answer": "unknown",
+              "family": "P176"
+            },
+            {
+              "question": "Is your object a kind of necked box lute played with a bow?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object made with wood?",
+              "answer": "unknown",
+              "family": "P186"
+            },
+            {
+              "question": "Can the ordinary version fit in a clothing pocket?",
+              "answer": "unknown",
+              "family": "size"
+            },
+            {
+              "question": "Is it mainly used for eating or preparing food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a piece of furniture?",
+              "answer": "unknown",
+              "family": "type"
+            },
+            {
+              "question": "Is it used inside the mouth?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a kitchen appliance?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is it mainly used for cleaning?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have strings used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it used for electronic communication?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have cutting blades?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a musical instrument?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a small bowl used to scoop food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it mainly used to wash clothes?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a keyboard used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to keep things cold?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have prongs used to spear food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it designed to cut things?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it normally have wheels?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to heat food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "unknown",
+              "family": "energy"
+            },
+            {
+              "question": "Is it mainly used to produce light?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it designed to protect against rain?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for reading?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for sitting?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it commonly used for playing sports?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used to tell the time?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for transportation?",
+              "answer": "unknown",
+              "family": "use"
+            }
+          ]
+        },
+        {
+          "target": "tingsha",
+          "topMatch": "shoot-to-kill",
+          "topWeight": 0.0009,
+          "transcript": [
+            {
+              "question": "Is your object a kind of musical instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as type of musical instrument?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of string instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of Membranophone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as microphone model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of drum?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your object a kind of electric guitar?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as musical instrument model?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object a kind of condenser microphone?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is your choice classified as family of musical instruments?",
+              "answer": "unknown",
+              "family": "P31"
+            },
+            {
+              "question": "Is your object made by Georg Neumann?",
+              "answer": "unknown",
+              "family": "P176"
+            },
+            {
+              "question": "Is your object a kind of necked box lute played with a bow?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Can the ordinary version fit in a clothing pocket?",
+              "answer": "unknown",
+              "family": "size"
+            },
+            {
+              "question": "Is it mainly used for eating or preparing food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a piece of furniture?",
+              "answer": "unknown",
+              "family": "type"
+            },
+            {
+              "question": "Is it used inside the mouth?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it a kitchen appliance?",
+              "answer": "unknown",
+              "family": "location"
+            },
+            {
+              "question": "Is it mainly used for cleaning?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have strings used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it used for electronic communication?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have cutting blades?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a musical instrument?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a small bowl used to scoop food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it mainly used to wash clothes?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have a keyboard used to produce music?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to keep things cold?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it have prongs used to spear food?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it designed to cut things?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does it normally have wheels?",
+              "answer": "unknown",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is its main job to heat food?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "unknown",
+              "family": "energy"
+            },
+            {
+              "question": "Is it mainly used to produce light?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is your object a kind of percussion instrument?",
+              "answer": "unknown",
+              "family": "P279"
+            },
+            {
+              "question": "Is it designed to protect against rain?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for reading?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for sitting?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it commonly used for playing sports?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used to tell the time?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for transportation?",
+              "answer": "unknown",
+              "family": "use"
+            },
+            {
+              "question": "Is it normally worn on the body?",
+              "answer": "unknown",
+              "family": "use"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 40,
+      "maxQuestions": 40,
+      "p95SelectionMs": 0.6,
+      "maxSelectionMs": 1.02
+    },
+    {
+      "theme": "movies",
+      "entities": 1107,
+      "databaseEntities": 1107,
+      "questions": 1570,
+      "samples": 10,
+      "correctFirstGuess": 0,
+      "unresolved": 10,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 5,
+      "exhausted": 0,
+      "questionLimit": 10,
+      "totalUnknownAnswers": 350,
+      "roundsWithUnknownAnswers": 10,
+      "exampleRounds": [
+        {
+          "target": "The Arrow",
+          "topMatch": "Insidious",
+          "topWeight": 0.0027,
+          "transcript": [
+            {
+              "question": "Is your film originally in English?",
+              "answer": "yes",
+              "family": "P364"
+            },
+            {
+              "question": "Is your film from United States?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre drama film?",
+              "answer": "yes",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from United Kingdom?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre action film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from France?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre crime film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre romance film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre thriller film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Germany?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre adventure film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film originally in French?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Does your film belong to the genre horror film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Italy?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre comedy drama?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre fantasy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre science fiction film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre mystery film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film originally in Italian?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Does your film belong to the genre romantic comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2012?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre biographical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2009?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre war film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2005?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre musical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2010?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre LGBTQ-related film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2006?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film originally in German?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Was your film released in 2011?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre teen film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2008?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre crime thriller film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2003?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Was your film released in 2001?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film from Canada?",
+              "answer": "yes",
+              "family": "P495"
+            },
+            {
+              "question": "Was your film released in 2002?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film originally in Spanish?",
+              "answer": "unknown",
+              "family": "P364"
+            }
+          ]
+        },
+        {
+          "target": "Stash House",
+          "topMatch": "The Dark Knight Rises",
+          "topWeight": 0.0043,
+          "transcript": [
+            {
+              "question": "Is your film originally in English?",
+              "answer": "yes",
+              "family": "P364"
+            },
+            {
+              "question": "Is your film from United States?",
+              "answer": "yes",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre drama film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre action film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from United Kingdom?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre crime film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre thriller film?",
+              "answer": "yes",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre horror film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre science fiction film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre adventure film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from France?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre romance film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre mystery film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre fantasy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Germany?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre comedy drama?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2009?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre crime thriller film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film originally in French?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Does your film belong to the genre romantic comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2012?",
+              "answer": "yes",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre musical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Italy?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Was your film released in 2010?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre teen film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2006?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre biographical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2011?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre LGBTQ-related film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2005?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre suspense film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2008?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film from Canada?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre war film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2003?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre neo-noir?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film originally in Italian?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Does your film belong to the genre romantic comedy?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre crime drama film?",
+              "answer": "unknown",
+              "family": "P136"
+            }
+          ]
+        },
+        {
+          "target": "The Honeytrap",
+          "topMatch": "The Honeytrap",
+          "topWeight": 0.008,
+          "transcript": [
+            {
+              "question": "Is your film originally in English?",
+              "answer": "yes",
+              "family": "P364"
+            },
+            {
+              "question": "Is your film from United States?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre drama film?",
+              "answer": "yes",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from United Kingdom?",
+              "answer": "yes",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre action film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from France?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre crime film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre romance film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre thriller film?",
+              "answer": "yes",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Germany?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre adventure film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre horror film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre mystery film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Does your film belong to the genre science fiction film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film originally in French?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Does your film belong to the genre fantasy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Italy?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Does your film belong to the genre comedy drama?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2012?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre crime thriller film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2006?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film originally in Italian?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Was your film released in 2010?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre war film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2009?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre biographical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2011?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre LGBTQ-related film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2001?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Is your film originally in German?",
+              "answer": "unknown",
+              "family": "P364"
+            },
+            {
+              "question": "Was your film released in 2005?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre romantic comedy film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2008?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre musical film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Was your film released in 2003?",
+              "answer": "unknown",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre crime drama film?",
+              "answer": "unknown",
+              "family": "P136"
+            },
+            {
+              "question": "Is your film from Canada?",
+              "answer": "unknown",
+              "family": "P495"
+            },
+            {
+              "question": "Was your film released in 2002?",
+              "answer": "yes",
+              "family": "P577"
+            },
+            {
+              "question": "Does your film belong to the genre teen film?",
+              "answer": "unknown",
+              "family": "P136"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 40,
+      "maxQuestions": 40,
+      "p95SelectionMs": 2.19,
+      "maxSelectionMs": 4.26
+    }
+  ]
+}

@@ -1,22 +1,21 @@
 # Project knowledge
 
-Recorded 2026-10-14 for the initial release.
+Updated 2026-10-14 for the 0.2 upgrade.
 
-- REA public-site inspection encountered a Cloudflare challenge. Do not claim that live Akinator gameplay, hidden endpoints or its private algorithm were observed.
-- Bayesian weighting and expected information gain are OpenGuess design decisions. Preserve this distinction in future explanations.
-- Static delivery and browser inference avoid central gameplay state and per-question remote API costs. They do not eliminate bandwidth costs or browser limits.
-- Catalog coverage is a product constraint. A guess can only come from supported entries, and inconclusive outcomes are valid.
-- “Don't know” supplies no evidence; rejection removes a candidate without inventing evidence; undo replays history.
-- Contribution JSON is local and untrusted. Only reviewed source changes update the shared catalog.
-- Before enlarging packs, measure O(C × Q) selection behavior on actual target browsers.
-- Keep private user context and local artifacts outside the public repository.
+- V1's automated reference visit reached Cloudflare. V2's normal Chrome session reached real home/settings/theme/question/answer/result views. Both observations are valid for their respective captures.
+- Completed REA scenario actions do not imply complete event coverage. Some capture exports were oversized and remained private; publish summaries and evidence IDs, not raw tokens or foreign scripts.
+- Static application graph findings cannot reveal Akinator's private server algorithm. Bayesian information gain is OpenGuess's design.
+- A sourced entity count is not guessing quality. Missing facts and duplicate semantic signatures require explicit limits. Spelling fallback was rejected as the wrong experience and is excluded from question selection.
+- The earlier 50/50 pack replay relied on 614 spelling answers. Its apparent success is invalid evidence for semantic guessing and is superseded by the correction work.
+- Properly waited reference gameplay showed questions about India, gender, reality, Japan, film popularity and video-game origin. Fixed exploratory No answers were not a coherent target or accuracy test.
+- Five packs contain 5,584 records. Default play uses 128 featured profiles (32 people, 36 fiction, 20 each animals/objects/films); sparse full-catalog play is explicitly Experimental.
+- Raw Wikidata facts are CC0; original curated annotations are MIT with separate source references. References are not an independent audit of every trait.
+- Featured semantic oracle replay recovered 128/128 with no wrong/unresolved results, maximum ten questions. This validates authored closed-world profiles, not human accuracy or all-catalog recovery.
+- Workers improve responsiveness without changing O(C × Q) selection complexity. Ignore stale responses and surface worker errors.
+- Local points and imported scores are editable. Optional public win totals must never be represented as server-verified competitions.
+- Proposal exports are untrusted suggestions, not shared learning. Cloud backups are opt-in and require independently tested access policies.
+- Preserve local-only play and keep secrets, private profile files and raw reference evidence outside public commits.
 
-Validation results belong in release notes or the reviewing pull request once run. This file records decisions and limitations, not unexecuted verification claims.
+Record actual final checks and live service results in [verification](verification.md); do not turn planned checks into success claims.
 
-- Full-library navigation must reset a narrower game scope; otherwise a visible suggested character can be impossible to guess. Explicitly test this transition.
-- Proposal category is independent of the current game scope and must be selected, not guessed from “Everyone.”
-- Keep correction controls on result screens so the answer triggering a guess can be undone.
-- Appearance/ability questions need semantic consistency. Competitive sprinting and superhuman speed are separate facts.
-- With Node 26, experimental global storage can conflict with a simulated browser. The tested baseline is Node 24; use real-browser checks for persistence/export.
-- Axe's Playwright integration requires explicitly created browser contexts, including mobile contexts. Hidden text inside an icon-only mobile link needs an accessible name.
-- Broad semantic analysis of a minified React bundle exhausted REA's default heap. Preserve partial coverage rather than equating script parsing with complete behavior recovery.
+The corrected default uses 128 rich semantic profiles. Imported record counts alone failed the user experience: letter questions dominated, and semantic-only replay of the full pool remained unresolved. Keep raw catalog scope separate from effective playable scope. Seed only near-equal useful questions; preserve replay through undo. Film annotations must merge into validated canonical identities rather than create duplicate records. Variant-sensitive facts use unknown rather than invented negatives.

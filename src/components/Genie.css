@@ -1,0 +1,114 @@
+.genie-art {
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+  pointer-events: none;
+}
+.genie-art svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 15px 13px rgb(17 74 104 / 12%));
+}
+.genie-float {
+  animation: genie-hover 5s ease-in-out infinite;
+  transform-origin: 200px 300px;
+}
+.genie-shadow {
+  animation: genie-shadow-breathe 5s ease-in-out infinite;
+  transform-origin: 197px 555px;
+}
+.genie-eyes {
+  transform-origin: 198px 211px;
+  animation: genie-blink 6.5s infinite;
+}
+.genie-sparkles {
+  animation: genie-twinkle 4s ease-in-out infinite;
+  transform-origin: center;
+}
+.genie-arm {
+  transition: transform 550ms ease;
+}
+.genie-arm-left {
+  transform-origin: 144px 299px;
+}
+.genie-arm-right {
+  transform-origin: 247px 299px;
+}
+.genie-thinking .genie-arm-right {
+  transform: rotate(-10deg) translate(-4px, -8px);
+}
+.genie-confident .genie-arm-left {
+  transform: rotate(-12deg);
+}
+.genie-celebrate .genie-arm-left {
+  transform: rotate(-33deg) translate(-8px, -8px);
+}
+.genie-celebrate .genie-arm-right {
+  transform: rotate(30deg) translate(8px, -8px);
+}
+.genie-celebrate .genie-sparkles {
+  animation-duration: 1.5s;
+}
+.genie-stumped .genie-arm-left {
+  transform: rotate(15deg);
+}
+.genie-stumped .genie-arm-right {
+  transform: rotate(-15deg);
+}
+.genie-stumped .genie-float {
+  animation-duration: 7s;
+}
+@keyframes genie-hover {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+@keyframes genie-shadow-breathe {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scaleX(0.88);
+    opacity: 0.1;
+  }
+}
+@keyframes genie-blink {
+  0%,
+  42%,
+  45%,
+  100% {
+    transform: scaleY(1);
+  }
+  43.5% {
+    transform: scaleY(0.06);
+  }
+}
+@keyframes genie-twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+.genie-still *,
+.genie-still .genie-float {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .genie-art * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

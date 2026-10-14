@@ -66,41 +66,137 @@ export function rankCandidates(
     );
 }
 
-/** Expected entropy reduction across the five possible responses. */
+/** Semantic question selection, retaining the raw five-response information gain. */
+function isSemantic(question: Question): boolean {
+  const metadata = question as Question & { kind?: string };
+  const orthography =
+    /\bname\b.*\b(?:letters?|contains?|starts?|ends?|length|spelling|spelled|short|long)\b|\b(?:letters?|initials?|length|spell(?:ing|ed)?)\b.*\bname\b|\b(?:short|long)\s+name\b/i;
+  return (
+    metadata.kind !== "spelling" &&
+    !/^name(?:_|-)/i.test(question.id) &&
+    question.property !== "name" &&
+    !orthography.test(question.text)
+  );
+}
+function questionFamily(question: Question): string | undefined {
+  return (
+    (question as Question & { family?: string }).family ?? question.property
+  );
+}
 export function selectQuestion(
   candidates: Candidate[],
   questions: Question[],
   history: AnswerRecord[],
+  roundSeed = 0,
 ): { question: Question; informationGain: number } | null {
   if (candidates.length < 2) return null;
   const asked = new Set(history.map((record) => record.questionId));
-  const priorEntropy = entropy(
-    candidates.map((candidate) => candidate.probability),
+  // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
+  // true/false/unknown trait share a response distribution, so three masses
+  // are sufficient. This avoids five posterior arrays per question.
+  const responseEntropy = [
+    entropy(positive),
+    entropy(negative),
+    entropy(positive.map((p, i) => (p + negative[i]) / 2)),
+  ];
+  const eligible = new Set(
+    questions.filter((q) => !asked.has(q.id) && isSemantic(q)).map((q) => q.id),
   );
-  let best: { question: Question; informationGain: number } | null = null;
-  for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
-    if (asked.has(question.id)) continue;
-    let expectedEntropy = 0;
-    for (const answer of answers) {
-      const joint = candidates.map(
-        (candidate) =>
-          candidate.probability *
-          likelihood(candidate.character.traits[question.id], answer),
-      );
-      const responseProbability = joint.reduce((sum, p) => sum + p, 0);
-      if (responseProbability > 0)
-        expectedEntropy +=
-          responseProbability *
-          entropy(joint.map((p) => p / responseProbability));
+  const previousQuestion = questions.find(
+    (q) => q.id === history.at(-1)?.questionId,
+  );
+  const previousFamily = previousQuestion
+    ? questionFamily(previousQuestion)
+    : undefined;
+  const masses = new Map<string, { positive: number; negative: number }>();
+  let totalMass = 0;
+  for (const candidate of candidates) {
+    totalMass += candidate.probability;
+    for (const [id, trait] of Object.entries(candidate.character.traits)) {
+      if (!eligible.has(id) || (trait !== true && trait !== false)) continue;
+      let mass = masses.get(id);
+      if (!mass) {
+        mass = { positive: 0, negative: 0 };
+        masses.set(id, mass);
+      }
+      if (trait === true) mass.positive += candidate.probability;
+      else mass.negative += candidate.probability;
     }
-    const informationGain = Math.max(0, priorEntropy - expectedEntropy);
-    if (
-      informationGain > 1e-10 &&
-      (!best || informationGain > best.informationGain + 1e-10)
-    )
+  }
+  let best: { question: Question; informationGain: number } | null = null;
+  let bestScore = 0;
+  const nearEqual: {
+    question: Question;
+    informationGain: number;
+    score: number;
+  }[] = [];
+  for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
+    if (!eligible.has(question.id)) continue;
+    const mass = masses.get(question.id);
+    const trueMass = mass?.positive ?? 0;
+    const falseMass = mass?.negative ?? 0;
+    // Missing and null facts belong to the same uncertain response group.
+    // Roundoff can make an otherwise empty unknown group slightly negative.
+    const unknownMass = Math.max(0, totalMass - trueMass - falseMass);
+    let answerEntropy = 0;
+    for (let index = 0; index < answers.length; index++) {
+      const probability =
+        trueMass * positive[index] +
+        falseMass * negative[index] +
+        (unknownMass * (positive[index] + negative[index])) / 2;
+      if (probability > 0)
+        answerEntropy -= probability * Math.log2(probability);
+    }
+    const informationGain = Math.max(
+      0,
+      answerEntropy -
+        trueMass * responseEntropy[0] -
+        falseMass * responseEntropy[1] -
+        unknownMass * responseEntropy[2],
+    );
+    const coverage =
+      totalMass > 0 ? Math.min(1, (trueMass + falseMass) / totalMass) : 0;
+    // Broad, documented splits are more useful than a rare known claim among
+    // mostly unknown profiles. A modest family cost breaks near-equal choices;
+    // it cannot turn an irrelevant question into an informative one.
+    const sameFamily =
+      previousFamily !== undefined &&
+      questionFamily(question) === previousFamily;
+    const score =
+      informationGain * Math.sqrt(coverage) * (sameFamily ? 0.9 : 1);
+    if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
+      nearEqual.push({ question, informationGain, score });
+    if (informationGain > 1e-10 && score > bestScore + 1e-10) {
       best = { question, informationGain };
+      bestScore = score;
+    }
+  }
+  if (best && roundSeed !== 0) {
+    const context = `${roundSeed}:${history.map((record) => `${record.questionId}:${record.answer}`).join("|")}`;
+    let priority = -1;
+    for (const option of nearEqual) {
+      if (option.score < bestScore * 0.95) continue;
+      const value = seededPriority(`${context}:${option.question.id}`);
+      if (value > priority) {
+        best = {
+          question: option.question,
+          informationGain: option.informationGain,
+        };
+        priority = value;
+      }
+    }
   }
   return best;
+}
+
+// A reproducible hash for variety, not security or likelihood estimation.
+function seededPriority(value: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index++)
+    hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
+  hash = Math.imul(hash ^ (hash >>> 16), 0x85ebca6b);
+  hash = Math.imul(hash ^ (hash >>> 13), 0xc2b2ae35);
+  return (hash ^ (hash >>> 16)) >>> 0;
 }
 
 /** answeredCount must count informative answers, excluding "unknown". */

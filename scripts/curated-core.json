@@ -1,0 +1,1054 @@
+{
+  "animals": {
+    "questions": [
+      {
+        "id": "core_mammal",
+        "text": "Is it a mammal?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_bird",
+        "text": "Is it a bird?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_reptile",
+        "text": "Is it a reptile?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_amphibian",
+        "text": "Is it an amphibian?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_insect",
+        "text": "Is it an insect?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_domestic",
+        "text": "Is it a commonly domesticated animal?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "habitat"
+      },
+      {
+        "id": "core_aquatic",
+        "text": "Does it spend much of its life in water?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "habitat"
+      },
+      {
+        "id": "core_fourlegs",
+        "text": "Does the adult normally have four legs?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_twolegs",
+        "text": "Does it normally walk on two legs?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_sixlegs",
+        "text": "Does the adult have six legs?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_wings",
+        "text": "Does the adult have wings?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_fly",
+        "text": "Can the adult fly under its own power?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "abilities"
+      },
+      {
+        "id": "core_feathers",
+        "text": "Does it have feathers?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_scales",
+        "text": "Does it have scales?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_stripes",
+        "text": "Is it famous for a striped body?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_blackwhite",
+        "text": "Is it famous for a black-and-white coat or plumage?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_trunk",
+        "text": "Does it have a trunk?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_longneck",
+        "text": "Is it famous for a very long neck?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_hooves",
+        "text": "Does it have hooves?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_catfamily",
+        "text": "Is it a member of the cat family?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_dogfamily",
+        "text": "Is it a member of the dog family?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_bearfamily",
+        "text": "Is it a member of the bear family?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_horsefamily",
+        "text": "Is it a member of the horse family?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "species"
+      },
+      {
+        "id": "core_plants",
+        "text": "Does it mainly eat plants?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "diet"
+      },
+      {
+        "id": "core_meat",
+        "text": "Does it mainly eat other animals?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "diet"
+      },
+      {
+        "id": "core_venom",
+        "text": "Is it venomous?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "abilities"
+      },
+      {
+        "id": "core_mane",
+        "text": "Are adult males famous for a mane?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_huge",
+        "text": "Can a typical full-grown individual weigh over 500 kg?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "size"
+      },
+      {
+        "id": "core_longears",
+        "text": "Is it famous for long ears?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_jumps",
+        "text": "Is it famous for hopping or jumping?",
+        "hint": "Think of the familiar adult animal. Answer “don’t know” if the species or life stage makes this uncertain.",
+        "kind": "semantic",
+        "family": "movement"
+      }
+    ],
+    "characters": [
+      {
+        "name": "Lion",
+        "article": "Lion",
+        "tags": ["mammal", "fourlegs", "catfamily", "meat", "mane"],
+        "unknown": []
+      },
+      {
+        "name": "Tiger",
+        "article": "Tiger",
+        "tags": ["mammal", "fourlegs", "catfamily", "meat", "stripes"],
+        "unknown": []
+      },
+      {
+        "name": "Zebra",
+        "article": "Zebra",
+        "tags": [
+          "mammal",
+          "fourlegs",
+          "horsefamily",
+          "plants",
+          "stripes",
+          "blackwhite",
+          "hooves"
+        ],
+        "unknown": []
+      },
+      {
+        "name": "Giraffe",
+        "article": "Giraffe",
+        "tags": ["mammal", "fourlegs", "plants", "longneck", "hooves", "huge"],
+        "unknown": []
+      },
+      {
+        "name": "African bush elephant",
+        "article": "African_bush_elephant",
+        "tags": ["mammal", "fourlegs", "plants", "trunk", "huge"],
+        "unknown": []
+      },
+      {
+        "name": "Giant panda",
+        "article": "Giant_panda",
+        "tags": ["mammal", "fourlegs", "bearfamily", "plants", "blackwhite"],
+        "unknown": []
+      },
+      {
+        "name": "Dog",
+        "article": "Dog",
+        "tags": ["mammal", "fourlegs", "dogfamily", "domestic"],
+        "unknown": ["plants", "meat"]
+      },
+      {
+        "name": "Cat",
+        "article": "Cat",
+        "tags": ["mammal", "fourlegs", "catfamily", "domestic", "meat"],
+        "unknown": []
+      },
+      {
+        "name": "Gray wolf",
+        "article": "Gray_wolf",
+        "tags": ["mammal", "fourlegs", "dogfamily", "meat"],
+        "unknown": []
+      },
+      {
+        "name": "Brown bear",
+        "article": "Brown_bear",
+        "tags": ["mammal", "fourlegs", "bearfamily"],
+        "unknown": ["plants", "meat"]
+      },
+      {
+        "name": "Bottlenose dolphin",
+        "article": "Common_bottlenose_dolphin",
+        "tags": ["mammal", "aquatic", "meat"],
+        "unknown": []
+      },
+      {
+        "name": "Blue whale",
+        "article": "Blue_whale",
+        "tags": ["mammal", "aquatic", "meat", "huge"],
+        "unknown": []
+      },
+      {
+        "name": "Horse",
+        "article": "Horse",
+        "tags": [
+          "mammal",
+          "fourlegs",
+          "horsefamily",
+          "plants",
+          "hooves",
+          "domestic",
+          "mane"
+        ],
+        "unknown": ["huge"]
+      },
+      {
+        "name": "Domestic rabbit",
+        "article": "Domestic_rabbit",
+        "tags": [
+          "mammal",
+          "fourlegs",
+          "plants",
+          "domestic",
+          "longears",
+          "jumps"
+        ],
+        "unknown": []
+      },
+      {
+        "name": "Eagle",
+        "article": "Eagle",
+        "tags": ["bird", "twolegs", "wings", "fly", "feathers", "meat"],
+        "unknown": []
+      },
+      {
+        "name": "Penguin",
+        "article": "Penguin",
+        "tags": [
+          "bird",
+          "twolegs",
+          "wings",
+          "feathers",
+          "aquatic",
+          "blackwhite",
+          "meat"
+        ],
+        "unknown": []
+      },
+      {
+        "name": "Crocodile",
+        "article": "Crocodile",
+        "tags": ["reptile", "fourlegs", "scales", "aquatic", "meat"],
+        "unknown": ["huge"]
+      },
+      {
+        "name": "Indian cobra",
+        "article": "Indian_cobra",
+        "tags": ["reptile", "scales", "venom", "meat"],
+        "unknown": []
+      },
+      {
+        "name": "Common frog",
+        "article": "Common_frog",
+        "tags": ["amphibian", "fourlegs", "meat", "jumps"],
+        "unknown": ["aquatic"]
+      },
+      {
+        "name": "Butterfly",
+        "article": "Butterfly",
+        "tags": ["insect", "sixlegs", "wings", "fly"],
+        "unknown": []
+      }
+    ]
+  },
+  "objects": {
+    "questions": [
+      {
+        "id": "core_electric",
+        "text": "Does the ordinary version need electricity to do its main job?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "energy"
+      },
+      {
+        "id": "core_screen",
+        "text": "Does it normally have an electronic screen?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "appearance"
+      },
+      {
+        "id": "core_pocket",
+        "text": "Can the ordinary version fit in a clothing pocket?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "size"
+      },
+      {
+        "id": "core_portable",
+        "text": "Is the familiar version normally easy to carry in one hand?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "size"
+      },
+      {
+        "id": "core_kitchen",
+        "text": "Is it a kitchen appliance?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "location"
+      },
+      {
+        "id": "core_cleaning",
+        "text": "Is it mainly used for cleaning?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_food",
+        "text": "Is it mainly used for eating or preparing food?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_furniture",
+        "text": "Is it a piece of furniture?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "type"
+      },
+      {
+        "id": "core_sitting",
+        "text": "Is it mainly used for sitting?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_wearable",
+        "text": "Is it normally worn on the body?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_music",
+        "text": "Is it a musical instrument?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_strings",
+        "text": "Does it have strings used to produce music?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_keys",
+        "text": "Does it have a keyboard used to produce music?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_wheels",
+        "text": "Does it normally have wheels?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_transport",
+        "text": "Is it mainly used for transportation?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_cutting",
+        "text": "Is it designed to cut things?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_reading",
+        "text": "Is it mainly used for reading?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_time",
+        "text": "Is it mainly used to tell the time?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_light",
+        "text": "Is it mainly used to produce light?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_rain",
+        "text": "Is it designed to protect against rain?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_cooling",
+        "text": "Is its main job to keep things cold?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_heating",
+        "text": "Is its main job to heat food?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_communication",
+        "text": "Is it used for electronic communication?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_clothes",
+        "text": "Is it mainly used to wash clothes?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_oral",
+        "text": "Is it used inside the mouth?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_writing",
+        "text": "Is it designed for writing?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_sport",
+        "text": "Is it commonly used for playing sports?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "use"
+      },
+      {
+        "id": "core_blades",
+        "text": "Does it have cutting blades?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_tines",
+        "text": "Does it have prongs used to spear food?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      },
+      {
+        "id": "core_bowl",
+        "text": "Does it have a small bowl used to scoop food?",
+        "hint": "Think of the familiar everyday version. Designs vary; “don’t know” is always allowed.",
+        "kind": "semantic",
+        "family": "anatomy"
+      }
+    ],
+    "characters": [
+      {
+        "name": "Smartphone",
+        "article": "Smartphone",
+        "tags": ["electric", "screen", "pocket", "portable", "communication"],
+        "unknown": []
+      },
+      {
+        "name": "Laptop",
+        "article": "Laptop",
+        "tags": ["electric", "screen", "communication"],
+        "unknown": ["portable"]
+      },
+      {
+        "name": "Bicycle",
+        "article": "Bicycle",
+        "tags": ["wheels", "transport"],
+        "unknown": []
+      },
+      {
+        "name": "Refrigerator",
+        "article": "Refrigerator",
+        "tags": ["electric", "kitchen", "food", "cooling"],
+        "unknown": []
+      },
+      {
+        "name": "Microwave oven",
+        "article": "Microwave_oven",
+        "tags": ["electric", "kitchen", "food", "heating"],
+        "unknown": ["screen"]
+      },
+      {
+        "name": "Washing machine",
+        "article": "Washing_machine",
+        "tags": ["electric", "cleaning", "clothes"],
+        "unknown": ["screen"]
+      },
+      {
+        "name": "Umbrella",
+        "article": "Umbrella",
+        "tags": ["portable", "rain"],
+        "unknown": []
+      },
+      {
+        "name": "Chair",
+        "article": "Chair",
+        "tags": ["furniture", "sitting"],
+        "unknown": []
+      },
+      {
+        "name": "Table",
+        "article": "Table_(furniture)",
+        "tags": ["furniture"],
+        "unknown": []
+      },
+      {
+        "name": "Ball",
+        "article": "Ball",
+        "tags": ["portable", "sport"],
+        "unknown": []
+      },
+      {
+        "name": "Spoon",
+        "article": "Spoon",
+        "tags": ["pocket", "portable", "food", "oral", "bowl"],
+        "unknown": []
+      },
+      {
+        "name": "Fork",
+        "article": "Fork",
+        "tags": ["pocket", "portable", "food", "oral", "tines"],
+        "unknown": []
+      },
+      {
+        "name": "Scissors",
+        "article": "Scissors",
+        "tags": ["pocket", "portable", "cutting", "blades"],
+        "unknown": []
+      },
+      {
+        "name": "Backpack",
+        "article": "Backpack",
+        "tags": ["wearable"],
+        "unknown": ["portable"]
+      },
+      {
+        "name": "Toothbrush",
+        "article": "Toothbrush",
+        "tags": ["pocket", "portable", "cleaning", "oral"],
+        "unknown": []
+      },
+      {
+        "name": "Book",
+        "article": "Book",
+        "tags": ["portable", "reading"],
+        "unknown": []
+      },
+      {
+        "name": "Guitar",
+        "article": "Guitar",
+        "tags": ["music", "strings"],
+        "unknown": []
+      },
+      {
+        "name": "Piano",
+        "article": "Piano",
+        "tags": ["music", "strings", "keys"],
+        "unknown": []
+      },
+      {
+        "name": "Clock",
+        "article": "Clock",
+        "tags": ["time"],
+        "unknown": ["electric"]
+      },
+      {
+        "name": "Lamp",
+        "article": "Lamp",
+        "tags": ["electric", "light"],
+        "unknown": []
+      }
+    ]
+  },
+  "movies": {
+    "questions": [
+      {
+        "id": "core_animated",
+        "text": "Is it an animated film?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "medium"
+      },
+      {
+        "id": "core_scifi",
+        "text": "Does it have a major science-fiction setting?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "genre"
+      },
+      {
+        "id": "core_fantasy",
+        "text": "Does it have a major fantasy or supernatural element?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "genre"
+      },
+      {
+        "id": "core_crime",
+        "text": "Is crime central to its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "genre"
+      },
+      {
+        "id": "core_comedy",
+        "text": "Is it primarily a comedy?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "genre"
+      },
+      {
+        "id": "core_musical",
+        "text": "Does it prominently feature songs performed by characters?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "genre"
+      },
+      {
+        "id": "core_superhero",
+        "text": "Is it a superhero film?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "role"
+      },
+      {
+        "id": "core_space",
+        "text": "Does the story involve space travel or distant planets?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "setting"
+      },
+      {
+        "id": "core_sea",
+        "text": "Does much of the story involve the sea or ships?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "setting"
+      },
+      {
+        "id": "core_animals",
+        "text": "Are animals central characters?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "characters"
+      },
+      {
+        "id": "core_dinosaurs",
+        "text": "Are dinosaurs central to its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "characters"
+      },
+      {
+        "id": "core_robots",
+        "text": "Are robots central to its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "characters"
+      },
+      {
+        "id": "core_magic",
+        "text": "Is magic central to its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "abilities"
+      },
+      {
+        "id": "core_pirates",
+        "text": "Are pirates central to its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "role"
+      },
+      {
+        "id": "core_espionage",
+        "text": "Does it prominently involve spies?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "role"
+      },
+      {
+        "id": "core_japan",
+        "text": "Is it a Japanese film?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "location"
+      },
+      {
+        "id": "core_disney",
+        "text": "Is it a Walt Disney animated feature?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "studio"
+      },
+      {
+        "id": "core_dreamworks",
+        "text": "Is it a DreamWorks animated feature?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "studio"
+      },
+      {
+        "id": "core_dc",
+        "text": "Does it feature DC Comics heroes?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "universe"
+      },
+      {
+        "id": "core_matrix",
+        "text": "Does it involve entering a simulated reality?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "setting"
+      },
+      {
+        "id": "core_dreams",
+        "text": "Does it involve deliberately entering dreams?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "setting"
+      },
+      {
+        "id": "core_shipwreck",
+        "text": "Does a famous shipwreck drive its story?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "plot"
+      },
+      {
+        "id": "core_mafia",
+        "text": "Is it about an organized-crime family?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "role"
+      },
+      {
+        "id": "core_kungfu",
+        "text": "Does it prominently feature martial-arts combat?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "abilities"
+      },
+      {
+        "id": "core_elves",
+        "text": "Does it prominently feature elves or hobbits?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "characters"
+      },
+      {
+        "id": "core_balloon",
+        "text": "Does an old man travel in a house lifted by balloons?",
+        "hint": "Use the named film and its main story, rather than a sequel or a remake.",
+        "kind": "semantic",
+        "family": "plot"
+      },
+      {
+        "id": "core_courtroom",
+        "text": "Does a lawyer and a courtroom case drive the story?",
+        "hint": "Use the named film and its main story.",
+        "kind": "semantic",
+        "family": "story"
+      },
+      {
+        "id": "core_arthur",
+        "text": "Is the story about King Arthur and his knights?",
+        "hint": "Use the named film and its main story.",
+        "kind": "semantic",
+        "family": "story"
+      },
+      {
+        "id": "core_newspaper",
+        "text": "Is a newspaper business central to the story?",
+        "hint": "Use the named film and its main story.",
+        "kind": "semantic",
+        "family": "story"
+      },
+      {
+        "id": "core_blackwhite",
+        "text": "Is the film mainly photographed in black and white?",
+        "hint": "Use the named film and its main story.",
+        "kind": "semantic",
+        "family": "appearance"
+      }
+    ],
+    "characters": [
+      {
+        "name": "Titanic",
+        "article": "Titanic_(1997_film)",
+        "tags": ["sea", "shipwreck"],
+        "unknown": [],
+        "wikidataId": "Q44578"
+      },
+      {
+        "name": "The Lion King",
+        "article": "The_Lion_King_(1994_film)",
+        "tags": ["animated", "fantasy", "musical", "animals", "disney"],
+        "unknown": []
+      },
+      {
+        "name": "The Matrix",
+        "article": "The_Matrix",
+        "tags": ["scifi", "matrix", "kungfu", "robots"],
+        "unknown": []
+      },
+      {
+        "name": "Star Wars: Episode IV – A New Hope",
+        "article": "Star_Wars_(film)",
+        "tags": ["scifi", "space", "robots"],
+        "unknown": ["fantasy", "magic"],
+        "wikidataId": "Q17738"
+      },
+      {
+        "name": "Frozen",
+        "article": "Frozen_(2013_film)",
+        "tags": ["animated", "fantasy", "musical", "magic", "disney"],
+        "unknown": []
+      },
+      {
+        "name": "Spirited Away",
+        "article": "Spirited_Away",
+        "tags": ["animated", "fantasy", "magic", "japan"],
+        "unknown": []
+      },
+      {
+        "name": "Jurassic Park",
+        "article": "Jurassic_Park_(film)",
+        "tags": ["scifi", "dinosaurs"],
+        "unknown": []
+      },
+      {
+        "name": "The Dark Knight",
+        "article": "The_Dark_Knight",
+        "tags": ["crime", "superhero", "dc"],
+        "unknown": []
+      },
+      {
+        "name": "Avatar",
+        "article": "Avatar_(2009_film)",
+        "tags": ["scifi", "space"],
+        "unknown": [],
+        "wikidataId": "Q24871"
+      },
+      {
+        "name": "Inception",
+        "article": "Inception",
+        "tags": ["scifi", "dreams"],
+        "unknown": [],
+        "wikidataId": "Q25188"
+      },
+      {
+        "name": "The Lord of the Rings: The Fellowship of the Ring",
+        "article": "The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring",
+        "tags": ["fantasy", "magic", "elves"],
+        "unknown": [],
+        "wikidataId": "Q127367"
+      },
+      {
+        "name": "Shrek",
+        "article": "Shrek",
+        "tags": ["animated", "fantasy", "comedy", "animals", "dreamworks"],
+        "unknown": []
+      },
+      {
+        "name": "The Godfather",
+        "article": "The_Godfather",
+        "tags": ["crime", "mafia"],
+        "unknown": [],
+        "wikidataId": "Q47703"
+      },
+      {
+        "name": "Scarface",
+        "article": "Scarface_(1983_film)",
+        "tags": ["crime"],
+        "unknown": [],
+        "wikidataId": "Q47075"
+      },
+      {
+        "name": "Citizen Kane",
+        "article": "Citizen_Kane",
+        "tags": ["newspaper", "blackwhite"],
+        "unknown": [],
+        "wikidataId": "Q24815"
+      },
+      {
+        "name": "Pirates of the Caribbean: The Curse of the Black Pearl",
+        "article": "Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl",
+        "tags": ["fantasy", "comedy", "sea", "pirates"],
+        "unknown": [],
+        "wikidataId": "Q46717"
+      },
+      {
+        "name": "Ghost",
+        "article": "Ghost_(1990_film)",
+        "tags": ["fantasy", "crime"],
+        "unknown": [],
+        "wikidataId": "Q49003"
+      },
+      {
+        "name": "Liar Liar",
+        "article": "Liar_Liar",
+        "tags": ["comedy", "fantasy", "courtroom"],
+        "unknown": [],
+        "wikidataId": "Q48980"
+      },
+      {
+        "name": "Die Another Day",
+        "article": "Die_Another_Day",
+        "tags": ["espionage"],
+        "unknown": [],
+        "wikidataId": "Q30931"
+      },
+      {
+        "name": "Monty Python and the Holy Grail",
+        "article": "Monty_Python_and_the_Holy_Grail",
+        "tags": ["comedy", "fantasy", "arthur"],
+        "unknown": [],
+        "wikidataId": "Q25043"
+      }
+    ]
+  }
+}
