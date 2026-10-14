@@ -30,7 +30,11 @@ Local release checks completed on 2026-10-14 with Node 24.19.0:
 - Both Supabase migrations are applied; 24 live ownership/isolation checks passed and disposable accounts were cleaned up. Public signup/email delivery still needs hosted mail and redirect configuration; it is not claimed verified.
 - Source review resolved storage-warning loss, public account-ID exposure, stale inference, duplicate film identities and incorrect license labels. Automated review also resolved stale documentation, conflicting annotation tags, a punctuation-sensitive test locator, file-input reselection and legacy base64url key decoding. No remaining material blocker was found in the reviewed correction.
 
-GitHub CI and live Pages verification remain pending publication of the reviewed release.
+Published through [PR #1](https://github.com/mk-knight23/openguess/pull/1), source revision `90e58ee`, main merge `053a4a3`. [Main CI](https://github.com/mk-knight23/openguess/actions/runs/38517609088) and [Pages deployment](https://github.com/mk-knight23/openguess/actions/runs/38517609089) passed.
+
+The [live site](https://mk-knight23.github.io/openguess/) passed the same 24 browser checks, including ten accessibility states. Five additional live rounds identified Albert Einstein, Harry Potter, Cat, Guitar and the intended Titanic film using semantic questions; thinking/confident/celebration poses and five collection entries were checked. Reports are `live-browser-qa.json` and `live-semantic-rounds.json`. A slow mobile load event timed out in the first live harness run; navigation to DOM readiness followed by actual game-ready assertions passed, without weakening gameplay checks.
+
+REA additionally observed the published site's real semantic question and five answer controls in `ev_56be4905476017f3c9646cd0ebc324bd3ea642e7741f0ae8ce93fc10648623f6`. Both controlled actions completed; REA still marked event coverage incomplete. This observation does not authenticate all runtime behavior or replace the separate browser checks.
 
 ## Reproduce
 

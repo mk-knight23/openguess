@@ -1,0 +1,170 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "theme": "people",
+      "target": "Albert Einstein",
+      "questions": 6,
+      "transcript": [
+        {
+          "question": "Is the character generally portrayed as male?",
+          "answer": "Yes",
+          "family": "gender"
+        },
+        {
+          "question": "Has this real person died?",
+          "answer": "Yes",
+          "family": "time"
+        },
+        {
+          "question": "Is the person famous for scientific work?",
+          "answer": "Yes",
+          "family": "occupation"
+        },
+        {
+          "question": "Is the character strongly associated with Britain?",
+          "answer": "No",
+          "family": "location"
+        },
+        {
+          "question": "Has the person been a national political leader?",
+          "answer": "No",
+          "family": "occupation"
+        },
+        {
+          "question": "Is a moustache a familiar part of the character\u2019s appearance?",
+          "answer": "Yes",
+          "family": "appearance"
+        }
+      ]
+    },
+    {
+      "theme": "fictional",
+      "target": "Harry Potter",
+      "questions": 6,
+      "transcript": [
+        {
+          "question": "Is the character usually shown as animation?",
+          "answer": "No",
+          "family": "media"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "answer": "Yes",
+          "family": "gender"
+        },
+        {
+          "question": "Does the character use magic or supernatural powers?",
+          "answer": "Yes",
+          "family": "abilities"
+        },
+        {
+          "question": "Is the character known mainly from films?",
+          "answer": "No",
+          "family": "media"
+        },
+        {
+          "question": "Is the character a wizard or witch?",
+          "answer": "Yes",
+          "family": "role"
+        },
+        {
+          "question": "Is attending school central to the character\u2019s story?",
+          "answer": "Yes",
+          "family": "setting"
+        }
+      ]
+    },
+    {
+      "theme": "animals",
+      "target": "Cat",
+      "questions": 5,
+      "transcript": [
+        {
+          "question": "Is it a mammal?",
+          "answer": "Yes",
+          "family": "species"
+        },
+        {
+          "question": "Is it a commonly domesticated animal?",
+          "answer": "Yes",
+          "family": "habitat"
+        },
+        {
+          "question": "Does it have hooves?",
+          "answer": "No",
+          "family": "anatomy"
+        },
+        {
+          "question": "Is it famous for long ears?",
+          "answer": "No",
+          "family": "appearance"
+        },
+        {
+          "question": "Is it a member of the cat family?",
+          "answer": "Yes",
+          "family": "species"
+        }
+      ]
+    },
+    {
+      "theme": "objects",
+      "target": "Guitar",
+      "questions": 4,
+      "transcript": [
+        {
+          "question": "Is the familiar version normally easy to carry in one hand?",
+          "answer": "No",
+          "family": "size"
+        },
+        {
+          "question": "Does the ordinary version need electricity to do its main job?",
+          "answer": "No",
+          "family": "energy"
+        },
+        {
+          "question": "Is it a musical instrument?",
+          "answer": "Yes",
+          "family": "use"
+        },
+        {
+          "question": "Does it have a keyboard used to produce music?",
+          "answer": "No",
+          "family": "anatomy"
+        }
+      ]
+    },
+    {
+      "theme": "movies",
+      "target": "Titanic",
+      "questions": 5,
+      "transcript": [
+        {
+          "question": "Does it have a major fantasy or supernatural element?",
+          "answer": "No",
+          "family": "genre"
+        },
+        {
+          "question": "Does it have a major science-fiction setting?",
+          "answer": "No",
+          "family": "genre"
+        },
+        {
+          "question": "Is crime central to its story?",
+          "answer": "No",
+          "family": "genre"
+        },
+        {
+          "question": "Is a newspaper business central to the story?",
+          "answer": "No",
+          "family": "story"
+        },
+        {
+          "question": "Does much of the story involve the sea or ships?",
+          "answer": "Yes",
+          "family": "setting"
+        }
+      ]
+    }
+  ]
+}
