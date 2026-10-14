@@ -177,3 +177,134 @@ it("filters explicit adult word forms while retaining ordinary entries", async (
   ).not.toBeInTheDocument();
   expect(screen.getByRole("heading", { name: ordinary.name })).toBeVisible();
 });
+it("preserves the warning when browser storage cannot save a profile", async () => {
+  const u = userEvent.setup();
+  render(<App />);
+  await u.click(screen.getByRole("button", { name: "Settings" }));
+  const fail = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+    throw new DOMException("Full", "QuotaExceededError");
+  });
+  try {
+    await u.clear(screen.getByRole("textbox", { name: "Nickname" }));
+    await u.type(
+      screen.getByRole("textbox", { name: "Nickname" }),
+      "Unsaved Explorer",
+    );
+    await u.click(screen.getByRole("button", { name: "Save profile" }));
+    expect(
+      screen.getByText(/Your browser could not save progress/),
+    ).toBeVisible();
+  } finally {
+    fail.mockRestore();
+  }
+});
+it("admits uncertainty when semantic facts cannot distinguish two candidates", async () => {
+  const first = characters[0];
+  vi.mocked(loadTheme).mockResolvedValueOnce({
+    theme: "people",
+    version: "test",
+    characters: [
+      { ...first, id: "semantic-a", traits: { shared: true } },
+      {
+        ...first,
+        id: "semantic-b",
+        name: "Second person",
+        traits: { shared: true },
+      },
+      {
+        ...first,
+        id: "semantic-c",
+        name: "Third person",
+        traits: { shared: false },
+      },
+    ],
+    questions: [
+      {
+        id: "shared",
+        text: "Is your person a scientist?",
+        hint: "A meaningful fact.",
+        kind: "semantic",
+        family: "occupation",
+      },
+    ],
+    source: {
+      url: "https://www.wikidata.org",
+      license: "CC0",
+      retrievedAt: "2026-10-14",
+    },
+    quality: {},
+  });
+  const u = userEvent.setup();
+  render(<App />);
+  await u.click(await screen.findByRole("button", { name: "Start guessing" }));
+  await u.click(await screen.findByRole("button", { name: "Yes" }));
+  expect(
+    await screen.findByRole("heading", { name: "You stumped me!" }),
+  ).toBeVisible();
+  expect(
+    screen.queryByRole("button", { name: "That’s correct" }),
+  ).not.toBeInTheDocument();
+});
+it("defaults to featured facts while keeping the full catalog visible and opt-in", async () => {
+  const first = characters[0];
+  vi.mocked(loadTheme).mockResolvedValueOnce({
+    theme: "people",
+    version: "test",
+    characters: [
+      {
+        ...first,
+        id: "featured-a",
+        name: "Featured A",
+        featured: true,
+        traits: { shared: true },
+      },
+      {
+        ...first,
+        id: "featured-b",
+        name: "Featured B",
+        featured: true,
+        traits: { shared: false },
+      },
+      {
+        ...first,
+        id: "experimental-c",
+        name: "Experimental C",
+        featured: false,
+        traits: { shared: null },
+      },
+    ],
+    questions: [
+      {
+        id: "shared",
+        text: "Is your person a scientist?",
+        hint: "A meaningful fact.",
+        kind: "semantic",
+        family: "occupation",
+      },
+    ],
+    source: {
+      url: "https://www.wikidata.org",
+      license: "CC0",
+      retrievedAt: "2026-10-14",
+    },
+    quality: {},
+  });
+  const u = userEvent.setup();
+  render(<App />);
+  const featured = await screen.findByRole("button", {
+    name: "Featured discoveries",
+  });
+  expect(featured).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByText(/2 featured choices/)).toBeVisible();
+  await u.click(screen.getByRole("button", { name: "Library" }));
+  expect(screen.getByRole("heading", { name: "Experimental C" })).toBeVisible();
+  await u.click(screen.getByRole("button", { name: "Play" }));
+  await u.click(
+    screen.getByRole("button", {
+      name: "Full catalog (experimental)",
+    }),
+  );
+  await u.click(screen.getByRole("button", { name: "Start guessing" }));
+  expect(await screen.findByTestId("question-text")).toBeVisible();
+  expect(screen.getByText(/3 entries/)).toBeVisible();
+});

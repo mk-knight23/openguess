@@ -1,6 +1,6 @@
 import type { DataPack, Theme } from "../types";
 export type { DataPack, Theme } from "../types";
-const loaders = {
+const loaders: Record<Theme, () => Promise<{ default: unknown }>> = {
   people: () => import("./packs/people.json"),
   fictional: () => import("./packs/fictional.json"),
   animals: () => import("./packs/animals.json"),

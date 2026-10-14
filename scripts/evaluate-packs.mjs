@@ -12,6 +12,9 @@ const mode = process.env.EVALUATION_MODE || "full";
 if (!["full", "core"].includes(mode))
   throw new Error("Evaluation mode must be full or core");
 const unknownDates = process.env.EVALUATION_UNKNOWN_DATES === "1";
+const roundSeed = Number(process.env.EVALUATION_SEED || 0);
+if (!Number.isInteger(roundSeed) || roundSeed < 0 || roundSeed > 0xffffffff)
+  throw new Error("Evaluation seed must be an unsigned 32-bit integer");
 if (!Number.isInteger(samples) || samples < 1)
   throw new Error("Samples must be a positive integer");
 const maximumQuestions = 40;
@@ -79,7 +82,12 @@ for (const theme of themes) {
     for (;;) {
       const candidates = rankCandidates(pack.characters, history);
       const start = performance.now();
-      const next = selectQuestion(candidates, pack.questions, history);
+      const next = selectQuestion(
+        candidates,
+        pack.questions,
+        history,
+        roundSeed,
+      );
       durations.push(performance.now() - start);
       const informative = history.filter(
         (record) => record.answer !== "unknown",
@@ -161,6 +169,7 @@ const report = {
   node: process.version,
   mode,
   unknownDates,
+  roundSeed,
   methodology:
     "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 semantic questions; unknown for absent/null facts; no forced low-confidence guesses. Not human accuracy.",
   results,

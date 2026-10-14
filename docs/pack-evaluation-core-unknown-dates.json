@@ -1,0 +1,670 @@
+{
+  "measuredAt": "2026-10-14T05:15:26.218Z",
+  "node": "v24.19.0",
+  "mode": "core",
+  "unknownDates": true,
+  "roundSeed": 0,
+  "methodology": "Deterministic coverage-stratified catalog-answer oracle; no rejections; 40 semantic questions; unknown for absent/null facts; no forced low-confidence guesses. Not human accuracy.",
+  "results": [
+    {
+      "theme": "people",
+      "entities": 32,
+      "databaseEntities": 1123,
+      "questions": 2071,
+      "samples": 32,
+      "correctFirstGuess": 32,
+      "unresolved": 0,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 0,
+      "exhausted": 0,
+      "questionLimit": 0,
+      "totalUnknownAnswers": 0,
+      "roundsWithUnknownAnswers": 0,
+      "exampleRounds": [
+        {
+          "target": "Ada Lovelace",
+          "topMatch": "Ada Lovelace",
+          "topWeight": 0.9368,
+          "transcript": [
+            {
+              "question": "Has this real person died?",
+              "answer": "yes",
+              "family": "time"
+            },
+            {
+              "question": "Is the person famous for scientific work?",
+              "answer": "yes",
+              "family": "occupation"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "no",
+              "family": "gender"
+            },
+            {
+              "question": "Is the character strongly associated with Britain?",
+              "answer": "yes",
+              "family": "location"
+            }
+          ]
+        },
+        {
+          "target": "APJ Abdul Kalam",
+          "topMatch": "APJ Abdul Kalam",
+          "topWeight": 0.9375,
+          "transcript": [
+            {
+              "question": "Has this real person died?",
+              "answer": "yes",
+              "family": "time"
+            },
+            {
+              "question": "Is the person famous for scientific work?",
+              "answer": "yes",
+              "family": "occupation"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "yes",
+              "family": "gender"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "no",
+              "family": "location"
+            },
+            {
+              "question": "Has the person been a national political leader?",
+              "answer": "yes",
+              "family": "occupation"
+            }
+          ]
+        },
+        {
+          "target": "Bill Gates",
+          "topMatch": "Bill Gates",
+          "topWeight": 0.935,
+          "transcript": [
+            {
+              "question": "Has this real person died?",
+              "answer": "no",
+              "family": "time"
+            },
+            {
+              "question": "Is the character known primarily for sport?",
+              "answer": "no",
+              "family": "occupation"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "yes",
+              "family": "location"
+            },
+            {
+              "question": "Is the character generally portrayed as male?",
+              "answer": "yes",
+              "family": "gender"
+            },
+            {
+              "question": "Is the person famous for acting?",
+              "answer": "no",
+              "family": "occupation"
+            },
+            {
+              "question": "Are glasses a familiar part of the character’s appearance?",
+              "answer": "yes",
+              "family": "appearance"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 6,
+      "maxQuestions": 7,
+      "p95SelectionMs": 1.42,
+      "maxSelectionMs": 5.09
+    },
+    {
+      "theme": "fictional",
+      "entities": 36,
+      "databaseEntities": 1114,
+      "questions": 820,
+      "samples": 36,
+      "correctFirstGuess": 36,
+      "unresolved": 0,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 0,
+      "exhausted": 0,
+      "questionLimit": 0,
+      "totalUnknownAnswers": 0,
+      "roundsWithUnknownAnswers": 0,
+      "exampleRounds": [
+        {
+          "target": "Batman",
+          "topMatch": "Batman",
+          "topWeight": 0.9681,
+          "transcript": [
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "no",
+              "family": "media"
+            },
+            {
+              "question": "Does the character use magic or supernatural powers?",
+              "answer": "no",
+              "family": "abilities"
+            },
+            {
+              "question": "Did the character originate in a video game?",
+              "answer": "no",
+              "family": "media"
+            },
+            {
+              "question": "Is the character strongly associated with the United States?",
+              "answer": "yes",
+              "family": "location"
+            },
+            {
+              "question": "Does the character usually wear a mask or helmet?",
+              "answer": "yes",
+              "family": "appearance"
+            },
+            {
+              "question": "Is being wealthy central to the fictional character?",
+              "answer": "yes",
+              "family": "occupation"
+            },
+            {
+              "question": "Is red a prominent part of the character’s design?",
+              "answer": "no",
+              "family": "appearance"
+            }
+          ]
+        },
+        {
+          "target": "Darth Vader",
+          "topMatch": "Darth Vader",
+          "topWeight": 0.9393,
+          "transcript": [
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "no",
+              "family": "media"
+            },
+            {
+              "question": "Does the character use magic or supernatural powers?",
+              "answer": "yes",
+              "family": "abilities"
+            },
+            {
+              "question": "Does the character famously use a sword?",
+              "answer": "yes",
+              "family": "equipment"
+            },
+            {
+              "question": "Does the character have a major connection to outer space?",
+              "answer": "yes",
+              "family": "setting"
+            },
+            {
+              "question": "Does the character wear notable armor?",
+              "answer": "yes",
+              "family": "appearance"
+            }
+          ]
+        },
+        {
+          "target": "Doraemon",
+          "topMatch": "Doraemon",
+          "topWeight": 0.8818,
+          "transcript": [
+            {
+              "question": "Is the character usually shown as animation?",
+              "answer": "yes",
+              "family": "media"
+            },
+            {
+              "question": "Is the fictional character usually a hero?",
+              "answer": "no",
+              "family": "role"
+            },
+            {
+              "question": "Is yellow a prominent part of the character’s design?",
+              "answer": "no",
+              "family": "appearance"
+            },
+            {
+              "question": "Is the character known mainly from films?",
+              "answer": "no",
+              "family": "media"
+            },
+            {
+              "question": "Does the character originate in a Japanese story or game?",
+              "answer": "yes",
+              "family": "location"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 6,
+      "maxQuestions": 7,
+      "p95SelectionMs": 0.54,
+      "maxSelectionMs": 0.84
+    },
+    {
+      "theme": "animals",
+      "entities": 20,
+      "databaseEntities": 1120,
+      "questions": 286,
+      "samples": 20,
+      "correctFirstGuess": 20,
+      "unresolved": 0,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 0,
+      "exhausted": 0,
+      "questionLimit": 0,
+      "totalUnknownAnswers": 2,
+      "roundsWithUnknownAnswers": 1,
+      "exampleRounds": [
+        {
+          "target": "Brown bear",
+          "topMatch": "Brown bear",
+          "topWeight": 0.9083,
+          "transcript": [
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "yes",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "no",
+              "family": "habitat"
+            },
+            {
+              "question": "Does it mainly eat other animals?",
+              "answer": "unknown",
+              "family": "diet"
+            },
+            {
+              "question": "Does it mainly eat plants?",
+              "answer": "unknown",
+              "family": "diet"
+            },
+            {
+              "question": "Is it a mammal?",
+              "answer": "yes",
+              "family": "species"
+            },
+            {
+              "question": "Does it have hooves?",
+              "answer": "no",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a member of the cat family?",
+              "answer": "no",
+              "family": "species"
+            },
+            {
+              "question": "Is it a member of the bear family?",
+              "answer": "yes",
+              "family": "species"
+            },
+            {
+              "question": "Is it famous for a black-and-white coat or plumage?",
+              "answer": "no",
+              "family": "appearance"
+            }
+          ]
+        },
+        {
+          "target": "Dog",
+          "topMatch": "Dog",
+          "topWeight": 0.9359,
+          "transcript": [
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "yes",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "yes",
+              "family": "habitat"
+            },
+            {
+              "question": "Is it a member of the cat family?",
+              "answer": "no",
+              "family": "species"
+            },
+            {
+              "question": "Does it have hooves?",
+              "answer": "no",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a member of the dog family?",
+              "answer": "yes",
+              "family": "species"
+            }
+          ]
+        },
+        {
+          "target": "Common frog",
+          "topMatch": "Common frog",
+          "topWeight": 0.9936,
+          "transcript": [
+            {
+              "question": "Does the adult normally have four legs?",
+              "answer": "yes",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it a commonly domesticated animal?",
+              "answer": "no",
+              "family": "habitat"
+            },
+            {
+              "question": "Does it mainly eat other animals?",
+              "answer": "yes",
+              "family": "diet"
+            },
+            {
+              "question": "Is it a mammal?",
+              "answer": "no",
+              "family": "species"
+            },
+            {
+              "question": "Does it have scales?",
+              "answer": "no",
+              "family": "appearance"
+            },
+            {
+              "question": "Is it an amphibian?",
+              "answer": "yes",
+              "family": "species"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 5,
+      "maxQuestions": 9,
+      "p95SelectionMs": 0.18,
+      "maxSelectionMs": 0.31
+    },
+    {
+      "theme": "objects",
+      "entities": 20,
+      "databaseEntities": 1120,
+      "questions": 491,
+      "samples": 20,
+      "correctFirstGuess": 20,
+      "unresolved": 0,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 0,
+      "exhausted": 0,
+      "questionLimit": 0,
+      "totalUnknownAnswers": 3,
+      "roundsWithUnknownAnswers": 3,
+      "exampleRounds": [
+        {
+          "target": "Backpack",
+          "topMatch": "Backpack",
+          "topWeight": 0.969,
+          "transcript": [
+            {
+              "question": "Is the familiar version normally easy to carry in one hand?",
+              "answer": "unknown",
+              "family": "size"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "no",
+              "family": "energy"
+            },
+            {
+              "question": "Can the ordinary version fit in a clothing pocket?",
+              "answer": "no",
+              "family": "size"
+            },
+            {
+              "question": "Is it a piece of furniture?",
+              "answer": "no",
+              "family": "type"
+            },
+            {
+              "question": "Is it a musical instrument?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Does it normally have wheels?",
+              "answer": "no",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it designed to protect against rain?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used for reading?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it commonly used for playing sports?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it normally worn on the body?",
+              "answer": "yes",
+              "family": "use"
+            }
+          ]
+        },
+        {
+          "target": "Clock",
+          "topMatch": "Clock",
+          "topWeight": 0.9569,
+          "transcript": [
+            {
+              "question": "Is the familiar version normally easy to carry in one hand?",
+              "answer": "no",
+              "family": "size"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "unknown",
+              "family": "energy"
+            },
+            {
+              "question": "Is it mainly used for eating or preparing food?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it a piece of furniture?",
+              "answer": "no",
+              "family": "type"
+            },
+            {
+              "question": "Is it a musical instrument?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Does it normally have wheels?",
+              "answer": "no",
+              "family": "anatomy"
+            },
+            {
+              "question": "Is it mainly used for cleaning?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used to produce light?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it mainly used to tell the time?",
+              "answer": "yes",
+              "family": "use"
+            }
+          ]
+        },
+        {
+          "target": "Laptop",
+          "topMatch": "Laptop",
+          "topWeight": 0.8939,
+          "transcript": [
+            {
+              "question": "Is the familiar version normally easy to carry in one hand?",
+              "answer": "unknown",
+              "family": "size"
+            },
+            {
+              "question": "Does the ordinary version need electricity to do its main job?",
+              "answer": "yes",
+              "family": "energy"
+            },
+            {
+              "question": "Is it mainly used for eating or preparing food?",
+              "answer": "no",
+              "family": "use"
+            },
+            {
+              "question": "Is it used for electronic communication?",
+              "answer": "yes",
+              "family": "use"
+            },
+            {
+              "question": "Can the ordinary version fit in a clothing pocket?",
+              "answer": "no",
+              "family": "size"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 5,
+      "maxQuestions": 10,
+      "p95SelectionMs": 0.26,
+      "maxSelectionMs": 0.46
+    },
+    {
+      "theme": "movies",
+      "entities": 20,
+      "databaseEntities": 1107,
+      "questions": 1570,
+      "samples": 20,
+      "correctFirstGuess": 20,
+      "unresolved": 0,
+      "totalNameSpellingAnswers": 0,
+      "wrongFirstGuess": 0,
+      "ambiguous": 0,
+      "exhausted": 0,
+      "questionLimit": 0,
+      "totalUnknownAnswers": 1,
+      "roundsWithUnknownAnswers": 1,
+      "exampleRounds": [
+        {
+          "target": "Frozen",
+          "topMatch": "Frozen",
+          "topWeight": 0.9363,
+          "transcript": [
+            {
+              "question": "Does it have a major fantasy or supernatural element?",
+              "answer": "yes",
+              "family": "genre"
+            },
+            {
+              "question": "Is it an animated film?",
+              "answer": "yes",
+              "family": "medium"
+            },
+            {
+              "question": "Are animals central characters?",
+              "answer": "no",
+              "family": "characters"
+            },
+            {
+              "question": "Is it a Walt Disney animated feature?",
+              "answer": "yes",
+              "family": "studio"
+            }
+          ]
+        },
+        {
+          "target": "Jurassic Park",
+          "topMatch": "Jurassic Park",
+          "topWeight": 0.9628,
+          "transcript": [
+            {
+              "question": "Does it have a major fantasy or supernatural element?",
+              "answer": "no",
+              "family": "genre"
+            },
+            {
+              "question": "Does it have a major science-fiction setting?",
+              "answer": "yes",
+              "family": "genre"
+            },
+            {
+              "question": "Are robots central to its story?",
+              "answer": "no",
+              "family": "characters"
+            },
+            {
+              "question": "Does the story involve space travel or distant planets?",
+              "answer": "no",
+              "family": "setting"
+            },
+            {
+              "question": "Are dinosaurs central to its story?",
+              "answer": "yes",
+              "family": "characters"
+            }
+          ]
+        },
+        {
+          "target": "Shrek",
+          "topMatch": "Shrek",
+          "topWeight": 0.9363,
+          "transcript": [
+            {
+              "question": "Does it have a major fantasy or supernatural element?",
+              "answer": "yes",
+              "family": "genre"
+            },
+            {
+              "question": "Is it an animated film?",
+              "answer": "yes",
+              "family": "medium"
+            },
+            {
+              "question": "Are animals central characters?",
+              "answer": "yes",
+              "family": "characters"
+            },
+            {
+              "question": "Is it a Walt Disney animated feature?",
+              "answer": "no",
+              "family": "studio"
+            }
+          ]
+        }
+      ],
+      "medianQuestions": 5,
+      "maxQuestions": 6,
+      "p95SelectionMs": 0.77,
+      "maxSelectionMs": 1.66
+    }
+  ]
+}

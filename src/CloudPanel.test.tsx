@@ -25,11 +25,9 @@ afterEach(cleanup);
 function signedIn() {
   state.client = {
     auth: {
-      getUser: vi
-        .fn()
-        .mockResolvedValue({
-          data: { user: { id: "owner", email: "test@example.invalid" } },
-        }),
+      getUser: vi.fn().mockResolvedValue({
+        data: { user: { id: "owner", email: "test@example.invalid" } },
+      }),
       onAuthStateChange: () => ({
         data: { subscription: { unsubscribe: vi.fn() } },
       }),

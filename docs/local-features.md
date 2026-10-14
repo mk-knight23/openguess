@@ -1,6 +1,6 @@
 # Local progression and interface languages
 
-OpenGuess progression belongs to the browser, without accounts, uploads, or global leaderboards. The `openguess.progress.v2` local storage key stores a nickname, language, optional sound, reduced motion, family mode, confirmed wins, stardust points, collection, daily completions, and the latest 100 games. Clearing browser storage removes progress; JSON export/import supports manual backup and transfer.
+OpenGuess progression belongs to the browser, without requiring accounts or uploads; optional cloud accounts and community scores are documented separately. The `openguess.progress.v2` local storage key stores a nickname, language, optional sound, reduced motion, family mode, confirmed wins, stardust points, collection, daily completions, and the latest 100 games. Clearing browser storage removes progress; JSON export/import supports manual backup and transfer.
 
 A confirmed win earns 100 stardust plus five points for each question below twenty. Repeated wins earn points, but collection entries remain unique by theme and entity ID. Collection records retain the lowest confirmed question count. Calendar streaks use local dates rather than elapsed 24-hour periods. Achievements are derived from saved progress; they never imply worldwide rarity or server verification. All locally editable scores are for personal enjoyment.
 

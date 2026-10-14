@@ -19,3 +19,9 @@ Human evaluations, unknown targets, noisy answers, portrayal ambiguity, and broa
 ## v1 reference
 
 The earlier authored 68-character catalog recovered 68/68 ideal-answer targets, with a median of seven and a maximum of nine questions. Reproduce with `npm test -- src/engine.catalog.test.ts`. That smaller authored catalog result is not transferable to imported v2 packs.
+
+## Corrected featured game
+
+The default pool contains 128 authored profiles: 32 people, 36 fictional characters and 20 each of animals, objects and films. `EVALUATION_MODE=core EVALUATION_SAMPLES=100 EVALUATION_UNKNOWN_DATES=1 node scripts/evaluate-packs.mjs` evaluates every featured subject with exact date questions answered unknown. All 128 selected the expected first subject; no wrong or unresolved rounds, zero spelling questions, maximum ten questions. The report is `pack-evaluation-core-unknown-dates.json`. Independent review also exercised 20 round seeds across all 128 profiles (2,560 rounds) with the same result. These are internal catalog consistency checks, not measured human accuracy or an independent audit of every authored fact.
+
+The full catalog contains 5,584 records. A separate ten-target-per-theme replay still produced 50 unresolved rounds out of 50, demonstrating that the imported facts are insufficient for reliable broad recognition. `pack-evaluation.json` retains that result. Full-catalog play is explicitly experimental; the library's size is not advertised as reliable recognition coverage.

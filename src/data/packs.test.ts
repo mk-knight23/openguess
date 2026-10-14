@@ -19,18 +19,43 @@ describe("sourced theme packs", () => {
         pack.characters.length,
       );
       expect(pack.questions.length).toBeGreaterThan(20);
+      expect(
+        pack.characters.filter((c) => c.featured).length,
+      ).toBeGreaterThanOrEqual(20);
+      expect(
+        pack.questions.some(
+          (q) => q.id.startsWith("name_") || q.property === "name",
+        ),
+      ).toBe(false);
+      expect(
+        pack.characters.some((c) =>
+          Object.keys(c.traits).some((id) => id.startsWith("name_")),
+        ),
+      ).toBe(false);
+      expect(
+        pack.questions.every(
+          (q) => !/letter|spelling|name contain/i.test(q.text),
+        ),
+      ).toBe(true);
       for (const c of pack.characters) {
-        expect(c.id).toMatch(/^Q\d+$/);
+        expect(c.id).toMatch(/^(Q\d+|authored:[a-z0-9:-]+)$/);
         expect(Object.keys(c.facts ?? {}).length).toBeGreaterThan(0);
-        expect(c.source?.license).toBe("CC0-1.0");
-        expect(c.source?.url).toBe(`https://www.wikidata.org/wiki/${c.id}`);
+        if (c.id.startsWith("Q")) {
+          expect(c.source?.license).toBe("CC0-1.0");
+          expect(c.source?.url).toBe(`https://www.wikidata.org/wiki/${c.id}`);
+        } else {
+          expect(c.source?.license).toContain("MIT");
+          expect(c.featured).toBe(true);
+          expect(c.annotationLicense).toBe("MIT");
+          expect(c.annotationSources?.length).toBeGreaterThan(0);
+        }
         expect(
           Object.values(c.traits).filter((v) => v === true).length,
         ).toBeGreaterThan(0);
         expect(
-          Object.entries(c.traits)
-            .filter(([key]) => !key.startsWith("name_letter_"))
-            .every(([, v]) => v === true || v === null),
+          Object.values(c.traits).every(
+            (v) => v === true || v === false || v === null,
+          ),
         ).toBe(true);
       }
       const signatures = new Set(
@@ -43,9 +68,16 @@ describe("sourced theme packs", () => {
         ),
       );
       expect(pack.quality.uniqueTraitSignatures).toBe(signatures.size);
-      expect(
-        Number(pack.quality.uniqueTraitSignatures) / pack.characters.length,
-      ).toBeGreaterThanOrEqual(0.7);
+      expect(pack.quality.semanticUniqueTraitSignatures).toBe(signatures.size);
+      if (theme === "people" || theme === "movies" || theme === "animals") {
+        expect(
+          pack.questions.some(
+            (q) =>
+              pack.characters.some((c) => c.traits[q.id] === true) &&
+              pack.characters.some((c) => c.traits[q.id] === false),
+          ),
+        ).toBe(true);
+      }
     });
   }
 });

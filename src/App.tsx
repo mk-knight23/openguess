@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   Sparkles,
   Settings,
@@ -27,6 +27,9 @@ import {
   Info,
   Volume2,
 } from "lucide-react";
+const CloudPanel = lazy(() =>
+  import("./CloudPanel").then((module) => ({ default: module.CloudPanel })),
+);
 import { Genie } from "./components/Genie";
 import { Avatar } from "./components/Artwork";
 import { themeManifest } from "./data/manifest";
@@ -104,10 +107,12 @@ function safePack(pack: DataPack, enabled: boolean): DataPack {
 export default function App() {
   const [view, setView] = useState<View>("home");
   const [theme, setTheme] = useState<Theme>("people");
+  const [expandedCatalog, setExpandedCatalog] = useState(false);
   const [pack, setPack] = useState<DataPack | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [roundSeed, setRoundSeed] = useState(0);
   const [history, setHistory] = useState<AnswerRecord[]>([]);
   const [rejected, setRejected] = useState<string[]>([]);
   const [phase, setPhase] = useState<Phase>("question");
@@ -132,38 +137,55 @@ export default function App() {
   const lang = progress.settings.language;
   const t = (key: Parameters<typeof translate>[1]) => translate(lang, key);
   const locale = languages.find((l) => l.code === lang) ?? languages[0];
-  const activePack = useMemo(
-    () => (pack ? safePack(pack, progress.settings.familyMode) : null),
-    [pack, progress.settings.familyMode],
+  const scopedPack = useMemo(
+    () =>
+      pack?.theme === theme
+        ? safePack(pack, progress.settings.familyMode)
+        : null,
+    [pack, theme, progress.settings.familyMode],
   );
-  const inference = useInference(activePack, history, rejected);
+  const featuredCount =
+    scopedPack?.characters.filter((c) => c.featured).length ?? 0;
+  const activePack = useMemo(
+    () =>
+      !scopedPack ||
+      expandedCatalog ||
+      !scopedPack.characters.some((c) => c.featured)
+        ? scopedPack
+        : {
+            ...scopedPack,
+            characters: scopedPack.characters.filter((c) => c.featured),
+          },
+    [scopedPack, expandedCatalog],
+  );
+  const inference = useInference(activePack, history, rejected, roundSeed);
   const { candidates, next, busy, error } = inference;
   const informative = history.filter((h) => h.answer !== "unknown").length;
+  const readyToGuess =
+    history.length > pausedAt && shouldGuess(candidates, informative);
   const exhausted =
     !busy &&
     !loading &&
     activePack &&
     (candidates.length === 0 ||
-      (!next && informative === 0) ||
-      (history.length >= MAX_QUESTIONS && informative === 0));
+      ((!next || history.length >= MAX_QUESTIONS) && !readyToGuess));
   const guess =
     !busy &&
     !error &&
     candidates.length > 0 &&
     phase === "question" &&
-    ((history.length > pausedAt && shouldGuess(candidates, informative)) ||
-      (informative > 0 && (!next || history.length >= MAX_QUESTIONS)));
+    readyToGuess;
   const top = candidates[0];
   const meta = themeManifest.find((m) => m.id === theme)!;
   const total = themeManifest.reduce((n, m) => n + m.count, 0);
   const visible = useMemo(
     () =>
-      activePack?.characters.filter((c) =>
+      scopedPack?.characters.filter((c) =>
         `${c.name} ${c.description}`
           .toLowerCase()
           .includes(search.toLowerCase()),
       ) ?? [],
-    [activePack, search],
+    [scopedPack, search],
   );
   const today = localDateKey(new Date());
   const daily = useMemo(
@@ -210,13 +232,16 @@ export default function App() {
   }, [history.length, view, phase, guess, busy]);
   function persist(p: Progress) {
     setProgress(p);
-    if (!saveProgress(p))
+    const saved = saveProgress(p);
+    if (!saved)
       setNotice(
         "Your browser could not save progress. Export a backup to keep it.",
       );
+    return saved;
   }
   function start() {
     if (!activePack || loading) return;
+    setRoundSeed(crypto.getRandomValues(new Uint32Array(1))[0] || 1);
     setHistory([]);
     setRejected([]);
     setPausedAt(-1);
@@ -285,8 +310,7 @@ export default function App() {
   }
   function setting(patch: Parameters<typeof updateProgress>[1]) {
     try {
-      persist(updateProgress(progress, patch));
-      setNotice("");
+      if (persist(updateProgress(progress, patch))) setNotice("");
     } catch {
       setNotice(
         "Please enter a valid nickname with 1–40 plain-text characters.",
@@ -318,11 +342,12 @@ export default function App() {
     }
     try {
       const p = parseProgress(await file.text());
-      persist(p);
+      const saved = persist(p);
       setNickname(p.profile.nickname);
-      setNotice(
-        "Progress imported. This replaces the progress on this browser.",
-      );
+      if (saved)
+        setNotice(
+          "Progress imported. This replaces the progress on this browser.",
+        );
     } catch {
       setNotice(
         "That file is not a valid OpenGuess progress backup. Nothing was changed.",
@@ -357,9 +382,11 @@ export default function App() {
         ? "stumped"
         : busy
           ? "thinking"
-          : guess
+          : guess || (history.length > 0 && (top?.probability ?? 0) > 0.45)
             ? "confident"
-            : "idle";
+            : history.length > 0
+              ? "thinking"
+              : "idle";
   const themePicker = (
     <div className="theme-picker" aria-label="Choose a universe">
       {themeManifest.map((m) => {
@@ -377,6 +404,45 @@ export default function App() {
           </button>
         );
       })}
+    </div>
+  );
+  const poolPicker = featuredCount > 0 && (
+    <div className="pool-picker">
+      <div role="group" aria-label="Gameplay knowledge pool">
+        <button
+          aria-pressed={!expandedCatalog}
+          onClick={() => {
+            setExpandedCatalog(false);
+            setHistory([]);
+            setRejected([]);
+            setPhase("question");
+            setPausedAt(-1);
+          }}
+        >
+          Featured discoveries
+        </button>
+        <button
+          aria-pressed={expandedCatalog}
+          onClick={() => {
+            setExpandedCatalog(true);
+            setHistory([]);
+            setRejected([]);
+            setPhase("question");
+            setPausedAt(-1);
+          }}
+        >
+          Full catalog (experimental)
+        </button>
+      </div>
+      <p>
+        {featuredCount} featured choices with richer facts ·{" "}
+        {scopedPack?.characters.length.toLocaleString()} total records.
+      </p>
+      <p>
+        {expandedCatalog
+          ? "Experimental: many imported records have incomplete facts and may remain unresolved."
+          : "Default play uses well-described subjects and meaningful questions. Browse the full database in the library."}
+      </p>
     </div>
   );
   const loadingView = (
@@ -512,6 +578,7 @@ export default function App() {
                 <h2 className="theme-caption">Select your next universe</h2>
                 {themePicker}
                 <p className="pack-scope">{meta.description}</p>
+                {poolPicker}
                 <button
                   className="big-play"
                   onClick={start}
@@ -583,7 +650,7 @@ export default function App() {
                     Return to setup
                   </button>
                 </div>
-              ) : loading || busy ? (
+              ) : loading || busy || !activePack ? (
                 loadingView
               ) : phase === "stumped" || exhausted ? (
                 <div className="speech-bubble result-bubble">
@@ -729,8 +796,9 @@ export default function App() {
                 <div className="v2-notes">
                   <p>
                     These are model weights, not calibrated real-world accuracy.
-                    Missing source facts remain unknown; spelling questions help
-                    distinguish sparse entries.
+                    Missing source facts remain unknown. Questions use
+                    meaningful facts; a sparse profile can leave the mystery
+                    unresolved.
                   </p>
                   <div>
                     {candidates.slice(0, 5).map((c) => (
@@ -788,6 +856,7 @@ export default function App() {
             </div>
             {themePicker}
             <p className="pack-scope">{meta.description}</p>
+            {poolPicker}
             <div className="library-bar">
               <label>
                 <Search size={19} />
@@ -817,8 +886,8 @@ export default function App() {
             ) : (
               <>
                 <p className="result-count">
-                  {visible.length.toLocaleString()} entries · source: Wikidata /
-                  CC0 · some questions use name spelling
+                  {visible.length.toLocaleString()} records · Wikidata facts
+                  (CC0) and authored profiles (MIT) · semantic questions only
                 </p>
                 <div className="v2-library-grid">
                   {visible.slice(page * 24, (page + 1) * 24).map((c) => (
@@ -1135,9 +1204,8 @@ export default function App() {
                       const p = readProgress({
                         getItem: () => null,
                       } as unknown as Storage);
-                      persist(p);
+                      if (persist(p)) setNotice("Local progress cleared.");
                       setNickname(p.profile.nickname);
-                      setNotice("Local progress cleared.");
                     }
                   }}
                 >
@@ -1145,6 +1213,17 @@ export default function App() {
                 </button>
               </section>
             </div>
+            <Suspense fallback={<p>Loading optional accounts…</p>}>
+              <CloudPanel
+                progress={progress}
+                onReplace={(p) => {
+                  const saved = persist(p);
+                  setNickname(p.profile.nickname);
+                  return saved;
+                }}
+                onNotice={setNotice}
+              />
+            </Suspense>
           </section>
         )}
         {view === "contribute" && (
@@ -1291,19 +1370,21 @@ export default function App() {
               <section className="settings-card">
                 <h2>Thousands of real records</h2>
                 <p>
-                  Five CC0 Wikidata packs contain {total.toLocaleString()}{" "}
-                  distinct-per-theme entities. Public facts are incomplete.
-                  Mammal taxa and vehicle/tool/instrument types broaden the
-                  animal and object packs, including many specialized entries.
+                  The catalog contains {total.toLocaleString()} records across
+                  five themes: CC0 Wikidata facts and MIT authored annotations.
+                  Public facts are incomplete. Mammal taxa and
+                  vehicle/tool/instrument types broaden the animal and object
+                  packs, including many specialized entries.
                 </p>
               </section>
               <section className="settings-card">
                 <h2>Honest guessing</h2>
                 <p>
                   Missing facts remain unknown. A percentage is a relative model
-                  weight, not a certified probability of being correct. Spelling
-                  questions are a fallback when facts cannot distinguish
-                  entries. It can still guess incorrectly.
+                  weight, not a certified probability of being correct.
+                  Questions use meaningful facts. If those facts cannot
+                  distinguish entries, the game admits uncertainty. It can still
+                  guess incorrectly.
                 </p>
               </section>
               <section className="settings-card">

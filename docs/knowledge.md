@@ -17,3 +17,5 @@ Updated 2026-10-14 for the 0.2 upgrade.
 - Preserve local-only play and keep secrets, private profile files and raw reference evidence outside public commits.
 
 Record actual final checks and live service results in [verification](verification.md); do not turn planned checks into success claims.
+
+The corrected default uses 128 rich semantic profiles. Imported record counts alone failed the user experience: letter questions dominated, and semantic-only replay of the full pool remained unresolved. Keep raw catalog scope separate from effective playable scope. Seed only near-equal useful questions; preserve replay through undo. Film annotations must merge into validated canonical identities rather than create duplicate records. Variant-sensitive facts use unknown rather than invented negatives.

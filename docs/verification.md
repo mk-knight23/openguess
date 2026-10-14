@@ -19,7 +19,18 @@ This upgrade extends the verified 0.1 foundation, but old test counts, screensho
 
 ## Results
 
-Final 0.2 results are pending the release operator's completed check report. Existing v1 `browser-qa.json` and screenshots are historical until regenerated and explicitly identified.
+Local release checks completed on 2026-10-14 with Node 24.19.0:
+
+- 76 unit/integration tests passed across 13 files, including semantic eligibility, seeded replay, worker lifecycle, featured profiles, uncertainty, pool selection, progress validation and cloud boundaries.
+- Strict TypeScript checking and production build passed. Packs and optional account code load separately. Vite reports large generated data chunks; this is documented rather than treated as a worldwide capacity claim.
+- Formatting and dependency audit passed; zero reported vulnerabilities. A scan of 101 prospective repository files found no private credential values.
+- Production browser checks passed in Chromium at desktop and mobile sizes: all five theme loads, answers/undo, Harry Potter identified through six semantic clues, result correction, collection award, library search, daily targets, profile persistence, RTL, backup validation, proposal download and real anonymous cloud-score loading. Ten measured states passed automated WCAG A/AA checks. See `browser-qa.json` and the regenerated screenshots.
+- All 128 featured targets resolved in semantic-only oracle evaluation with date answers unknown. Independent review additionally replayed 20 seeds per subject (2,560 rounds), with no wrong or unresolved results and at most ten questions. These are internal model/data consistency checks, not measured human accuracy.
+- The full 5,584-record experimental catalog remained unresolved for all 50 sampled targets. Its broad record count does not imply reliable semantic recognition; default gameplay uses the 128 featured profiles.
+- Both Supabase migrations are applied; 24 live ownership/isolation checks passed and disposable accounts were cleaned up. Public signup/email delivery still needs hosted mail and redirect configuration; it is not claimed verified.
+- Source review resolved storage-warning loss, public account-ID exposure, stale inference, duplicate film identities and incorrect license labels. No remaining material blocker was found in the reviewed correction.
+
+GitHub CI and live Pages verification remain pending publication of the reviewed release.
 
 ## Reproduce
 
