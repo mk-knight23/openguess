@@ -54,6 +54,7 @@ async function axe(page, label) {
   checks.push("accessibility " + label);
 }
 async function ready(page) {
+  await page.locator('.game-content[aria-busy="false"]').waitFor();
   await page.getByTestId("question-text").waitFor();
   await page.getByRole("button", { name: "Yes", exact: true }).waitFor();
 }

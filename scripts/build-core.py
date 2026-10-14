@@ -62,6 +62,12 @@ for theme in ['people','fictional','animals','objects','movies']:
    q=next((q for q in pack['questions'] if q['id']==ident),None)
    assert q is not None, 'Unknown related clue '+ident
    q['relatedGroup']=group['group']
+ for group in clue_data.get('equivalentClues',[]):
+  if group['theme']!=theme:continue
+  for ident in group['questionIds']:
+   q=next((q for q in pack['questions'] if q['id']==ident),None)
+   assert q is not None, 'Unknown equivalent clue '+ident
+   q['equivalenceGroup']=group['group']
  assert len({q['id'] for q in pack['questions']})==len(pack['questions']), 'Duplicate authored question'
  pack['source']['annotationLicense']='MIT';pack['source']['license']='CC0-1.0; MIT authored annotations';pack['source']['coreNotice']='Legacy broad tags retain their original closed-catalog coverage. New signature facts use explicit scoped rows; absent evidence remains unknown. Raw Wikidata records remain experimental.'
  signatures=len(set(json.dumps(c['traits'],sort_keys=True) for c in pack['characters']))

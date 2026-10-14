@@ -60679,5 +60679,17 @@
       "group": "truth-curse",
       "questionIds": ["sig_movies_liar_liar_1", "sig_movies_liar_liar_2"]
     }
+  ],
+  "equivalentClues": [
+    {
+      "theme": "objects",
+      "group": "lighting-purpose",
+      "questionIds": ["core_light", "sig_objects_lamp_1"]
+    },
+    {
+      "theme": "objects",
+      "group": "timekeeping-purpose",
+      "questionIds": ["core_time", "sig_objects_clock_1"]
+    }
   ]
 }

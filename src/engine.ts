@@ -102,7 +102,12 @@ export function selectQuestion(
   questions: Question[],
   history: AnswerRecord[],
   roundSeed = 0,
+  varietyBand = 0.05,
 ): { question: Question; informationGain: number } | null {
+  if (!Number.isFinite(varietyBand) || varietyBand < 0 || varietyBand > 0.2)
+    throw new RangeError(
+      "Question variety must stay within a 0–20% usefulness band.",
+    );
   if (!candidates.length) return null;
   const asked = new Set(history.map((record) => record.questionId));
   // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
@@ -128,11 +133,13 @@ export function selectQuestion(
           (!q.equivalenceGroup || !usedEquivalence.has(q.equivalenceGroup)) &&
           (q.prerequisites ?? []).every((p) => {
             const observed = history.find((r) => r.questionId === p.questionId);
-            if (observed && observed.answer !== "unknown")
-              return p.value
+            const supportedAnswer =
+              observed &&
+              (p.value
                 ? ["yes", "probably"].includes(observed.answer)
-                : ["no", "probably-not"].includes(observed.answer);
+                : ["no", "probably-not"].includes(observed.answer));
             return (
+              supportedAnswer ||
               candidates.reduce(
                 (sum, c) =>
                   sum +
@@ -239,7 +246,7 @@ export function selectQuestion(
     const context = `${roundSeed}:${history.map((record) => `${record.questionId}:${record.answer}`).join("|")}`;
     let priority = -1;
     for (const option of nearEqual) {
-      if (option.score < bestScore * 0.95) continue;
+      if (option.score < bestScore * (1 - varietyBand)) continue;
       const value = seededPriority(`${context}:${option.question.id}`);
       if (value > priority) {
         best = {
@@ -296,7 +303,7 @@ function isDistinctiveSignature(q: Question, candidates: Candidate[]): boolean {
     candidates[0]?.character.traits[q.id] !== true
   )
     return false;
-  return candidates.slice(1).some((c) => c.character.traits[q.id] === false);
+  return candidates[1]?.character.traits[q.id] === false;
 }
 /** Readiness is evidence based: neither exclusion nor exhaustion proves identity. */
 export function getRoundReadiness(
@@ -314,7 +321,8 @@ export function getRoundReadiness(
     };
   const questionMap = new Map(questions.map((q) => [q.id, q]));
   const groups = new Set<string>();
-  let confirmed = false;
+  const signatureGroups = new Set<string>();
+  let contradictions = 0;
   for (const record of history) {
     if (record.answer === "unknown") continue;
     const q = questionMap.get(record.questionId);
@@ -323,7 +331,8 @@ export function getRoundReadiness(
     const positiveAnswer =
       record.answer === "yes" || record.answer === "probably";
     if (typeof fact !== "boolean" || fact !== positiveAnswer) {
-      if (q.tier === "signature") confirmed = false;
+      if (typeof fact === "boolean") contradictions++;
+      if (q.tier === "signature") signatureGroups.clear();
       continue;
     }
     const group = evidenceGroup(q);
@@ -332,10 +341,11 @@ export function getRoundReadiness(
       positiveAnswer &&
       isDistinctiveSignature(q, candidates)
     )
-      confirmed = true;
+      signatureGroups.add(group);
     groups.add(group);
   }
   const independentEvidence = groups.size;
+  const confirmed = signatureGroups.size >= (contradictions ? 2 : 1);
   const margin = leader.probability - (candidates[1]?.probability ?? 0);
   const ready =
     leader.probability >= 0.85 &&

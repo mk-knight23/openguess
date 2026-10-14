@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { loadTheme } from "./loadTheme";
 import { validateQuestionMetadata } from "../questionMetadata";
-import { rankCandidates } from "../engine";
+import { rankCandidates, selectQuestion } from "../engine";
+import type { AnswerRecord } from "../types";
 
 describe("reviewed featured clues", () => {
   for (const theme of [
@@ -66,4 +67,24 @@ it("does not count a trunk and grasping with a trunk as independent discoveries"
   );
   expect(candidates[0].character.name).toBe("African bush elephant");
   expect(candidates[0].probability).toBeLessThan(0.997);
+});
+it("does not rephrase the same lighting-purpose question after an unknown answer", async () => {
+  const pack = await loadTheme("objects");
+  const pool = pack.characters.filter((c) => c.featured);
+  const history: AnswerRecord[] = [];
+  for (let turn = 0; turn < 40; turn++) {
+    const next = selectQuestion(
+      rankCandidates(pool, history, [], pack.questions),
+      pack.questions,
+      history,
+      15,
+    );
+    if (!next) break;
+    history.push({ questionId: next.question.id, answer: "unknown" });
+  }
+  expect(
+    history.filter((h) =>
+      ["core_light", "sig_objects_lamp_1"].includes(h.questionId),
+    ),
+  ).toHaveLength(1);
 });
