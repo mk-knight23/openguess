@@ -11,7 +11,7 @@ const prompts: [string, string, string][] = [
   ],
   [
     "male",
-    "Is the character generally portrayed as male?",
+    "Is your character male?",
     "Use the familiar public or fictional portrayal; unknown is fine.",
   ],
   [

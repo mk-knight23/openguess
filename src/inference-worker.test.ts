@@ -164,3 +164,79 @@ it("sends a changed round seed without rehydrating and hides the previous round"
   act(() => worker.reply(first.requestId));
   expect(result.current.busy).toBe(true);
 });
+it("fallback propagates explicit readiness and discounts related evidence", async () => {
+  vi.stubGlobal("Worker", undefined);
+  const qualityPack = {
+    ...pack,
+    questions: [
+      { ...pack.questions[0], tier: "broad" as const, relatedGroup: "one" },
+      {
+        id: "r",
+        text: "R",
+        hint: "",
+        tier: "broad" as const,
+        relatedGroup: "one",
+      },
+    ],
+    characters: pack.characters.map((c) => ({
+      ...c,
+      traits: { ...c.traits, r: c.traits.q },
+    })),
+  };
+  const { result } = renderHook(() =>
+    useInference(
+      qualityPack,
+      [
+        { questionId: "q", answer: "yes" },
+        { questionId: "r", answer: "yes" },
+      ],
+      [],
+    ),
+  );
+  await waitFor(() => expect(result.current.busy).toBe(false));
+  expect(result.current.readiness?.ready).toBe(false);
+  expect(result.current.readiness?.independentEvidence).toBe(1);
+  expect(result.current.candidates[0].probability).toBeLessThan(0.999);
+});
+it("worker replays the same readiness and question for identical evidence and seed", async () => {
+  const replies: import("./inference.worker").WorkerResult[] = [];
+  const scope = {
+    onmessage: null as
+      | ((event: { data: import("./inference.worker").WorkerRequest }) => void)
+      | null,
+    postMessage: (result: import("./inference.worker").WorkerResult) =>
+      replies.push(result),
+  };
+  vi.stubGlobal("self", scope);
+  vi.resetModules();
+  await import("./inference.worker");
+  scope.onmessage!({ data: { type: "hydrate", pack } });
+  for (const requestId of [1, 2])
+    scope.onmessage!({
+      data: {
+        type: "compute",
+        requestId,
+        history: [],
+        rejected: [],
+        roundSeed: 44,
+      },
+    });
+  expect(replies[0].readiness?.phase).toBe("discovery");
+  expect({ ...replies[0], requestId: 2 }).toEqual(replies[1]);
+});
+it("fallback rejects invalid prerequisite metadata just as the worker does", async () => {
+  vi.stubGlobal("Worker", undefined);
+  const invalid = {
+    ...pack,
+    questions: [
+      {
+        ...pack.questions[0],
+        prerequisites: [{ questionId: "missing", value: true }],
+      },
+    ],
+  };
+  const { result } = renderHook(() => useInference(invalid, [], []));
+  await waitFor(() => expect(result.current.busy).toBe(false));
+  expect(result.current.error).toContain("restart");
+  expect(result.current.candidates).toEqual([]);
+});

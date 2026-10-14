@@ -17,7 +17,7 @@ This upgrade extends the verified 0.1 foundation, but old test counts, screensho
 
 [Reference investigation](research/akinator.md) now includes normal-browser gameplay observations. The event families were incomplete despite completed actions; static graph extraction has unresolved nodes. No proprietary server algorithm was recovered.
 
-## Results
+## Historical 0.2.0 results
 
 Local release checks completed on 2026-10-14 with Node 24.19.0:
 
@@ -39,3 +39,15 @@ REA additionally observed the published site's real semantic question and five a
 ## Reproduce
 
 Use Node.js 24, `npm ci`, `npm test`, `npm run typecheck`, `npm run build`, `npm run format:check`, `npm audit --audit-level=high` and the current browser-test script. See [data provenance](data-provenance.md) for importer reproduction and [benchmarks](benchmarks.md) for measurement details.
+
+## 0.2.1 question quality upgrade
+
+The [upgrade report](question-quality-upgrade.md) records the 12,800-round shipping matrix, its frozen baseline and the separate wider-variety comparison. Exact and dates-withheld cases passed all 2,560 rounds each; partial-unknown and mistaken-answer cases disclose their unresolved/incorrect results. No human-accuracy percentage is claimed.
+
+Production browser QA passed 24 main checks and seven additional experience journeys, including five widths/motion/zoom configurations, five signature-backed theme guesses and rejected-guess recovery. Fifteen accessibility states were measured across those reports; this is not full accessibility certification. The zoom equivalent is documented explicitly. Reports and regenerated screenshots are saved with this revision.
+
+REA's upgraded-app start/unknown/undo scenario was complete within its declared scope: `ev_d07f8612a5e89402006a73cdf73ac745ec408bec470a3d6ea415bc86d0a16335`. The earlier reference captures and private-server limitations remain separate.
+
+TDD regressions and independent adversarial review resolved related-group bypass, a signature shared with the strongest rival and strict equivalent-clue repetition. Further tests cover contradictory-evidence corroboration, mistaken-prerequisite recovery, familiar-only featured questions, optional help and truthful companion moods. Final local verification passed on Node 24.19.0: 112 tests across 17 files, strict typecheck, production build, formatting and dependency audit (zero vulnerabilities). A scan of 114 prospective tracked files found no private credential matches. Vite retains its large-chunk advisory for lazy-loaded data packs. Independent final review passed 34 focused tests and checked the report totals and frozen semantic snapshot; it did not independently rerun the full matrix or browser suite. Publication verification follows separately.
+
+The pre-merge CodeRabbit review found neutral unknown signature facts incorrectly clearing confirmation. A failing regression reproduced it; the fix preserves confirmation without adding evidence, while Boolean contradictions still clear it. Independent review passed all 11 engine quality tests afterward. The full 112-test suite, both browser suites and both 12,800-round matrices were rerun successfully; matrix totals were unchanged. CodeRabbit rate-limited its automatic follow-up review.

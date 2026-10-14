@@ -34,8 +34,9 @@ import { Genie } from "./components/Genie";
 import { Avatar } from "./components/Artwork";
 import { themeManifest } from "./data/manifest";
 import { loadTheme } from "./data/loadTheme";
+import { featuredPack } from "./data/featuredPack";
 import { useInference } from "./useInference";
-import { shouldGuess } from "./engine";
+import { deriveRoundMood } from "./roundPresentation";
 import {
   readProgress,
   saveProgress,
@@ -117,6 +118,7 @@ export default function App() {
   const [rejected, setRejected] = useState<string[]>([]);
   const [phase, setPhase] = useState<Phase>("question");
   const [pausedAt, setPausedAt] = useState(-1);
+  const [recovering, setRecovering] = useState(false);
   const [progress, setProgress] = useState<Progress>(readProgress);
   const [explain, setExplain] = useState(false);
   const [search, setSearch] = useState("");
@@ -151,17 +153,26 @@ export default function App() {
       expandedCatalog ||
       !scopedPack.characters.some((c) => c.featured)
         ? scopedPack
-        : {
-            ...scopedPack,
-            characters: scopedPack.characters.filter((c) => c.featured),
-          },
+        : featuredPack(scopedPack),
     [scopedPack, expandedCatalog],
   );
   const inference = useInference(activePack, history, rejected, roundSeed);
-  const { candidates, next, busy, error } = inference;
+  const { candidates, next, busy, error, readiness } = inference;
+  const displayedQuestion = useRef<{
+    pack: DataPack;
+    next: NonNullable<typeof next>;
+  } | null>(null);
+  useEffect(() => {
+    if (next && activePack)
+      displayedQuestion.current = { pack: activePack, next };
+  }, [next, activePack]);
+  const visibleNext =
+    next ??
+    (busy && displayedQuestion.current?.pack === activePack
+      ? displayedQuestion.current.next
+      : null);
   const informative = history.filter((h) => h.answer !== "unknown").length;
-  const readyToGuess =
-    history.length > pausedAt && shouldGuess(candidates, informative);
+  const readyToGuess = history.length > pausedAt && readiness?.ready === true;
   const exhausted =
     !busy &&
     !loading &&
@@ -243,6 +254,7 @@ export default function App() {
     setRoundSeed(crypto.getRandomValues(new Uint32Array(1))[0] || 1);
     setHistory([]);
     setRejected([]);
+    setRecovering(false);
     setPausedAt(-1);
     setPhase("question");
     setExplain(false);
@@ -250,6 +262,7 @@ export default function App() {
     setView("game");
   }
   function retry() {
+    setRecovering(false);
     setHistory([]);
     setRejected([]);
     setPhase("question");
@@ -257,6 +270,7 @@ export default function App() {
     setLoadAttempt((n) => n + 1);
   }
   function changeTheme(id: Theme) {
+    setRecovering(false);
     setTheme(id);
     setHistory([]);
     setRejected([]);
@@ -267,15 +281,18 @@ export default function App() {
   }
   function answer(value: Answer) {
     if (busy || guess || exhausted || !next || phase !== "question") return;
+    setRecovering(false);
     setHistory((h) => [...h, { questionId: next.question.id, answer: value }]);
   }
   function undo() {
+    setRecovering(false);
     setHistory((h) => h.slice(0, -1));
     setPausedAt(history.length - 1);
     setPhase("question");
   }
   function reject() {
     if (!top) return;
+    setRecovering(true);
     setRejected((r) => [...r, top.character.id]);
     setPausedAt(history.length);
     setPhase("question");
@@ -374,18 +391,23 @@ export default function App() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   });
-  const mood =
-    phase === "won"
-      ? "celebrate"
-      : phase === "stumped" || exhausted
-        ? "stumped"
-        : busy
-          ? "thinking"
-          : guess || (history.length > 0 && (top?.probability ?? 0) > 0.45)
-            ? "confident"
-            : history.length > 0
-              ? "thinking"
-              : "idle";
+  const mood = deriveRoundMood({
+    status:
+      view !== "game"
+        ? "home"
+        : phase === "won"
+          ? "won"
+          : phase === "stumped" || exhausted
+            ? "lost"
+            : guess
+              ? "guess"
+              : "playing",
+    busy,
+    confirming: readiness?.phase === "confirming",
+    narrowing: readiness?.phase === "narrowing",
+    rejectedGuess: recovering,
+    answeredCount: history.length,
+  });
   const themePicker = (
     <div className="theme-picker" aria-label="Choose a universe">
       {themeManifest.map((m) => {
@@ -627,7 +649,7 @@ export default function App() {
                 {activePack?.characters.length.toLocaleString()} entries
               </span>
             </div>
-            <div className="game-content">
+            <div className="game-content" aria-busy={busy}>
               <div className="round-header">
                 <button onClick={() => setView("home")}>
                   <ArrowLeft size={16} /> Change universe
@@ -649,7 +671,7 @@ export default function App() {
                     Return to setup
                   </button>
                 </div>
-              ) : loading || busy || !activePack ? (
+              ) : loading || !activePack || (busy && !visibleNext) ? (
                 loadingView
               ) : phase === "stumped" || exhausted ? (
                 <div className="speech-bubble result-bubble">
@@ -732,20 +754,35 @@ export default function App() {
                     </>
                   )}
                 </div>
-              ) : next ? (
+              ) : visibleNext ? (
                 <>
                   <div className="question-bubble speech-bubble">
                     <span className="question-number">
                       {String(history.length + 1).padStart(2, "0")}
                     </span>
-                    <div>
+                    <div
+                      className="question-transition"
+                      key={visibleNext.question.id}
+                    >
                       <span className="result-label">{t("question")}</span>
                       <h2 data-testid="question-text" ref={focus} tabIndex={-1}>
-                        {next.question.text}
+                        {visibleNext.question.text}
                       </h2>
-                      <p>{next.question.hint}</p>
+                      <details className="question-help">
+                        <summary>Help with this clue</summary>
+                        <p>{visibleNext.question.hint}</p>
+                      </details>
                     </div>
                   </div>
+                  <p className="round-phase" role="status">
+                    {busy
+                      ? "Connecting the clues…"
+                      : recovering
+                        ? "Let’s try another angle."
+                        : readiness?.phase === "confirming"
+                          ? "One more detail…"
+                          : "Follow the clues."}
+                  </p>
                   <div className="answer-card">
                     {choices.map((c) => (
                       <button
@@ -1431,7 +1468,7 @@ export default function App() {
       </main>
       <footer className="v2-footer">
         <span>
-          <Sparkles size={16} /> OpenGuess · version 0.2
+          <Sparkles size={16} /> OpenGuess · version 0.2.1
         </span>
         <button onClick={() => setView("about")}>About & data sources</button>
         <a href={`${REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">

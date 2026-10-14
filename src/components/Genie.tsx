@@ -2,7 +2,15 @@ import { useId } from "react";
 import "./Genie.css";
 
 export type GenieMood =
-  "idle" | "thinking" | "confident" | "celebrate" | "stumped";
+  | "idle"
+  | "curious"
+  | "narrowing"
+  | "confirming"
+  | "recovering"
+  | "thinking"
+  | "confident"
+  | "celebrate"
+  | "stumped";
 
 /** Original OpenGuess companion. Decorative; its state is described by the game UI. */
 export function Genie({
@@ -15,7 +23,8 @@ export function Genie({
   theme?: string;
 }) {
   const id = useId().replace(/:/g, "");
-  const thinking = mood === "thinking";
+  const thinking =
+    mood === "thinking" || mood === "narrowing" || mood === "confirming";
   const surprised = mood === "stumped";
   const happy = mood === "celebrate" || mood === "confident";
   return (

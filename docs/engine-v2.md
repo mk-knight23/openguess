@@ -1,5 +1,7 @@
 # Inference at catalog scale
 
+For current 0.2.1 behavior and measured policy comparisons, see [question quality upgrade](question-quality-upgrade.md). The sections below preserve the optimization history; their original 0.2.0 guessing gate is superseded by independent, rival-separating signature confirmation.
+
 Question selection uses the same five-response likelihood model as v0.1. The optimization groups candidate probability into true, false, and unknown masses for each question. Mutual information is calculated as response entropy minus conditional response entropy. This is mathematically equivalent to the prior-entropy minus expected-posterior-entropy implementation, but avoids five candidate arrays and repeated posterior normalization per question.
 
 Selection iterates the present traits of each candidate once to collect known true/false masses. Missing mass is the total candidate weight minus those two known masses. Scoring is O(present traits + questions), with O(questions) temporary aggregation space; it no longer probes every absent entity/question pair. Lexicographic question tie breaks, the 1e-10 information threshold, no repeated questions, and soft candidate evidence remain unchanged. Rankings use log weights and keep alternatives nonzero. Null and omitted facts share an uncertain response model; an unknown user answer contributes no evidence.

@@ -28,20 +28,34 @@ export function rankCandidates(
   characters: Character[],
   history: AnswerRecord[],
   rejectedIds: string[] = [],
+  questions: Question[] = [],
 ): Candidate[] {
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const seen = new Map<string, number>();
+  const discounted = history.map((record) => {
+    const q = questionMap.get(record.questionId);
+    const group = q?.relatedGroup ?? q?.equivalenceGroup;
+    const count = group ? (seen.get(group) ?? 0) : 0;
+    if (group && record.answer !== "unknown") seen.set(group, count + 1);
+    return { record, discount: 1 / (count + 1) };
+  });
   const rejected = new Set(rejectedIds);
   const scored = characters
     .filter((character) => !rejected.has(character.id))
     .map((character) => ({
       character,
-      logWeight: history.reduce(
-        (weight, record) =>
+      logWeight: discounted.reduce(
+        (weight, { record, discount }) =>
           record.answer === "unknown"
             ? weight
             : weight +
-              Math.log(
-                likelihood(character.traits[record.questionId], record.answer),
-              ),
+              discount *
+                Math.log(
+                  likelihood(
+                    character.traits[record.questionId],
+                    record.answer,
+                  ),
+                ),
         0,
       ),
     }));
@@ -88,8 +102,13 @@ export function selectQuestion(
   questions: Question[],
   history: AnswerRecord[],
   roundSeed = 0,
+  varietyBand = 0.05,
 ): { question: Question; informationGain: number } | null {
-  if (candidates.length < 2) return null;
+  if (!Number.isFinite(varietyBand) || varietyBand < 0 || varietyBand > 0.2)
+    throw new RangeError(
+      "Question variety must stay within a 0–20% usefulness band.",
+    );
+  if (!candidates.length) return null;
   const asked = new Set(history.map((record) => record.questionId));
   // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
   // true/false/unknown trait share a response distribution, so three masses
@@ -99,8 +118,40 @@ export function selectQuestion(
     entropy(negative),
     entropy(positive.map((p, i) => (p + negative[i]) / 2)),
   ];
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const usedEquivalence = new Set(
+    history
+      .map((r) => questionMap.get(r.questionId)?.equivalenceGroup)
+      .filter(Boolean),
+  );
   const eligible = new Set(
-    questions.filter((q) => !asked.has(q.id) && isSemantic(q)).map((q) => q.id),
+    questions
+      .filter(
+        (q) =>
+          !asked.has(q.id) &&
+          isSemantic(q) &&
+          (!q.equivalenceGroup || !usedEquivalence.has(q.equivalenceGroup)) &&
+          (q.prerequisites ?? []).every((p) => {
+            const observed = history.find((r) => r.questionId === p.questionId);
+            const supportedAnswer =
+              observed &&
+              (p.value
+                ? ["yes", "probably"].includes(observed.answer)
+                : ["no", "probably-not"].includes(observed.answer));
+            return (
+              supportedAnswer ||
+              candidates.reduce(
+                (sum, c) =>
+                  sum +
+                  (c.character.traits[p.questionId] === p.value
+                    ? c.probability
+                    : 0),
+                0,
+              ) >= 0.8
+            );
+          }),
+      )
+      .map((q) => q.id),
   );
   const previousQuestion = questions.find(
     (q) => q.id === history.at(-1)?.questionId,
@@ -125,6 +176,9 @@ export function selectQuestion(
   }
   let best: { question: Question; informationGain: number } | null = null;
   let bestScore = 0;
+  const confirming =
+    candidates[0].probability >= 0.7 &&
+    !getRoundReadiness(candidates, history, questions).confirmed;
   const nearEqual: {
     question: Question;
     informationGain: number;
@@ -163,7 +217,24 @@ export function selectQuestion(
       previousFamily !== undefined &&
       questionFamily(question) === previousFamily;
     const score =
-      informationGain * Math.sqrt(coverage) * (sameFamily ? 0.9 : 1);
+      informationGain *
+      Math.sqrt(coverage) *
+      (sameFamily ? 0.9 : 1) *
+      (history.slice(-3).some((r) => {
+        const previous = questionMap.get(r.questionId);
+        return (
+          r.answer === "unknown" &&
+          previous &&
+          ((questionFamily(question) !== undefined &&
+            questionFamily(previous) === questionFamily(question)) ||
+            (question.relatedGroup &&
+              previous.relatedGroup === question.relatedGroup))
+        );
+      })
+        ? 0.45
+        : 1) *
+      (question.answerability === "specialist" ? 0.85 : 1) *
+      (confirming && isDistinctiveSignature(question, candidates) ? 3 : 1);
     if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
       nearEqual.push({ question, informationGain, score });
     if (informationGain > 1e-10 && score > bestScore + 1e-10) {
@@ -175,7 +246,7 @@ export function selectQuestion(
     const context = `${roundSeed}:${history.map((record) => `${record.questionId}:${record.answer}`).join("|")}`;
     let priority = -1;
     for (const option of nearEqual) {
-      if (option.score < bestScore * 0.95) continue;
+      if (option.score < bestScore * (1 - varietyBand)) continue;
       const value = seededPriority(`${context}:${option.question.id}`);
       if (value > priority) {
         best = {
@@ -203,11 +274,96 @@ function seededPriority(value: string): number {
 export function shouldGuess(
   candidates: Candidate[],
   answeredCount: number,
+  history?: AnswerRecord[],
+  questions?: Question[],
 ): boolean {
+  if (history && questions)
+    return getRoundReadiness(candidates, history, questions).ready;
   return (
     candidates.length === 1 ||
     (candidates.length > 1 &&
       answeredCount >= 3 &&
       candidates[0].probability >= 0.85)
   );
+}
+
+export interface RoundReadiness {
+  phase: "discovery" | "narrowing" | "confirming" | "ready" | "unresolved";
+  ready: boolean;
+  independentEvidence: number;
+  confirmed: boolean;
+}
+function evidenceGroup(q: Question): string {
+  return q.relatedGroup ?? q.equivalenceGroup ?? q.id;
+}
+function isDistinctiveSignature(q: Question, candidates: Candidate[]): boolean {
+  if (
+    q.tier !== "signature" ||
+    q.answerability === "specialist" ||
+    candidates[0]?.character.traits[q.id] !== true
+  )
+    return false;
+  return candidates[1]?.character.traits[q.id] === false;
+}
+/** Readiness is evidence based: neither exclusion nor exhaustion proves identity. */
+export function getRoundReadiness(
+  candidates: Candidate[],
+  history: AnswerRecord[],
+  questions: Question[],
+): RoundReadiness {
+  const leader = candidates[0];
+  if (!leader)
+    return {
+      phase: "unresolved",
+      ready: false,
+      independentEvidence: 0,
+      confirmed: false,
+    };
+  const questionMap = new Map(questions.map((q) => [q.id, q]));
+  const groups = new Set<string>();
+  const signatureGroups = new Set<string>();
+  let contradictions = 0;
+  for (const record of history) {
+    if (record.answer === "unknown") continue;
+    const q = questionMap.get(record.questionId);
+    if (!q) continue;
+    const fact = leader.character.traits[q.id];
+    const positiveAnswer =
+      record.answer === "yes" || record.answer === "probably";
+    if (typeof fact !== "boolean" || fact !== positiveAnswer) {
+      if (typeof fact === "boolean") {
+        contradictions++;
+        if (q.tier === "signature") signatureGroups.clear();
+      }
+      continue;
+    }
+    const group = evidenceGroup(q);
+    if (
+      !groups.has(group) &&
+      positiveAnswer &&
+      isDistinctiveSignature(q, candidates)
+    )
+      signatureGroups.add(group);
+    groups.add(group);
+  }
+  const independentEvidence = groups.size;
+  const confirmed = signatureGroups.size >= (contradictions ? 2 : 1);
+  const margin = leader.probability - (candidates[1]?.probability ?? 0);
+  const ready =
+    leader.probability >= 0.85 &&
+    margin >= 0.65 &&
+    independentEvidence >= 3 &&
+    confirmed;
+  return {
+    phase: ready
+      ? "ready"
+      : leader.probability >= 0.7
+        ? "confirming"
+        : independentEvidence >= 2
+          ? "narrowing"
+          : "discovery",
+    ready,
+    independentEvidence,
+    confirmed,
+  };
 }

@@ -1,0 +1,176 @@
+{
+  "testedAt": "2026-10-14T10:54:15.125Z",
+  "passed": true,
+  "zoomMethod": "720 CSS pixels at DPR2 represents a 1440-pixel desktop at 200% full-page zoom; native browser zoom UI was not manipulated.",
+  "checks": [
+    "desktop guidance/keyboard/undo/focus/targets/reflow/accessibility",
+    "tablet guidance/keyboard/undo/focus/targets/reflow/accessibility",
+    "mobile guidance/keyboard/undo/focus/targets/reflow/accessibility",
+    "landscape guidance/keyboard/undo/focus/targets/reflow/accessibility",
+    "zoom-equivalent guidance/keyboard/undo/focus/targets/reflow/accessibility",
+    "rejected guess visibly resumes discovery",
+    "five themes reach supported signature guesses with real companion states"
+  ],
+  "rounds": [
+    {
+      "theme": "people",
+      "target": "Ada Lovelace",
+      "transcript": [
+        {
+          "question": "Is the character strongly associated with the United States?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Is your character male?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Has this real person died?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Is the character strongly associated with Britain?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Did this person describe a method for calculating Bernoulli numbers on a proposed machine?",
+          "answer": "yes",
+          "tier": "signature"
+        }
+      ]
+    },
+    {
+      "theme": "fictional",
+      "target": "Harry Potter",
+      "transcript": [
+        {
+          "question": "Does the character use magic or supernatural powers?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Is the character known mainly from films?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Is attending school central to the character’s story?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Is the character a wizard or witch?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Does this character play Quidditch as a Seeker?",
+          "answer": "yes",
+          "tier": "signature"
+        }
+      ]
+    },
+    {
+      "theme": "animals",
+      "target": "Giraffe",
+      "transcript": [
+        {
+          "question": "Is it a mammal?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Is it a commonly domesticated animal?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Can a typical full-grown individual weigh over 500 kg?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Is it famous for a very long neck?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Does this animal have small horn-like structures called ossicones?",
+          "answer": "yes",
+          "tier": "signature"
+        }
+      ]
+    },
+    {
+      "theme": "objects",
+      "target": "Guitar",
+      "transcript": [
+        {
+          "question": "Is the familiar version normally easy to carry in one hand?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Does the ordinary version need electricity to do its main job?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Is it a piece of furniture?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Does it have strings used to produce music?",
+          "answer": "yes",
+          "tier": "broad"
+        },
+        {
+          "question": "Does the familiar version of this instrument have six strings?",
+          "answer": "yes",
+          "tier": "signature"
+        }
+      ]
+    },
+    {
+      "theme": "movies",
+      "target": "Titanic",
+      "transcript": [
+        {
+          "question": "Does it have a major fantasy or supernatural element?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Does it have a major science-fiction setting?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Is crime central to its story?",
+          "answer": "no",
+          "tier": "broad"
+        },
+        {
+          "question": "Does this spy film include a palace built of ice?",
+          "answer": "no",
+          "tier": "signature"
+        },
+        {
+          "question": "Does a childhood sled supply the final revelation in this story?",
+          "answer": "no",
+          "tier": "signature"
+        },
+        {
+          "question": "Does this film follow two lovers aboard a doomed ocean liner?",
+          "answer": "yes",
+          "tier": "signature"
+        }
+      ]
+    }
+  ]
+}

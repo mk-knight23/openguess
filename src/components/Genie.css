@@ -1,6 +1,6 @@
 .genie-art {
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
   margin-inline: auto;
   pointer-events: none;
 }
@@ -11,11 +11,11 @@
   filter: drop-shadow(0 15px 13px rgb(17 74 104 / 12%));
 }
 .genie-float {
-  animation: genie-hover 5s ease-in-out infinite;
+  animation: genie-hover 850ms ease-out;
   transform-origin: 200px 300px;
 }
 .genie-shadow {
-  animation: genie-shadow-breathe 5s ease-in-out infinite;
+  animation: genie-shadow-breathe 850ms ease-out;
   transform-origin: 197px 555px;
 }
 .genie-eyes {
@@ -23,11 +23,11 @@
   animation: genie-blink 6.5s infinite;
 }
 .genie-sparkles {
-  animation: genie-twinkle 4s ease-in-out infinite;
+  opacity: 0.85;
   transform-origin: center;
 }
 .genie-arm {
-  transition: transform 550ms ease;
+  transition: transform 220ms ease;
 }
 .genie-arm-left {
   transform-origin: 144px 299px;
@@ -111,4 +111,26 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+.genie-curious .genie-arm-left {
+  transform: rotate(-8deg);
+}
+.genie-narrowing .genie-arm-right {
+  transform: rotate(-12deg) translate(-4px, -8px);
+}
+.genie-confirming .genie-arm-left {
+  transform: rotate(-18deg) translate(-3px, -4px);
+}
+.genie-confirming .genie-arm-right {
+  transform: rotate(-9deg);
+}
+.genie-recovering .genie-arm-left {
+  transform: rotate(9deg);
+}
+.genie-recovering .genie-arm-right {
+  transform: rotate(14deg);
+}
+.genie-thinking .genie-sparkles {
+  animation: genie-twinkle 2s ease-in-out infinite;
 }
