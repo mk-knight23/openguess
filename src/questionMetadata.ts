@@ -62,6 +62,21 @@ export function validateQuestionMetadata(
     visited.add(id);
   }
   for (const id of ids.keys()) visit(id);
+  for (const c of characters) {
+    const equivalents = new Map<string, boolean>();
+    for (const q of questions) {
+      const fact = c.traits[q.id];
+      if (!q.equivalenceGroup || typeof fact !== "boolean") continue;
+      if (
+        equivalents.has(q.equivalenceGroup) &&
+        equivalents.get(q.equivalenceGroup) !== fact
+      )
+        errors.push(
+          `${c.id}: conflicting equivalent facts ${q.equivalenceGroup}`,
+        );
+      equivalents.set(q.equivalenceGroup, fact);
+    }
+  }
   for (const c of characters)
     for (const [id, source] of Object.entries(c.factSources ?? {})) {
       if (

@@ -31,3 +31,23 @@ it("rejects prerequisite cycles, contradictory scopes and malformed groups", () 
     validateQuestionMetadata([q("a", { relatedGroup: " " })]).join(" "),
   ).toContain("group");
 });
+it("rejects conflicting equivalent facts and malformed fact provenance", () => {
+  const questions = [
+    q("a", { equivalenceGroup: "same" }),
+    q("b", { equivalenceGroup: "same" }),
+  ];
+  const character = {
+    id: "c",
+    name: "C",
+    description: "",
+    category: "real" as const,
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { a: true, b: false },
+    factSources: { a: { url: "file:///secret", scope: "" } },
+  };
+  const errors = validateQuestionMetadata(questions, "people", [character]);
+  expect(errors.join(" ")).toContain("equivalent");
+  expect(errors.join(" ")).toContain("fact source");
+});
