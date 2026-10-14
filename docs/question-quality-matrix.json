@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-10-14T10:43:40.842Z",
+  "measuredAt": "2026-10-14T11:26:30.823Z",
   "varietyBand": 0.05,
-  "sourceCommit": "3c63428",
+  "sourceCommit": "2b213d5e39102dd391519491056d0fb4928e0244",
   "methodology": "All featured profiles, seeds1-20, five deterministic authored-answer policies, 40 question limit, no forced guesses. Not human accuracy. Identity checked against target ID, distinctiveness uses authored metadata.",
   "results": [
     {
