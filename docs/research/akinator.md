@@ -27,7 +27,7 @@ An earlier capture beginning `ev_cc2411` ran before animation transitions settle
 
 This provides a concrete product lesson: the game adapts meaningful subject properties. OpenGuess's earlier spelling-heavy replay (50 rounds with 614 spelling answers) failed that purpose despite favorable ID-selection counts. The corrected implementation excludes spelling questions and requires fresh semantic evaluation.
 
-The public browser uses an answer endpoint; the private Limule server implementation remains unknown. A browser fetch of the publisher FAQ returned 403 in the later investigation, so its previously cited description is a source attribution, not newly observed server evidence. No native application binary was available for core-binary analysis.
+The public browser uses an answer endpoint; the private Limule server implementation remains unknown. An initial browser fetch of the FAQ returned 403; a later normal-browser visit to the canonical English FAQ succeeded, as recorded below. No native application binary was available for core-binary analysis.
 
 ## Tool scope and originality
 
@@ -58,3 +58,11 @@ Stop when a candidate's relative model weight passes a threshold after sufficien
 ## Earlier v1 boundary
 
 The first automated visit encountered Cloudflare verification and HTTP 403. Its challenge-only inspection informed the original release but did not reveal live gameplay. The normal-browser captures above provide additional public-flow evidence for v2. Neither investigation recovered private server internals.
+
+## Additional reference observations
+
+REA Objects capture `ev_fddc1093143a4311d3d0345eff50cac5b0ff59b321e87ca41c285e59002646de` showed semantic questions about pocket fit, electrical power, size and use involving the mouth. Animals capture `ev_e9a95ad54e90001f33a87f21fbfe5640ed582f1d7e859bc2a23cdfbf46b221a6` covered domestication, legs/limbs, being alive and eyes. These support broad subject-specific question families, not orthographic identification.
+
+The [canonical English publisher FAQ](https://en.akinator.com/content/6/Everything-you-039-ve-always-wanted-to-know-about-Akinator) was readable in normal Chrome, evidence `ev_9e595f4b70df66b6e88b0a03d5882595ce7ff1e61e8659549205841af68c0ecd`. It describes a proprietary Limule algorithm, truthful real/fictional-character answers, duplicate-aware character additions after failure, moderated name refinements, duplicate checking for proposed questions and permission requirements for moderated photos. Scenario actions completed but requested event-family coverage remained incomplete.
+
+These contribution workflows are publisher-described requirements, not features all recovered from server code. OpenGuess implements local JSON proposals and manual review; automatic duplicate comparisons and name-refinement moderation remain pending in the [feature ledger](../feature-ledger.md). The private server algorithm is unknown, so the independent semantic engine is informed by observable gameplay rather than recovered backend source.

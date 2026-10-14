@@ -6,7 +6,9 @@ A free, open-source guessing game with an original blue genie, adaptive question
 
 ## Version 0.2
 
-Five lazy-loaded Wikidata CC0 packs contain **5,478 entities**: 1,100 people, 1,078 fictional characters, 1,100 mammal taxa, 1,100 vehicle/tool/instrument types and 1,100 films. These finite catalogs have sparse facts; they are not worldwide coverage. Gameplay asks about meaningful properties of the subject, not letters in its name. Spelling questions are excluded; when semantic evidence cannot distinguish candidates, the round must remain inconclusive. See [provenance and quality limits](docs/data-provenance.md).
+Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,597 records** (1,123 people, 1,114 fictional characters and 1,120 in each remaining theme) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
+
+Gameplay asks about meaningful properties, not letters in a name. Spelling questions are excluded. When semantic evidence cannot distinguish candidates, the round remains inconclusive. Raw Wikidata statements are CC0; independently authored semantic annotations are MIT and carry separate provenance. See [data provenance](docs/data-provenance.md).
 
 - Five answer strengths, semantic adaptive questions, answer correction, undo, rejection and restart.
 - Original animated genie interface, transparent candidate weights and a visible library.
@@ -37,10 +39,10 @@ Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; 
 
 ## How it works
 
-The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. Corrected semantic-pack evaluation and actual human gameplay are needed before broad accuracy claims.
+The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The corrected featured-profile oracle recovered 128/128 targets with zero wrong or unresolved rounds and at most ten questions. This tests closed authored facts, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
 
 Bayesian updates rank candidates from authored/imported traits. Information gain chooses unasked questions. A worker keeps larger-pack inference off the interface thread. “Don't know” adds no evidence; absent Wikidata claims remain unknown. Model percentages are relative weights within the chosen pack, not calibrated chances of a correct answer.
 
 See [architecture](docs/architecture.md), [scaling](docs/scaling.md), [feature ledger](docs/feature-ledger.md), [roadmap](docs/roadmap.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 
-REA investigation observed Akinator's public browser interface, including question/answer transitions. Its server algorithm and database remain unknown. OpenGuess includes no Akinator code, assets or scraped database. Application code is [MIT licensed](LICENSE); imported structured data is CC0 and dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not mean unlimited free hosting.
+REA investigation observed Akinator's public browser interface, including question/answer transitions. Its server algorithm and database remain unknown. OpenGuess includes no Akinator code, assets or scraped database. Application code is [MIT licensed](LICENSE); raw imported structured data is CC0 and original semantic annotations are MIT and dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not mean unlimited free hosting.

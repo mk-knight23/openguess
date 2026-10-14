@@ -1,10 +1,10 @@
 # Architecture
 
-Vite builds a React/TypeScript static application. A small manifest describes five packs; selecting a theme lazy-loads its finite CC0 dataset. Entity QIDs, source URLs, retrieval timestamps and query metadata preserve provenance. Mammal taxa and vehicle/tool/instrument types are explicit scope boundaries, not all animals or everyday objects.
+Vite builds a React/TypeScript static application. A small manifest describes five packs; selecting a theme lazy-loads it. The default game uses 128 featured profiles with independently authored MIT semantic annotations. The full 5,597-record sourced catalog is explicitly Experimental and remains accessible in the library. Raw Wikidata CC0 statements retain QIDs, source URLs, retrieval timestamps and query metadata; authored annotations have separate licenses and references. Curated animal and object profiles supplement the raw mammal-taxon and vehicle/tool/instrument query scopes. None of these finite scopes means all subjects worldwide.
 
 ## Inference and worker
 
-Normalized candidate weights start from a uniform prior. Answers apply soft likelihoods in log space; missing traits stay unknown and “don't know” supplies no evidence. Question selection aggregates true, false and unknown probability masses, then computes expected information gain. This retains O(C × Q) selection while avoiding repeated per-answer candidate arrays. See [engine details](engine-v2.md).
+Normalized candidate weights start from a uniform prior. Answers apply soft likelihoods in log space; missing traits stay unknown and “don't know” supplies no evidence. Question selection aggregates true, false and unknown probability masses, then computes expected information gain. Sparse trait accumulation avoids repeated per-answer candidate arrays; see engine details for the current complexity and measurements. See [engine details](engine-v2.md).
 
 A module worker receives the loaded pack once and subsequent history/exclusion requests with increasing IDs. The hook ignores stale replies, terminates workers on pack changes and exposes busy/error states. A synchronous fallback exists when workers are unavailable and may block large-pack interfaces. Relative weights are heuristic, not calibrated real-world confidence.
 

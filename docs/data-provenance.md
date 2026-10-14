@@ -1,29 +1,26 @@
 # OpenGuess data provenance
 
-Version 0.2 uses independently imported **Wikidata structured statements**, available under [CC0](https://www.wikidata.org/wiki/Wikidata:Licensing). It does not use Akinator's character database. Every imported entity includes its Wikidata QID, source URL, license, and retrieval timestamp. Application source code remains MIT.
+Raw imported Wikidata statements are [CC0](https://www.wikidata.org/wiki/Wikidata:Licensing). Independently authored semantic annotations are MIT and carry separate annotation source/license fields. These mixed packs are not entirely CC0. No Akinator database, scripts, artwork or article prose is included.
 
-## Reproducing the import
+## Default and experimental scopes
 
-Run `python3 scripts/import-wikidata.py` from the repository root. Requires Python 3 and curl. The script fetches English-labeled entities and selected statement predicates through the public Wikidata SPARQL endpoint, using an identified User-Agent. Requests run serially, with a pause between requests and an on-disk query cache in `/tmp/openguess-wikidata-v2`. Optionally append theme IDs (for example `movies objects`) to import only those themes. Use `--force` to regenerate existing packs from cached source responses; preserve cache to avoid redundant requests. The exact seed query is recorded in each pack, and the importer's batch query construction is in source.
+Default play uses 128 featured profiles: 32 people, 36 fictional characters, 20 animals, 20 objects and 20 films. The people/fiction profiles reuse 68 independently authored starter profiles; 60 new animal/object/film profiles use explicit semantic annotations and source references from `scripts/curated-core.json`.
 
-## Scope and inference limits
+The full catalog contains 5,597 records: 1,123 people, 1,114 fictional characters and 1,120 each animals, objects and films. Full-catalog play is an explicit Experimental opt-in. Raw animal queries draw primarily from mammal taxa; raw object queries focus on vehicle/tool/instrument types. Featured profiles supplement those scopes. Catalog counts do not prove distinctive semantic knowledge or human recognition accuracy.
 
-This is a finite, curated-by-query catalog, not all people or all animals worldwide. Animal entries are taxonomic entities, currently drawn from the mammal subtree because the unrestricted animal traversal exceeded the public endpoint response window; object entries focus on vehicle, tool and musical-instrument types, not individual possessions. These are documented query scopes, not claims of complete worldwide coverage. Claims can be incomplete or inaccurate. Missing semantic claims remain unknown: the importer never turns an absent occupation, nationality, material, habitat, director, or genre into a false fact.
+## Reproduction
 
-The engine also uses explicit English-name spelling questions. These are known true or false from the displayed label and provide a fallback when source facts are sparse. Spelling is not a substitute for a rich semantic database. Each pack reports distinct full trait signatures and collisions, but that metric includes spelling; it does not imply every entity has a distinctive factual biography. Two entities with identical signatures cannot be separated by the current questions.
+```sh
+python3 scripts/import-wikidata.py
+python3 scripts/build-core.py
+```
 
-Birth and release dates become year-level questions; taxon discovery dates follow the source's time-of-discovery property. Names and descriptions are retained as data, without copying article prose or reference-site artwork. No photos are imported, avoiding separate photo-license obligations.
+The importer requires Python 3 and curl, identifies its public Wikidata requests, pauses between serial requests and caches responses under `/tmp/openguess-wikidata-v2`. Queries and retrieval metadata document the raw source. The core builder reproducibly overlays independently authored profiles and semantic questions; rerunning it does not fabricate duplicate entries. Inspect both scripts and source annotations before regenerating releases.
 
-## Updating and contributing
+## Truth and uncertainty
 
-Contribute corrections to Wikidata or propose new question predicates in the importer. Review facts and question phrasing before publishing regenerated packs. Catalog updates should retain IDs for saved collections, update retrieval timestamps and version, run pack integrity tests, and publish the resulting quality counts. Do not fabricate entities to meet a catalog target.
+Absent raw claims stay unknown, never silently false. Curated boolean traits express authored familiar portrayals, not independently audited universal facts. Fictional versions can differ; unclear interpretations should use unknown. Source Wikipedia references support provenance review, not a claim that every trait was individually verified. Do not invent Wikidata QIDs for curated profiles.
 
-## Imported pack quality (2026-10-14)
+Spelling and letter questions are excluded from gameplay and raw generation. The old spelling-heavy replay is superseded. The corrected featured oracle recovered 128/128 with zero wrong or unresolved results and at most ten questions, using stored closed-world traits. It is not human accuracy, an independent fact audit or proof that all experimental entries are distinguishable.
 
-| Theme     | Entities | Semantic signatures | Full signatures including spelling |
-| --------- | -------: | ------------------: | ---------------------------------: |
-| people    |     1100 |                1097 |                               1100 |
-| fictional |     1078 |                 533 |                               1076 |
-| animals   |     1100 |                 320 |                               1089 |
-| objects   |     1100 |                 399 |                               1072 |
-| movies    |     1100 |                1099 |                               1100 |
+Review questions, source references, duplicate semantic signatures and missing-data coverage when updating packs. Retain stable IDs for collections, update versions/retrieval timestamps, and rerun data and semantic-replay checks. Photos need separate rights review and are not automatically imported through proposals.
