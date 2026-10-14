@@ -1,4 +1,10 @@
-import { rankCandidates, selectQuestion } from "./engine";
+import {
+  rankCandidates,
+  selectQuestion,
+  getRoundReadiness,
+  type RoundReadiness,
+} from "./engine";
+import { validateQuestionMetadata } from "./questionMetadata";
 import type { AnswerRecord, DataPack } from "./types";
 export type WorkerRequest =
   | { type: "hydrate"; pack: DataPack }
@@ -14,21 +20,30 @@ export interface WorkerResult {
   candidates: { id: string; probability: number }[];
   questionId: string | null;
   informationGain: number;
+  readiness?: RoundReadiness;
   error?: string;
 }
 let pack: DataPack | null = null;
+let metadataErrors: string[] = [];
 self.onmessage = (event: MessageEvent<WorkerRequest>) => {
   const request = event.data;
   if (request.type === "hydrate") {
     pack = request.pack;
+    metadataErrors = validateQuestionMetadata(
+      pack.questions,
+      pack.theme,
+      pack.characters,
+    );
     return;
   }
   try {
+    if (metadataErrors.length) throw new Error("Invalid question metadata");
     if (!pack) throw new Error("The catalog is not ready.");
     const candidates = rankCandidates(
       pack.characters,
       request.history,
       request.rejected,
+      pack.questions,
     );
     const next = selectQuestion(
       candidates,
@@ -38,6 +53,7 @@ self.onmessage = (event: MessageEvent<WorkerRequest>) => {
     );
     self.postMessage({
       requestId: request.requestId,
+      readiness: getRoundReadiness(candidates, request.history, pack.questions),
       candidates: candidates.map((c) => ({
         id: c.character.id,
         probability: c.probability,

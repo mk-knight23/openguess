@@ -1,16 +1,23 @@
 import { useEffect, useRef, useState } from "react";
-import { rankCandidates, selectQuestion } from "./engine";
+import {
+  rankCandidates,
+  selectQuestion,
+  getRoundReadiness,
+  type RoundReadiness,
+} from "./engine";
 import type { AnswerRecord, Candidate, DataPack, Question } from "./types";
 import type { WorkerResult } from "./inference.worker";
 interface Inference {
   candidates: Candidate[];
   next: { question: Question; informationGain: number } | null;
+  readiness: RoundReadiness | null;
   busy: boolean;
   error: string | null;
 }
 const empty: Inference = {
   candidates: [],
   next: null,
+  readiness: null,
   busy: false,
   error: null,
 };
@@ -82,6 +89,7 @@ export function useInference(
           next: question
             ? { question, informationGain: result.informationGain }
             : null,
+          readiness: result.readiness ?? null,
           busy: false,
           error: result.error ?? null,
         },
@@ -128,10 +136,12 @@ export function useInference(
           pack.characters,
           evidence,
           rejectedIds,
+          pack.questions,
         );
         setState({
           candidates,
           next: selectQuestion(candidates, pack.questions, evidence, roundSeed),
+          readiness: getRoundReadiness(candidates, evidence, pack.questions),
           busy: false,
           error: null,
         });
