@@ -34,7 +34,7 @@ export function rankCandidates(
   const seen = new Map<string, number>();
   const discounted = history.map((record) => {
     const q = questionMap.get(record.questionId);
-    const group = q?.equivalenceGroup ?? q?.relatedGroup;
+    const group = q?.relatedGroup ?? q?.equivalenceGroup;
     const count = group ? (seen.get(group) ?? 0) : 0;
     if (group && record.answer !== "unknown") seen.set(group, count + 1);
     return { record, discount: 1 / (count + 1) };
@@ -287,7 +287,7 @@ export interface RoundReadiness {
   confirmed: boolean;
 }
 function evidenceGroup(q: Question): string {
-  return q.equivalenceGroup ?? q.relatedGroup ?? q.id;
+  return q.relatedGroup ?? q.equivalenceGroup ?? q.id;
 }
 function isDistinctiveSignature(q: Question, candidates: Candidate[]): boolean {
   if (

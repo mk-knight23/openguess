@@ -99,3 +99,19 @@ it("a later contradictory confirmation clears an earlier confirmation", () => {
     ]),
   ).toBe(false);
 });
+it("unique equivalence labels cannot bypass a shared evidence group", () => {
+  const questions = [...broad, signature].map((q) => ({
+    ...q,
+    relatedGroup: "one",
+    equivalenceGroup: q.id,
+  }));
+  const evidence: AnswerRecord[] = [
+    ...history,
+    { questionId: "s", answer: "yes" },
+  ];
+  const grouped = rankCandidates(characters, evidence, [], questions);
+  expect(grouped[0].probability).toBeLessThan(
+    rankCandidates(characters, evidence)[0].probability,
+  );
+  expect(shouldGuess(grouped, 4, evidence, questions)).toBe(false);
+});
