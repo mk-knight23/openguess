@@ -11,6 +11,7 @@ export interface Character {
   traits: Record<string, TraitValue>;
   source?: { url: string; license: string; retrievedAt: string };
   facts?: Record<string, string[]>;
+  factSources?: Record<string, { url: string; scope: string }>;
   featured?: boolean;
   annotationLicense?: string;
   annotationSources?: string[];
@@ -21,6 +22,12 @@ export interface Question {
   hint: string;
   kind?: "semantic" | "spelling";
   family?: string;
+  tier?: "broad" | "signature";
+  answerability?: "familiar" | "specialist";
+  relatedGroup?: string;
+  equivalenceGroup?: string;
+  prerequisites?: { questionId: string; value: boolean }[];
+  themes?: Theme[];
   property?: string;
   value?: string;
 }
