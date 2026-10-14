@@ -100,3 +100,21 @@ describe("optional cloud integration", () => {
     await removePublishedScore(c);
   });
 });
+it("accepts base64url legacy anon payloads and continues rejecting service-role payloads", () => {
+  const anon = Buffer.from(
+    JSON.stringify({ role: "anon", note: "ÿÿÿ" }),
+  ).toString("base64url");
+  expect(anon).toMatch(/[-_]/);
+  const client = createCloudClient(
+    "https://test.supabase.co",
+    `header.${anon}.signature`,
+  );
+  expect(client).not.toBeNull();
+  client?.auth.stopAutoRefresh();
+  const secret = Buffer.from(
+    JSON.stringify({ role: "service_role", note: "ÿÿÿ" }),
+  ).toString("base64url");
+  expect(() =>
+    createCloudClient("https://test.supabase.co", `header.${secret}.signature`),
+  ).toThrow();
+});

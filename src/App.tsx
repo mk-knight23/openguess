@@ -132,7 +132,6 @@ export default function App() {
     rights: false,
   });
   const focus = useRef<HTMLHeadingElement>(null);
-  const importRef = useRef<HTMLInputElement>(null);
   const generation = useRef(0);
   const lang = progress.settings.language;
   const t = (key: Parameters<typeof translate>[1]) => translate(lang, key);
@@ -1183,10 +1182,13 @@ export default function App() {
                 <label className="outline-button upload-button">
                   <Upload size={17} /> Import progress
                   <input
-                    ref={importRef}
                     type="file"
                     accept="application/json,.json"
-                    onChange={(e) => void importBackup(e.target.files?.[0])}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      e.target.value = "";
+                      void importBackup(file);
+                    }}
                   />
                 </label>
                 <p>

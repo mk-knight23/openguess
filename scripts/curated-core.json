@@ -303,7 +303,6 @@
           "plants",
           "hooves",
           "domestic",
-          "huge",
           "mane"
         ],
         "unknown": ["huge"]
@@ -356,7 +355,7 @@
       {
         "name": "Common frog",
         "article": "Common_frog",
-        "tags": ["amphibian", "fourlegs", "aquatic", "meat", "jumps"],
+        "tags": ["amphibian", "fourlegs", "meat", "jumps"],
         "unknown": ["aquatic"]
       },
       {
@@ -939,7 +938,7 @@
       {
         "name": "Star Wars: Episode IV – A New Hope",
         "article": "Star_Wars_(film)",
-        "tags": ["scifi", "space", "robots", "magic"],
+        "tags": ["scifi", "space", "robots"],
         "unknown": ["fantasy", "magic"],
         "wikidataId": "Q17738"
       },

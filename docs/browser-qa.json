@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-10-14T05:18:59.467Z",
+  "testedAt": "2026-10-14T05:31:02.353Z",
   "passed": true,
   "checks": [
     "accessibility home",
@@ -24,7 +24,8 @@
     "reviewable contribution download",
     "accessibility mobile-home",
     "accessibility mobile-question",
-    "mobile answer/undo"
+    "mobile answer/undo",
+    "unknown answers stop honestly without a forced guess"
   ],
   "target": "Harry Potter",
   "questions": 6

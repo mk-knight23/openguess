@@ -1,5 +1,6 @@
 import { chromium } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { translate } from "../src/i18n.ts";
 import assert from "node:assert/strict";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -132,7 +133,7 @@ try {
             ? "Yes"
             : target.traits[q.id] === false
               ? "No"
-              : "Don't know",
+              : translate("en", "dontKnow"),
         exact: true,
       })
       .click();
@@ -159,7 +160,7 @@ try {
           ? "Yes"
           : target.traits[undoQ.id] === false
             ? "No"
-            : "Don't know",
+            : translate("en", "dontKnow"),
       exact: true,
     })
     .click();
@@ -318,6 +319,22 @@ try {
     fullPage: true,
   });
   checks.push("mobile answer/undo");
+  for (let i = 0; i < 40; i++) {
+    await ready(mobile);
+    await mobile
+      .getByRole("button", { name: translate("en", "dontKnow"), exact: true })
+      .click();
+  }
+  await mobile
+    .getByRole("heading", { name: "You stumped me!", exact: true })
+    .waitFor();
+  assert.equal(
+    await mobile
+      .getByRole("button", { name: "That’s correct", exact: true })
+      .count(),
+    0,
+  );
+  checks.push("unknown answers stop honestly without a forced guess");
   assert.deepEqual(errors, [], "no browser errors");
   const report = {
     testedAt: new Date().toISOString(),

@@ -308,3 +308,17 @@ it("defaults to featured facts while keeping the full catalog visible and opt-in
   expect(await screen.findByTestId("question-text")).toBeVisible();
   expect(screen.getByText(/3 entries/)).toBeVisible();
 });
+it("allows retrying the same backup file after an invalid import", async () => {
+  const u = userEvent.setup();
+  render(<App />);
+  await u.click(screen.getByRole("button", { name: "Settings" }));
+  const input = screen.getByLabelText("Import progress") as HTMLInputElement;
+  const file = new File(["{}"], "invalid.json", { type: "application/json" });
+  const read = vi.fn(async () => "{}");
+  Object.defineProperty(file, "text", { value: read });
+  await u.upload(input, file);
+  await screen.findByText(/That file is not a valid/);
+  expect(input.value).toBe("");
+  await u.upload(input, file);
+  await waitFor(() => expect(read).toHaveBeenCalledTimes(2));
+});

@@ -16,7 +16,12 @@ export function createCloudClient(
     throw new Error("Private cloud keys must never be exposed to the browser.");
   if (!key.startsWith("sb_publishable_")) {
     try {
-      const payload = JSON.parse(atob(key.split(".")[1]));
+      const part = key.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      const padded = part.padEnd(
+        part.length + ((4 - (part.length % 4)) % 4),
+        "=",
+      );
+      const payload = JSON.parse(atob(padded));
       if (payload.role !== "anon") throw new Error();
     } catch {
       throw new Error(
