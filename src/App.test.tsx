@@ -4,38 +4,130 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { characters, questions } from "./data/catalog";
 import App from "./App";
 import { loadTheme } from "./data/loadTheme";
-vi.mock("./data/loadTheme", () => ({
-  loadTheme: vi.fn(async (theme: string) => ({
-    theme,
-    version: "test",
-    characters: characters.filter((c) =>
-      theme === "fictional"
-        ? c.category === "fictional"
-        : c.category === "real",
-    ),
-    questions,
-    source: {
-      url: "https://www.wikidata.org",
-      license: "CC0",
-      retrievedAt: "2026-10-14",
-    },
-    quality: {},
-  })),
-}));
+vi.mock("./data/loadTheme", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./data/loadTheme")>();
+  return { loadTheme: vi.fn(actual.loadTheme) };
+});
 afterEach(() => {
   cleanup();
   localStorage.clear();
 });
 describe("OpenGuess v2", () => {
-  it("keeps question guidance optional and reveals it on request", async () => {
+  it("uses reviewed familiar clues in the featured pool", async () => {
+    const entries = Array.from({ length: 4 }, (_, n) => ({
+      ...characters[0],
+      id: `scope-${n}`,
+      name: `Scope ${n}`,
+      featured: true,
+      traits: { raw: n < 2, reviewed: n === 0 },
+    }));
+    vi.mocked(loadTheme).mockResolvedValueOnce({
+      theme: "people",
+      version: "test",
+      characters: entries,
+      questions: [
+        {
+          id: "raw",
+          text: "Does this person have an obscure imported classification?",
+          hint: "Unreviewed source template.",
+          tier: "broad",
+          answerability: "specialist",
+        },
+        {
+          id: "reviewed",
+          text: "Does this person play a familiar instrument?",
+          hint: "Reviewed familiar clue.",
+          tier: "broad",
+          answerability: "familiar",
+        },
+      ],
+      source: {
+        url: "https://www.wikidata.org",
+        license: "CC0",
+        retrievedAt: "2026-10-14",
+      },
+      quality: {},
+    });
     const u = userEvent.setup();
     render(<App />);
-    await u.click(await screen.findByRole("button", { name: "Start guessing" }));
+    await u.click(
+      await screen.findByRole("button", { name: "Start guessing" }),
+    );
+    expect(await screen.findByTestId("question-text")).toHaveTextContent(
+      "Does this person play a familiar instrument?",
+    );
+  });
+  it("keeps question guidance optional and reveals it on request", async () => {
+    const pack = await loadTheme("people");
+    const u = userEvent.setup();
+    render(<App />);
+    await u.click(
+      await screen.findByRole("button", { name: "Start guessing" }),
+    );
     const text = (await screen.findByTestId("question-text")).textContent;
-    const question = questions.find((q) => q.text === text)!;
+    const question = pack.questions.find((q) => q.text === text)!;
     expect(screen.getByText(question.hint)).not.toBeVisible();
     await u.click(screen.getByText("Help with this clue"));
     expect(screen.getByText(question.hint)).toBeVisible();
+  });
+  it("does not confidently present an identity without familiar distinctive evidence", async () => {
+    const broad = ["gender", "career", "origin"].map((id) => ({
+      id,
+      text: `Does this person have the ${id} trait?`,
+      hint: "A broad clue.",
+      tier: "broad" as const,
+      family: id,
+    }));
+    const signature = {
+      id: "obscure",
+      text: "Did they publish this obscure technical result?",
+      hint: "Specialist knowledge.",
+      tier: "signature" as const,
+      answerability: "specialist" as const,
+    };
+    const entries = Array.from({ length: 8 }, (_, n) => ({
+      ...characters[0],
+      id: `profile-${n}`,
+      name: `Person ${n}`,
+      featured: true,
+      traits: {
+        gender: Boolean(n & 1),
+        career: Boolean(n & 2),
+        origin: Boolean(n & 4),
+        obscure: n === 7,
+      },
+    }));
+    vi.mocked(loadTheme).mockResolvedValueOnce({
+      theme: "people",
+      version: "test",
+      characters: entries,
+      questions: [...broad, signature],
+      source: {
+        url: "https://www.wikidata.org",
+        license: "CC0",
+        retrievedAt: "2026-10-14",
+      },
+      quality: {},
+    });
+    const u = userEvent.setup();
+    render(<App />);
+    await u.click(
+      await screen.findByRole("button", { name: "Start guessing" }),
+    );
+    for (let i = 0; i < 4 && screen.queryByTestId("question-text"); i++) {
+      await u.click(await screen.findByRole("button", { name: "Yes" }));
+      await waitFor(() =>
+        expect(
+          screen.queryByText("Connecting the clues…"),
+        ).not.toBeInTheDocument(),
+      );
+    }
+    expect(
+      screen.queryByRole("button", { name: "That’s correct" }),
+    ).not.toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "You stumped me!" }),
+    ).toBeVisible();
   });
   it("offers five separate universes and starts an adaptive round", async () => {
     const u = userEvent.setup();
@@ -88,13 +180,17 @@ describe("OpenGuess v2", () => {
     expect(screen.getByText(/Your collection is waiting/)).toBeVisible();
   });
   it("records a confirmed guess and allows correcting the result-triggering answer", async () => {
+    const pack = await loadTheme("fictional");
+    const questions = pack.questions;
     const u = userEvent.setup();
     render(<App />);
     await u.click(screen.getByRole("button", { name: /^Characters/ }));
     await u.click(
       await screen.findByRole("button", { name: "Start guessing" }),
     );
-    const target = characters.find((c) => c.name === "Harry Potter")!;
+    const target = pack.characters.find(
+      (c) => c.featured && c.name === "Harry Potter",
+    )!;
     let last = "";
     await waitFor(() =>
       expect(screen.getByTestId("question-text")).toBeVisible(),
@@ -104,7 +200,12 @@ describe("OpenGuess v2", () => {
       const q = questions.find((q) => q.text === last)!;
       await u.click(
         screen.getByRole("button", {
-          name: target.traits[q.id] ? "Yes" : "No",
+          name:
+            target.traits[q.id] === true
+              ? "Yes"
+              : target.traits[q.id] === false
+                ? "No"
+                : "Don’t know",
         }),
       );
       await waitFor(() =>
@@ -120,7 +221,14 @@ describe("OpenGuess v2", () => {
     );
     const q = questions.find((q) => q.text === last)!;
     await u.click(
-      screen.getByRole("button", { name: target.traits[q.id] ? "Yes" : "No" }),
+      screen.getByRole("button", {
+        name:
+          target.traits[q.id] === true
+            ? "Yes"
+            : target.traits[q.id] === false
+              ? "No"
+              : "Don’t know",
+      }),
     );
     await waitFor(() =>
       expect(
