@@ -404,6 +404,7 @@ export default function App() {
               : "playing",
     busy,
     confirming: readiness?.phase === "confirming",
+    narrowing: readiness?.phase === "narrowing",
     rejectedGuess: recovering,
     answeredCount: history.length,
   });
@@ -1467,7 +1468,7 @@ export default function App() {
       </main>
       <footer className="v2-footer">
         <span>
-          <Sparkles size={16} /> OpenGuess · version 0.2
+          <Sparkles size={16} /> OpenGuess · version 0.2.1
         </span>
         <button onClick={() => setView("about")}>About & data sources</button>
         <a href={`${REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">

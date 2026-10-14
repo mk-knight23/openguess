@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { deriveRoundMood } from "./roundPresentation";
+it("does not imply narrowing when inference has no supporting progress", () => {
+  expect(
+    deriveRoundMood({ status: "playing", answeredCount: 20, narrowing: false }),
+  ).toBe("curious");
+});
 
 describe("round presentation", () => {
   it("follows discovery depth and confirmation without timers", () => {

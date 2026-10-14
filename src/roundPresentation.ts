@@ -5,6 +5,7 @@ export interface RoundPresentation {
   confirming?: boolean;
   rejectedGuess?: boolean;
   answeredCount?: number;
+  narrowing?: boolean;
 }
 export function deriveRoundMood(state: RoundPresentation): GenieMood {
   if (state.status === "home") return "idle";
@@ -14,5 +15,7 @@ export function deriveRoundMood(state: RoundPresentation): GenieMood {
   if (state.busy) return "thinking";
   if (state.rejectedGuess) return "recovering";
   if (state.confirming) return "confirming";
-  return (state.answeredCount ?? 0) >= 5 ? "narrowing" : "curious";
+  return (state.narrowing ?? (state.answeredCount ?? 0) >= 5)
+    ? "narrowing"
+    : "curious";
 }
