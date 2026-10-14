@@ -7,6 +7,7 @@ import {
 } from "./engine";
 import type { AnswerRecord, Candidate, DataPack, Question } from "./types";
 import type { WorkerResult } from "./inference.worker";
+import { validateQuestionMetadata } from "./questionMetadata";
 interface Inference {
   candidates: Candidate[];
   next: { question: Question; informationGain: number } | null;
@@ -132,6 +133,11 @@ export function useInference(
       });
     else if (typeof Worker === "undefined") {
       try {
+        if (
+          validateQuestionMetadata(pack.questions, pack.theme, pack.characters)
+            .length
+        )
+          throw new Error("Invalid question metadata");
         const candidates = rankCandidates(
           pack.characters,
           evidence,

@@ -224,3 +224,19 @@ it("worker replays the same readiness and question for identical evidence and se
   expect(replies[0].readiness?.phase).toBe("discovery");
   expect({ ...replies[0], requestId: 2 }).toEqual(replies[1]);
 });
+it("fallback rejects invalid prerequisite metadata just as the worker does", async () => {
+  vi.stubGlobal("Worker", undefined);
+  const invalid = {
+    ...pack,
+    questions: [
+      {
+        ...pack.questions[0],
+        prerequisites: [{ questionId: "missing", value: true }],
+      },
+    ],
+  };
+  const { result } = renderHook(() => useInference(invalid, [], []));
+  await waitFor(() => expect(result.current.busy).toBe(false));
+  expect(result.current.error).toContain("restart");
+  expect(result.current.candidates).toEqual([]);
+});
