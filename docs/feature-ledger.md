@@ -3,7 +3,7 @@
 | Capability               | OpenGuess 0.2 scope                                                     | Boundary                                                       |
 | ------------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------- |
 | Adaptive guessing        | Five answers, correction, undo, rejection, explanations                 | Semantic-only original engine; not Limule recovery             |
-| Multiple themes          | People, fiction, mammals, object types, films                           | 128 featured profiles; full 5,597-record catalog Experimental  |
+| Multiple themes          | People, fiction, mammals, object types, films                           | 128 featured profiles; full 5,584-record catalog Experimental  |
 | Replay goals             | Five daily discoveries/theme, local awards, collection, points, streaks | Local editable progress; pack updates can alter challenges     |
 | Languages                | 18 partial interface languages                                          | Questions and data remain English                              |
 | Profiles and portability | Local nickname/settings, validated JSON backup                          | Browser storage can be cleared                                 |

@@ -6,7 +6,7 @@ A free, open-source guessing game with an original blue genie, adaptive question
 
 ## Version 0.2
 
-Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,597 records** (1,123 people, 1,114 fictional characters and 1,120 in each remaining theme) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
+Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,584 records** (1,123 people, 1,114 fictional characters and 1,120 each in animals and objects, and 1,107 films) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
 
 Gameplay asks about meaningful properties, not letters in a name. Spelling questions are excluded. When semantic evidence cannot distinguish candidates, the round remains inconclusive. Raw Wikidata statements are CC0; independently authored semantic annotations are MIT and carry separate provenance. See [data provenance](docs/data-provenance.md).
 

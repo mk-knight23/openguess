@@ -1,6 +1,6 @@
 # Architecture
 
-Vite builds a React/TypeScript static application. A small manifest describes five packs; selecting a theme lazy-loads it. The default game uses 128 featured profiles with independently authored MIT semantic annotations. The full 5,597-record sourced catalog is explicitly Experimental and remains accessible in the library. Raw Wikidata CC0 statements retain QIDs, source URLs, retrieval timestamps and query metadata; authored annotations have separate licenses and references. Curated animal and object profiles supplement the raw mammal-taxon and vehicle/tool/instrument query scopes. None of these finite scopes means all subjects worldwide.
+Vite builds a React/TypeScript static application. A small manifest describes five packs; selecting a theme lazy-loads it. The default game uses 128 featured profiles with independently authored MIT semantic annotations. The full 5,584-record sourced catalog is explicitly Experimental and remains accessible in the library. Raw Wikidata CC0 statements retain QIDs, source URLs, retrieval timestamps and query metadata; authored annotations have separate licenses and references. Curated animal and object profiles supplement the raw mammal-taxon and vehicle/tool/instrument query scopes. None of these finite scopes means all subjects worldwide.
 
 ## Inference and worker
 
