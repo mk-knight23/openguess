@@ -1,6 +1,6 @@
 # OpenGuess V2 question quality and experience proposal
 
-Status: approved by the user on 2026-10-14. Implementation in progress on `codex/v2-question-quality`.
+Status: approved by the user on 2026-10-14. Implementation and local verification complete on `codex/v2-question-quality`; publication checks in progress.
 
 ## Outcome and constraints
 

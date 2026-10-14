@@ -1,12 +1,12 @@
 # Question quality investigation
 
-Date: 2026-10-14. Status: research complete enough to propose an upgrade; implementation awaits the user's required plan approval.
+Date: 2026-10-14. Status: pre-upgrade research; the approved implementation and measured results are documented in [the upgrade report](../question-quality-upgrade.md).
 
 ## Main finding
 
 The current product can identify its featured profiles from its own truth table, but that does not establish an interesting human conversation. The strongest actionable gap is a rich, recognizable clue bank, combined with context-aware selection and distinctive confirmation. More unrestricted randomness would not supply missing facts.
 
-## Current source audit
+## Pre-upgrade source audit (7109284)
 
 | Theme     | Featured profiles | Pack questions | Questions with any featured facts | Questions with at least 80% featured coverage |
 | --------- | ----------------: | -------------: | --------------------------------: | --------------------------------------------: |

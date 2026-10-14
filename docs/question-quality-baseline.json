@@ -1,0 +1,1024 @@
+{
+  "measuredAt": "2026-10-14T06:21:49.723Z",
+  "methodology": "All featured profiles, seeds1-20, five deterministic authored-answer policies, 40 question limit, no forced guesses. Not human accuracy. Identity checked against target ID, distinctiveness uses authored metadata.",
+  "results": [
+    {
+      "theme": "people",
+      "policy": "exact",
+      "rounds": 640,
+      "correctFirstGuess": 640,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "us": 192,
+        "deceased": 160,
+        "india": 96,
+        "male": 64,
+        "sport": 128
+      },
+      "uniqueSequences": 516,
+      "medianTurns": 6,
+      "p95Turns": 7,
+      "maxTurns": 8
+    },
+    {
+      "theme": "people",
+      "policy": "dates-unknown",
+      "rounds": 640,
+      "correctFirstGuess": 640,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "us": 192,
+        "deceased": 160,
+        "india": 96,
+        "male": 64,
+        "sport": 128
+      },
+      "uniqueSequences": 516,
+      "medianTurns": 6,
+      "p95Turns": 7,
+      "maxTurns": 8
+    },
+    {
+      "theme": "people",
+      "policy": "partial-unknown",
+      "rounds": 640,
+      "correctFirstGuess": 502,
+      "wrongFirstGuess": 0,
+      "unresolved": 138,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 4392,
+      "maxFamilyStreak": 8,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "us": 192,
+        "deceased": 160,
+        "india": 96,
+        "male": 64,
+        "sport": 128
+      },
+      "uniqueSequences": 597,
+      "medianTurns": 8,
+      "p95Turns": 40,
+      "maxTurns": 40
+    },
+    {
+      "theme": "people",
+      "policy": "probably",
+      "rounds": 640,
+      "correctFirstGuess": 620,
+      "wrongFirstGuess": 0,
+      "unresolved": 20,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 300,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "us": 192,
+        "deceased": 160,
+        "india": 96,
+        "male": 64,
+        "sport": 128
+      },
+      "uniqueSequences": 500,
+      "medianTurns": 7,
+      "p95Turns": 11,
+      "maxTurns": 40
+    },
+    {
+      "theme": "people",
+      "policy": "one-mistake",
+      "rounds": 640,
+      "correctFirstGuess": 439,
+      "wrongFirstGuess": 155,
+      "unresolved": 46,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 682,
+      "maxFamilyStreak": 7,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "us": 192,
+        "deceased": 160,
+        "india": 96,
+        "male": 64,
+        "sport": 128
+      },
+      "uniqueSequences": 595,
+      "medianTurns": 10,
+      "p95Turns": 40,
+      "maxTurns": 40
+    },
+    {
+      "theme": "fictional",
+      "policy": "exact",
+      "rounds": 720,
+      "correctFirstGuess": 720,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 2,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "animated": 108,
+        "japan": 180,
+        "magic": 252,
+        "male": 180
+      },
+      "uniqueSequences": 666,
+      "medianTurns": 6,
+      "p95Turns": 7,
+      "maxTurns": 8
+    },
+    {
+      "theme": "fictional",
+      "policy": "dates-unknown",
+      "rounds": 720,
+      "correctFirstGuess": 720,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 2,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "animated": 108,
+        "japan": 180,
+        "magic": 252,
+        "male": 180
+      },
+      "uniqueSequences": 666,
+      "medianTurns": 6,
+      "p95Turns": 7,
+      "maxTurns": 8
+    },
+    {
+      "theme": "fictional",
+      "policy": "partial-unknown",
+      "rounds": 720,
+      "correctFirstGuess": 690,
+      "wrongFirstGuess": 0,
+      "unresolved": 30,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 1906,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "animated": 108,
+        "japan": 180,
+        "magic": 252,
+        "male": 180
+      },
+      "uniqueSequences": 699,
+      "medianTurns": 8,
+      "p95Turns": 14,
+      "maxTurns": 40
+    },
+    {
+      "theme": "fictional",
+      "policy": "probably",
+      "rounds": 720,
+      "correctFirstGuess": 720,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "animated": 108,
+        "japan": 180,
+        "magic": 252,
+        "male": 180
+      },
+      "uniqueSequences": 669,
+      "medianTurns": 7,
+      "p95Turns": 9,
+      "maxTurns": 10
+    },
+    {
+      "theme": "fictional",
+      "policy": "one-mistake",
+      "rounds": 720,
+      "correctFirstGuess": 556,
+      "wrongFirstGuess": 157,
+      "unresolved": 7,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 0,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "animated": 108,
+        "japan": 180,
+        "magic": 252,
+        "male": 180
+      },
+      "uniqueSequences": 703,
+      "medianTurns": 10,
+      "p95Turns": 12,
+      "maxTurns": 38
+    },
+    {
+      "theme": "animals",
+      "policy": "exact",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 31,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_mammal": 180,
+        "core_fourlegs": 220
+      },
+      "uniqueSequences": 285,
+      "medianTurns": 5,
+      "p95Turns": 7,
+      "maxTurns": 10
+    },
+    {
+      "theme": "animals",
+      "policy": "dates-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 31,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_mammal": 180,
+        "core_fourlegs": 220
+      },
+      "uniqueSequences": 285,
+      "medianTurns": 5,
+      "p95Turns": 7,
+      "maxTurns": 10
+    },
+    {
+      "theme": "animals",
+      "policy": "partial-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 372,
+      "wrongFirstGuess": 0,
+      "unresolved": 28,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 949,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_mammal": 180,
+        "core_fourlegs": 220
+      },
+      "uniqueSequences": 330,
+      "medianTurns": 7,
+      "p95Turns": 30,
+      "maxTurns": 30
+    },
+    {
+      "theme": "animals",
+      "policy": "probably",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 44,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_mammal": 180,
+        "core_fourlegs": 220
+      },
+      "uniqueSequences": 300,
+      "medianTurns": 6,
+      "p95Turns": 13,
+      "maxTurns": 15
+    },
+    {
+      "theme": "animals",
+      "policy": "one-mistake",
+      "rounds": 400,
+      "correctFirstGuess": 195,
+      "wrongFirstGuess": 195,
+      "unresolved": 10,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 53,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_mammal": 180,
+        "core_fourlegs": 220
+      },
+      "uniqueSequences": 343,
+      "medianTurns": 8,
+      "p95Turns": 12,
+      "maxTurns": 30
+    },
+    {
+      "theme": "objects",
+      "policy": "exact",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 50,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_portable": 200,
+        "core_electric": 200
+      },
+      "uniqueSequences": 231,
+      "medianTurns": 5,
+      "p95Turns": 8,
+      "maxTurns": 10
+    },
+    {
+      "theme": "objects",
+      "policy": "dates-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 50,
+      "maxFamilyStreak": 4,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_portable": 200,
+        "core_electric": 200
+      },
+      "uniqueSequences": 231,
+      "medianTurns": 5,
+      "p95Turns": 8,
+      "maxTurns": 10
+    },
+    {
+      "theme": "objects",
+      "policy": "partial-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 318,
+      "wrongFirstGuess": 0,
+      "unresolved": 82,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 1401,
+      "maxFamilyStreak": 9,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_portable": 200,
+        "core_electric": 200
+      },
+      "uniqueSequences": 301,
+      "medianTurns": 7,
+      "p95Turns": 29,
+      "maxTurns": 29
+    },
+    {
+      "theme": "objects",
+      "policy": "probably",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 50,
+      "maxFamilyStreak": 9,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_portable": 200,
+        "core_electric": 200
+      },
+      "uniqueSequences": 211,
+      "medianTurns": 6,
+      "p95Turns": 17,
+      "maxTurns": 17
+    },
+    {
+      "theme": "objects",
+      "policy": "one-mistake",
+      "rounds": 400,
+      "correctFirstGuess": 387,
+      "wrongFirstGuess": 12,
+      "unresolved": 1,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 68,
+      "maxFamilyStreak": 7,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_portable": 200,
+        "core_electric": 200
+      },
+      "uniqueSequences": 339,
+      "medianTurns": 10,
+      "p95Turns": 16,
+      "maxTurns": 29
+    },
+    {
+      "theme": "movies",
+      "policy": "exact",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 20,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_fantasy": 400
+      },
+      "uniqueSequences": 134,
+      "medianTurns": 5,
+      "p95Turns": 6,
+      "maxTurns": 6
+    },
+    {
+      "theme": "movies",
+      "policy": "dates-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 30,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_fantasy": 400
+      },
+      "uniqueSequences": 136,
+      "medianTurns": 5,
+      "p95Turns": 6,
+      "maxTurns": 7
+    },
+    {
+      "theme": "movies",
+      "policy": "partial-unknown",
+      "rounds": 400,
+      "correctFirstGuess": 386,
+      "wrongFirstGuess": 0,
+      "unresolved": 14,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 1205,
+      "maxFamilyStreak": 8,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_fantasy": 400
+      },
+      "uniqueSequences": 289,
+      "medianTurns": 7,
+      "p95Turns": 17,
+      "maxTurns": 40
+    },
+    {
+      "theme": "movies",
+      "policy": "probably",
+      "rounds": 400,
+      "correctFirstGuess": 400,
+      "wrongFirstGuess": 0,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 20,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_fantasy": 400
+      },
+      "uniqueSequences": 178,
+      "medianTurns": 6,
+      "p95Turns": 11,
+      "maxTurns": 11
+    },
+    {
+      "theme": "movies",
+      "policy": "one-mistake",
+      "rounds": 400,
+      "correctFirstGuess": 377,
+      "wrongFirstGuess": 23,
+      "unresolved": 0,
+      "signatureBeforeGuess": 0,
+      "totalUnknown": 27,
+      "maxFamilyStreak": 3,
+      "equivalentRepeat": 0,
+      "openingQuestions": {
+        "core_fantasy": 400
+      },
+      "uniqueSequences": 312,
+      "medianTurns": 10,
+      "p95Turns": 15,
+      "maxTurns": 17
+    }
+  ],
+  "exampleRounds": [
+    {
+      "theme": "people",
+      "target": "Barack Obama",
+      "transcript": [
+        {
+          "question": "Is the character strongly associated with the United States?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Has this real person died?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character famous for basketball?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Are glasses a familiar part of the character\u2019s appearance?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Has the person been a national political leader?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "people",
+      "target": "Serena Williams",
+      "transcript": [
+        {
+          "question": "Is the character strongly associated with the United States?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the person famous for hosting television shows?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character known primarily for sport?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "people",
+      "target": "Shah Rukh Khan",
+      "transcript": [
+        {
+          "question": "Is the character strongly associated with the United States?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character known primarily for sport?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character strongly associated with India?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the person famous for acting?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Are glasses a familiar part of the character\u2019s appearance?",
+          "tier": "unmarked",
+          "answer": "no"
+        }
+      ]
+    },
+    {
+      "theme": "fictional",
+      "target": "Harry Potter",
+      "transcript": [
+        {
+          "question": "Is the character usually shown as animation?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the character use magic or supernatural powers?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the character have a major connection to outer space?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Did the character originate in a novel or literary story?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the character strongly associated with Britain?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "fictional",
+      "target": "Hermione Granger",
+      "transcript": [
+        {
+          "question": "Is the character usually shown as animation?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Did the character originate in a video game?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the fictional character royalty?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does the character famously use a bow and arrows?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is attending school central to the character\u2019s story?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "fictional",
+      "target": "Gandalf",
+      "transcript": [
+        {
+          "question": "Is the character usually shown as animation?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the character generally portrayed as male?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the character use magic or supernatural powers?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the character have a major connection to outer space?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Did the character originate in a novel or literary story?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is the character strongly associated with Britain?",
+          "tier": "unmarked",
+          "answer": "no"
+        }
+      ]
+    },
+    {
+      "theme": "animals",
+      "target": "Lion",
+      "transcript": [
+        {
+          "question": "Is it a mammal?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a commonly domesticated animal?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it mainly eat other animals?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the adult normally have four legs?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a member of the cat family?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Are adult males famous for a mane?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "animals",
+      "target": "Tiger",
+      "transcript": [
+        {
+          "question": "Is it a mammal?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a commonly domesticated animal?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it mainly eat other animals?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does the adult normally have four legs?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a member of the cat family?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Are adult males famous for a mane?",
+          "tier": "unmarked",
+          "answer": "no"
+        }
+      ]
+    },
+    {
+      "theme": "animals",
+      "target": "Zebra",
+      "transcript": [
+        {
+          "question": "Is it a mammal?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a commonly domesticated animal?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it mainly eat other animals?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Can a typical full-grown individual weigh over 500 kg?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it have hooves?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "objects",
+      "target": "Smartphone",
+      "transcript": [
+        {
+          "question": "Is the familiar version normally easy to carry in one hand?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it used inside the mouth?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Can the ordinary version fit in a clothing pocket?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does it have cutting blades?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it used for electronic communication?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "objects",
+      "target": "Laptop",
+      "transcript": [
+        {
+          "question": "Is the familiar version normally easy to carry in one hand?",
+          "tier": "unmarked",
+          "answer": "unknown"
+        },
+        {
+          "question": "Does the ordinary version need electricity to do its main job?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Is it a kitchen appliance?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it used for electronic communication?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Can the ordinary version fit in a clothing pocket?",
+          "tier": "unmarked",
+          "answer": "no"
+        }
+      ]
+    },
+    {
+      "theme": "objects",
+      "target": "Bicycle",
+      "transcript": [
+        {
+          "question": "Is the familiar version normally easy to carry in one hand?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does the ordinary version need electricity to do its main job?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it a musical instrument?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it a piece of furniture?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it mainly used for transportation?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "movies",
+      "target": "The Godfather",
+      "transcript": [
+        {
+          "question": "Does it have a major fantasy or supernatural element?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it have a major science-fiction setting?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is crime central to its story?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does it feature DC Comics heroes?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it about an organized-crime family?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "movies",
+      "target": "Scarface",
+      "transcript": [
+        {
+          "question": "Does it have a major fantasy or supernatural element?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it have a major science-fiction setting?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is crime central to its story?",
+          "tier": "unmarked",
+          "answer": "yes"
+        },
+        {
+          "question": "Does it feature DC Comics heroes?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is it about an organized-crime family?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Was your film released in 1984?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    },
+    {
+      "theme": "movies",
+      "target": "Citizen Kane",
+      "transcript": [
+        {
+          "question": "Does it have a major fantasy or supernatural element?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Does it have a major science-fiction setting?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is crime central to its story?",
+          "tier": "unmarked",
+          "answer": "no"
+        },
+        {
+          "question": "Is the film mainly photographed in black and white?",
+          "tier": "unmarked",
+          "answer": "yes"
+        }
+      ]
+    }
+  ],
+  "sourceCommit": "71092849a8a6ef22569aeb0aa61d79f27f027824"
+}

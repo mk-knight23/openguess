@@ -4,7 +4,9 @@ A free, open-source guessing game with an original blue genie, adaptive question
 
 [Play](https://mk-knight23.github.io/openguess/) · [Source](https://github.com/mk-knight23/openguess) · [Research](docs/research/akinator.md) · [Verification](docs/verification.md)
 
-## Version 0.2
+## Version 0.2.1
+
+This V2 upgrade adds 384 original signature clues, contextual follow-ups, independent confirmation and a light glass stage. The same 128 featured profiles remain the default. [Upgrade results and limits](docs/question-quality-upgrade.md) compare question variety, uncertainty and mistaken-answer recovery against the previous release.
 
 Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,584 records** (1,123 people, 1,114 fictional characters and 1,120 each in animals and objects, and 1,107 films) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
 
@@ -39,7 +41,7 @@ Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; 
 
 ## How it works
 
-The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The corrected featured-profile oracle recovered 128/128 targets with zero wrong or unresolved rounds and at most ten questions. This tests closed authored facts, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
+The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The current featured-profile oracle recovered all 128 targets over 20 seeds with zero wrong or unresolved rounds and at most eleven questions in that sample. This tests closed authored facts, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
 
 Bayesian updates rank candidates from authored/imported traits. Information gain chooses unasked questions. A worker keeps larger-pack inference off the interface thread. “Don't know” adds no evidence; absent Wikidata claims remain unknown. Model percentages are relative weights within the chosen pack, not calibrated chances of a correct answer.
 
