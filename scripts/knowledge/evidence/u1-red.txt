@@ -1,0 +1,41 @@
+test_cache_replays_exact_bytes_and_detects_corruption (test_pilot.SourceBoundaryTests) ... FAIL
+test_failed_acquisition_is_explicit_and_never_cached_as_success (test_pilot.SourceBoundaryTests) ... FAIL
+test_mirrors_retain_same_upstream_origin (test_pilot.SourceBoundaryTests) ... FAIL
+test_missing_license_is_rejected (test_pilot.SourceBoundaryTests) ... FAIL
+
+======================================================================
+FAIL: test_cache_replays_exact_bytes_and_detects_corruption (test_pilot.SourceBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_pilot.py", line 20, in test_cache_replays_exact_bytes_and_detects_corruption
+    self.assertEqual(len(calls), 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_failed_acquisition_is_explicit_and_never_cached_as_success (test_pilot.SourceBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_pilot.py", line 31, in test_failed_acquisition_is_explicit_and_never_cached_as_success
+    with self.assertRaises(OSError): cache.get('https://example.test/fail')
+AssertionError: OSError not raised
+
+======================================================================
+FAIL: test_mirrors_retain_same_upstream_origin (test_pilot.SourceBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_pilot.py", line 38, in test_mirrors_retain_same_upstream_origin
+    self.assertEqual(validate_assertion({'source':'original'}, registry), 'eltontraits')
+AssertionError: None != 'eltontraits'
+
+======================================================================
+FAIL: test_missing_license_is_rejected (test_pilot.SourceBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_pilot.py", line 11, in test_missing_license_is_rejected
+    validate_assertion({'source': 'bad'}, {'bad': {'origin': 'original'}})
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+FAILED (failures=4)
