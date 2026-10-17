@@ -147,74 +147,28 @@
     ]
   },
   "birdEnrichment": {
-    "zeroExplicitDistinctionPairs": 103,
-    "subjectsInZeroDistinctionPairs": 51,
-    "pairsWithFewerThanTwoEvidenceGroups": 1005,
-    "collisionExamples": [
-      [
-        "Hartlaub's Spurfowl",
-        "Orange-footed Scrubfowl"
-      ],
-      [
-        "Hartlaub's Spurfowl",
-        "Rock Partridge"
-      ],
-      [
-        "Orange-footed Scrubfowl",
-        "Rock Partridge"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Francolinus schlegelii"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Nothura darwinii"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Yellow-legged Tinamou"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Chinese Francolin"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Francolinus albogularis"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Chukar Partridge"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Francolinus streptophorus"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Francolinus shelleyi"
-      ],
-      [
-        "Rusty-necklaced Partridge",
-        "Arabian Partridge"
-      ]
-    ],
+    "zeroExplicitDistinctionPairs": 0,
+    "subjectsInZeroDistinctionPairs": 0,
+    "pairsWithFewerThanTwoEvidenceGroups": 10,
+    "collisionExamples": [],
+    "minimumNonTaxonomicPropositions": 24,
     "sourceBirdSpecies": 9995,
     "eligibleSourceRows": 7139,
     "sampled": 100,
-    "unambiguousSpeciesJoins": 96,
-    "supportedProjections": 2112,
-    "twentyPropositionsFiveTopics": 96,
-    "screened": 0,
+    "unambiguousSpeciesJoins": 99,
+    "supportedProjections": 12079,
+    "twentyPropositionsFiveTopics": 99,
+    "screened": 64,
     "qualified": 0,
     "originalPrimaryBooksIndependentlyRead": false,
     "failures": [],
     "limitations": [
-      "Source-rich ordered sample, not a familiarity survey.",
+      "Sample stratified across supplied families and source completeness, not a familiarity survey.",
       "Diet/foraging percentage zero is explicit source evidence, not absent-claim completion.",
       "Related thresholds and diet components retain shared evidence groups.",
       "Upstream reference families grouped from publisher metadata/source index; original books not independently checked.",
+      "Body-mass thresholds are species adult means and may be difficult for humans to answer.",
+      "Opposing family negatives derive only from explicit functional family assignments within the same taxonomy version; missing claims stay unknown.",
       "No full-universe replay receipt."
     ]
   }
