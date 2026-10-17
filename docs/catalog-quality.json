@@ -12,7 +12,15 @@
       "screened": 0,
       "replayQualified": 0,
       "target": 5000,
-      "failures": []
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 672,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 99,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
     },
     "fictional": {
       "selected": 100,
@@ -24,7 +32,15 @@
       "screened": 0,
       "replayQualified": 0,
       "target": 5000,
-      "failures": []
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 337,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
     },
     "animals": {
       "selected": 100,
@@ -36,7 +52,15 @@
       "screened": 0,
       "replayQualified": 0,
       "target": 5000,
-      "failures": []
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 212,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
     },
     "objects": {
       "selected": 100,
@@ -48,7 +72,15 @@
       "screened": 0,
       "replayQualified": 0,
       "target": 5000,
-      "failures": []
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 181,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
     },
     "movies": {
       "selected": 100,
@@ -60,7 +92,15 @@
       "screened": 0,
       "replayQualified": 0,
       "target": 5000,
-      "failures": []
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 814,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 2,
+        "full-universe-replay-pending": 100
+      }
     }
   },
   "sources": {

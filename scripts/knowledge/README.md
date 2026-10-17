@@ -22,3 +22,5 @@ EltonTraits 1.0: Wilman, Belmaker, Simpson, de la Rosa, Rivadeneira and Jetz; Fi
 Do not describe this acquisition as 25,000 playable profiles. Read `docs/catalog-quality.json` for actual counts and `docs/data-pilot.md` for remaining work.
 
 WordNet 3.0 is acquired from Princeton's `WNdb-3.0.tar.gz`. The artifact noun sample retains sense IDs, aliases, hypernym pointers and the required license/copyright/disclaimer header in `data/wordnet-LICENSE.txt`; no definitions are copied. Raw noun-file counts are lexical senses, not automatically distinct familiar playable objects. No text-label identity join is performed.
+
+After acquisition, run `python3 scripts/knowledge/build_pilot.py` to compile the existing licensed Wikidata positive claims against the existing structured question templates, then execute conservative screening. DBpedia and independent-source assertions remain raw until their proposition mappings are reviewed. This writes `*-compiled.json` in quarantine and measured screening reasons into the quality report. No replay receipt is fabricated; the compiler produces zero newly qualified profiles until the actual gate passes.
