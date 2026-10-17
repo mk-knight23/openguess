@@ -1,0 +1,15 @@
+......F..................
+======================================================================
+FAIL: test_measurement_scope_is_bound_to_question_not_entire_entity (test_compile.CompileTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_compile.py", line 32, in test_measurement_scope_is_bound_to_question_not_entire_entity
+    self.assertEqual(result['subjects'][0]['traits'],{'q':True})
+AssertionError: {} != {'q': True}
+- {}
++ {'q': True}
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.022s
+
+FAILED (failures=1)

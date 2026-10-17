@@ -1,0 +1,13 @@
+..F................
+======================================================================
+FAIL: test_published_hyphenated_columns_and_certainty_preserved (test_adapters.AdapterTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_adapters.py", line 18, in test_published_hyphenated_columns_and_certainty_preserved
+    self.assertEqual(len(facts),2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.008s
+
+FAILED (failures=1)

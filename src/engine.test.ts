@@ -295,7 +295,7 @@ describe("semantic question policy", () => {
     ];
     expect(selectQuestion(candidates, qs, [])?.question.id).toBe("broad");
   });
-  it("varies equally informative families without choosing an irrelevant question", () => {
+  it("keeps a useful follow-up after a positive topic answer", () => {
     const candidates = rankCandidates(
       [
         make("a", { a: true, b: true, weak: true }),
@@ -313,7 +313,7 @@ describe("semantic question policy", () => {
       selectQuestion(candidates, qs, [
         { questionId: "previous", answer: "yes" },
       ])?.question.id,
-    ).toBe("b");
+    ).toBe("a");
   });
 });
 it("keeps a clearly stronger same-family split instead of forced variety", () => {

@@ -13,6 +13,17 @@ export interface Character {
   facts?: Record<string, string[]>;
   factSources?: Record<string, { url: string; scope: string }>;
   featured?: boolean;
+  qualification?: {
+    screened?: boolean;
+    qualified: boolean;
+    reasons?: string[];
+    replay: {
+      status: "pending" | "passed" | "failed";
+      universeDigest: string;
+      seeds: number[];
+    };
+    [key: string]: unknown;
+  };
   annotationLicense?: string;
   annotationSources?: string[];
 }
@@ -22,6 +33,16 @@ export interface Question {
   hint: string;
   kind?: "semantic" | "spelling";
   family?: string;
+  topic?: string;
+  /** Explicit portrayal/proposition scope for safe implication rules. */
+  scope?: string;
+  followUpTo?: { questionId: string; value: boolean }[];
+  implications?: {
+    when: boolean;
+    questionId: string;
+    value: boolean;
+    scope: string;
+  }[];
   tier?: "broad" | "signature";
   answerability?: "familiar" | "specialist";
   relatedGroup?: string;

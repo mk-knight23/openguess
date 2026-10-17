@@ -1,3 +1,4 @@
+import { buildConversationContext } from "./conversation.ts";
 import type {
   Answer,
   AnswerRecord,
@@ -92,10 +93,93 @@ function isSemantic(question: Question): boolean {
     !orthography.test(question.text)
   );
 }
-function questionFamily(question: Question): string | undefined {
-  return (
-    (question as Question & { family?: string }).family ?? question.property
+export interface QuestionSelection {
+  question: Question;
+  informationGain: number;
+  contextualUtility: number;
+  reasons: string[];
+}
+/** Support for a mistaken premise must come from independently asked clues. */
+function independentPremiseSupport(
+  prerequisite: { questionId: string; value: boolean },
+  candidates: Candidate[],
+  questions: Question[],
+  history: AnswerRecord[],
+): boolean {
+  if (
+    !history.some(
+      (r) => r.answer !== "unknown" && r.questionId !== prerequisite.questionId,
+    )
+  )
+    return false;
+  type Node = string | symbol;
+  const children = new Map<Node, Node[]>();
+  const groups = new Map<string, symbol>();
+  const link = (from: Node, to: Node) =>
+    children.set(from, [...(children.get(from) ?? []), to]);
+  for (const q of questions) {
+    for (const p of [...(q.prerequisites ?? []), ...(q.followUpTo ?? [])])
+      link(p.questionId, q.id);
+    for (const rule of q.implications ?? []) link(q.id, rule.questionId);
+    // Group hubs prevent an equivalent or correlated child from being used
+    // as independent evidence for the premise on which that child depends.
+    for (const key of [
+      q.equivalenceGroup && `equivalent:${q.scope}:${q.equivalenceGroup}`,
+      q.relatedGroup && `related:${q.relatedGroup}`,
+    ]) {
+      if (!key) continue;
+      if (!groups.has(key)) groups.set(key, Symbol(key));
+      const hub = groups.get(key)!;
+      link(q.id, hub);
+      link(hub, q.id);
+    }
+  }
+  const excluded = new Set<Node>([prerequisite.questionId]);
+  const queue: Node[] = [prerequisite.questionId];
+  for (let i = 0; i < queue.length; i++)
+    for (const id of children.get(queue[i]) ?? [])
+      if (!excluded.has(id)) {
+        excluded.add(id);
+        queue.push(id);
+      }
+  const independent = history.filter(
+    (r) => !excluded.has(r.questionId) && r.answer !== "unknown",
   );
+  if (!independent.length) return false;
+  const profiles = candidates.map((c) => c.character);
+  const support = (records: AnswerRecord[]) =>
+    rankCandidates(profiles, records, [], questions).reduce(
+      (sum, c) =>
+        sum +
+        (c.character.traits[prerequisite.questionId] === prerequisite.value
+          ? c.probability
+          : 0),
+      0,
+    );
+  const posterior = support(independent);
+  const prior =
+    profiles.filter(
+      (c) => c.traits[prerequisite.questionId] === prerequisite.value,
+    ).length / profiles.length;
+  // An unasked premise may be supported by the candidate universe. Reopening
+  // a rejected premise needs corroboration beyond catalog prevalence.
+  if (posterior < 0.8) return false;
+  const lastContradiction = history.reduce(
+    (last, record, index) =>
+      record.questionId === prerequisite.questionId &&
+      (prerequisite.value ? record.answer === "no" : record.answer === "yes")
+        ? index
+        : last,
+    -1,
+  );
+  if (lastContradiction >= 0) {
+    if (posterior <= prior + 1e-10) return false;
+    const before = history
+      .slice(0, lastContradiction)
+      .filter((r) => !excluded.has(r.questionId) && r.answer !== "unknown");
+    if (posterior <= support(before) + 1e-10) return false;
+  }
+  return true;
 }
 export function selectQuestion(
   candidates: Candidate[],
@@ -103,13 +187,14 @@ export function selectQuestion(
   history: AnswerRecord[],
   roundSeed = 0,
   varietyBand = 0.05,
-): { question: Question; informationGain: number } | null {
+): QuestionSelection | null {
   if (!Number.isFinite(varietyBand) || varietyBand < 0 || varietyBand > 0.2)
     throw new RangeError(
       "Question variety must stay within a 0–20% usefulness band.",
     );
   if (!candidates.length) return null;
   const asked = new Set(history.map((record) => record.questionId));
+  const context = buildConversationContext(questions, history);
   // I(C; A) = H(A) - sum_c p(c) H(A | c). Candidates with the same
   // true/false/unknown trait share a response distribution, so three masses
   // are sufficient. This avoids five posterior arrays per question.
@@ -124,6 +209,7 @@ export function selectQuestion(
       .map((r) => questionMap.get(r.questionId)?.equivalenceGroup)
       .filter(Boolean),
   );
+  const premiseSupport = new Map<string, boolean>();
   const eligible = new Set(
     questions
       .filter(
@@ -131,34 +217,21 @@ export function selectQuestion(
           !asked.has(q.id) &&
           isSemantic(q) &&
           (!q.equivalenceGroup || !usedEquivalence.has(q.equivalenceGroup)) &&
+          !context.established.has(q.id) &&
           (q.prerequisites ?? []).every((p) => {
-            const observed = history.find((r) => r.questionId === p.questionId);
-            const supportedAnswer =
-              observed &&
-              (p.value
-                ? ["yes", "probably"].includes(observed.answer)
-                : ["no", "probably-not"].includes(observed.answer));
-            return (
-              supportedAnswer ||
-              candidates.reduce(
-                (sum, c) =>
-                  sum +
-                  (c.character.traits[p.questionId] === p.value
-                    ? c.probability
-                    : 0),
-                0,
-              ) >= 0.8
-            );
+            const established = context.established.get(p.questionId);
+            if (established?.value === p.value) return true;
+            const key = `${p.questionId}:${p.value}`;
+            if (!premiseSupport.has(key))
+              premiseSupport.set(
+                key,
+                independentPremiseSupport(p, candidates, questions, history),
+              );
+            return premiseSupport.get(key)!;
           }),
       )
       .map((q) => q.id),
   );
-  const previousQuestion = questions.find(
-    (q) => q.id === history.at(-1)?.questionId,
-  );
-  const previousFamily = previousQuestion
-    ? questionFamily(previousQuestion)
-    : undefined;
   const masses = new Map<string, { positive: number; negative: number }>();
   let totalMass = 0;
   for (const candidate of candidates) {
@@ -174,7 +247,7 @@ export function selectQuestion(
       else mass.negative += candidate.probability;
     }
   }
-  let best: { question: Question; informationGain: number } | null = null;
+  let best: QuestionSelection | null = null;
   let bestScore = 0;
   const confirming =
     candidates[0].probability >= 0.7 &&
@@ -183,6 +256,8 @@ export function selectQuestion(
     question: Question;
     informationGain: number;
     score: number;
+    contextualUtility: number;
+    reasons: string[];
   }[] = [];
   for (const question of [...questions].sort((a, b) => byId(a.id, b.id))) {
     if (!eligible.has(question.id)) continue;
@@ -210,35 +285,32 @@ export function selectQuestion(
     );
     const coverage =
       totalMass > 0 ? Math.min(1, (trueMass + falseMass) / totalMass) : 0;
-    // Broad, documented splits are more useful than a rare known claim among
-    // mostly unknown profiles. A modest family cost breaks near-equal choices;
-    // it cannot turn an irrelevant question into an informative one.
-    const sameFamily =
-      previousFamily !== undefined &&
-      questionFamily(question) === previousFamily;
+    // Context is bounded to an 8% preference among informative clues.
+    // Unknown answers demote an unhelpful thread without banning recovery.
+    const utility = context.utility(question);
+    const contextualUtility =
+      informationGain * Math.sqrt(coverage) * (utility.multiplier - 1);
     const score =
       informationGain *
       Math.sqrt(coverage) *
-      (sameFamily ? 0.9 : 1) *
-      (history.slice(-3).some((r) => {
-        const previous = questionMap.get(r.questionId);
-        return (
-          r.answer === "unknown" &&
-          previous &&
-          ((questionFamily(question) !== undefined &&
-            questionFamily(previous) === questionFamily(question)) ||
-            (question.relatedGroup &&
-              previous.relatedGroup === question.relatedGroup))
-        );
-      })
-        ? 0.45
-        : 1) *
+      utility.multiplier *
       (question.answerability === "specialist" ? 0.85 : 1) *
       (confirming && isDistinctiveSignature(question, candidates) ? 3 : 1);
     if (roundSeed !== 0 && informationGain > 1e-10 && score > 1e-10)
-      nearEqual.push({ question, informationGain, score });
+      nearEqual.push({
+        question,
+        informationGain,
+        score,
+        contextualUtility,
+        reasons: utility.reasons,
+      });
     if (informationGain > 1e-10 && score > bestScore + 1e-10) {
-      best = { question, informationGain };
+      best = {
+        question,
+        informationGain,
+        contextualUtility,
+        reasons: utility.reasons,
+      };
       bestScore = score;
     }
   }
@@ -252,6 +324,8 @@ export function selectQuestion(
         best = {
           question: option.question,
           informationGain: option.informationGain,
+          contextualUtility: option.contextualUtility,
+          reasons: option.reasons,
         };
         priority = value;
       }

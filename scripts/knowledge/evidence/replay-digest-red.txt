@@ -1,0 +1,16 @@
+..................F.....
+======================================================================
+FAIL: test_replay_digest_excludes_derived_qualification_status (test_qualify.QualificationBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_qualify.py", line 36, in test_replay_digest_excludes_derived_qualification_status
+    self.assertEqual(universe_digest(rows,QUESTIONS),universe_digest(screened,QUESTIONS))
+AssertionError: '43f9a75a4162ec08791f4bdfe8d3daabe03ae5b565ccf62e3ce399ef1e7b5265' != 'ba58a70048feb15c48a6a9c710335708d64da28c92fe75b5b2e3f919056521c0'
+- 43f9a75a4162ec08791f4bdfe8d3daabe03ae5b565ccf62e3ce399ef1e7b5265
++ ba58a70048feb15c48a6a9c710335708d64da28c92fe75b5b2e3f919056521c0
+
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.014s
+
+FAILED (failures=1)

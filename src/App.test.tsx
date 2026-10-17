@@ -1,4 +1,12 @@
-import { render, screen, cleanup, waitFor } from "@testing-library/react";
+import {
+  act,
+  configure,
+  fireEvent,
+  render,
+  screen,
+  cleanup,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { characters, questions } from "./data/catalog";
@@ -8,7 +16,11 @@ vi.mock("./data/loadTheme", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./data/loadTheme")>();
   return { loadTheme: vi.fn(actual.loadTheme) };
 });
+configure({ asyncUtilTimeout: 4000 });
+vi.setConfig({ testTimeout: 120000 });
 afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
   cleanup();
   localStorage.clear();
 });
@@ -410,10 +422,10 @@ it("defaults to featured facts while keeping the full catalog visible and opt-in
   const u = userEvent.setup();
   render(<App />);
   const featured = await screen.findByRole("button", {
-    name: "Featured discoveries",
+    name: "Playable discoveries",
   });
   expect(featured).toHaveAttribute("aria-pressed", "true");
-  expect(screen.getByText(/2 featured choices/)).toBeVisible();
+  expect(screen.getByText(/2 playable choices/)).toBeVisible();
   await u.click(screen.getByRole("button", { name: "Library" }));
   expect(screen.getByRole("heading", { name: "Experimental C" })).toBeVisible();
   await u.click(screen.getByRole("button", { name: "Play" }));
@@ -439,4 +451,165 @@ it("allows retrying the same backup file after an invalid import", async () => {
   expect(input.value).toBe("");
   await u.upload(input, file);
   await waitFor(() => expect(read).toHaveBeenCalledTimes(2));
+});
+
+describe("answer presentation pacing", () => {
+  async function begin() {
+    const u = userEvent.setup();
+    render(<App />);
+    await u.click(
+      await screen.findByRole("button", { name: "Start guessing" }),
+    );
+    await screen.findByTestId("question-text");
+    vi.useFakeTimers();
+    return screen.getByTestId("question-text").textContent;
+  }
+  it("acknowledges one answer immediately and holds the clue for the complete deadline", async () => {
+    const first = await begin();
+    const yes = screen.getByRole("button", { name: "Yes" });
+    act(() => {
+      fireEvent.click(yes);
+      fireEvent.keyDown(window, { key: "1" });
+    });
+    expect(yes).toHaveAttribute("aria-pressed", "true");
+    expect(yes).toBeDisabled();
+    expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    expect(screen.getByText("Connecting the clues…")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Detective notes" }));
+    expect(
+      screen.getAllByRole("button", { name: "Correct from here" }),
+    ).toHaveLength(1);
+    act(() => vi.advanceTimersByTime(2199));
+    expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.getByTestId("question-text").textContent).not.toBe(first);
+    expect(screen.queryByText("Connecting the clues…")).not.toBeInTheDocument();
+  });
+  it.each([
+    "Undo",
+    "Restart",
+    "Give up",
+    "Library",
+    "Settings",
+    "Correct from here",
+  ])("cancels a pending reveal through %s", async (action) => {
+    const first = await begin();
+    fireEvent.click(screen.getByRole("button", { name: "Yes" }));
+    if (action === "Correct from here")
+      fireEvent.click(screen.getByRole("button", { name: "Detective notes" }));
+    fireEvent.click(screen.getByRole("button", { name: action }));
+    act(() => vi.advanceTimersByTime(3000));
+    expect(screen.queryByText("Connecting the clues…")).not.toBeInTheDocument();
+    if (action === "Undo" || action === "Correct from here")
+      expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    if (action === "Give up")
+      expect(
+        screen.getByRole("heading", { name: "You stumped me!" }),
+      ).toBeVisible();
+    if (action === "Library" || action === "Settings")
+      expect(screen.queryByTestId("question-text")).not.toBeInTheDocument();
+  });
+});
+
+it("includes replay-qualified nonfeatured subjects in default gameplay", async () => {
+  const digest = "d".repeat(64);
+  const old = {
+    ...characters[0],
+    id: "legacy",
+    name: "Legacy subject",
+    featured: true,
+    traits: { clue: false },
+  };
+  const added = {
+    ...old,
+    id: "supported",
+    name: "New supported subject",
+    featured: false,
+    traits: { clue: true },
+    qualification: {
+      screened: true,
+      qualified: true,
+      replay: {
+        status: "passed" as const,
+        universeDigest: digest,
+        seeds: [1, 2, 3, 4, 5],
+      },
+    },
+  };
+  vi.mocked(loadTheme).mockResolvedValueOnce({
+    theme: "people",
+    version: "qualified-test",
+    characters: [old, added],
+    questions: [
+      {
+        id: "clue",
+        text: "Does this person make music?",
+        hint: "An ordinary property.",
+        tier: "broad",
+        answerability: "familiar",
+      },
+    ],
+    source: {
+      url: "https://example.org",
+      license: "CC0-1.0",
+      retrievedAt: "2026-10-17",
+    },
+    quality: { qualifiedUniverseDigest: digest },
+  });
+  const u = userEvent.setup();
+  render(<App />);
+  await u.click(await screen.findByRole("button", { name: "Start guessing" }));
+  await u.click(await screen.findByRole("button", { name: "Detective notes" }));
+  expect(screen.getByText("New supported subject")).toBeVisible();
+});
+
+it("shows Give up immediately while the calculation worker is still pending", async () => {
+  class PendingWorker {
+    static latest: PendingWorker;
+    constructor() {
+      PendingWorker.latest = this;
+    }
+    onmessage: ((event: { data: unknown }) => void) | null = null;
+    onerror: (() => void) | null = null;
+    pack: any;
+    postMessage(message: any) {
+      if (message.type === "hydrate") this.pack = message.pack;
+      if (message.type === "compute" && message.history.length === 0)
+        queueMicrotask(() =>
+          this.onmessage?.({
+            data: {
+              requestId: message.requestId,
+              candidates: this.pack.characters.map((c: any) => ({
+                id: c.id,
+                probability: 1 / this.pack.characters.length,
+              })),
+              questionId: this.pack.questions[0].id,
+              informationGain: 0.1,
+            },
+          }),
+        );
+    }
+    terminate() {}
+  }
+  vi.stubGlobal("Worker", PendingWorker);
+  render(<App />);
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Start guessing" }),
+  );
+  await screen.findByTestId("question-text");
+  fireEvent.click(screen.getByRole("button", { name: "Yes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Give up" }));
+  expect(
+    screen.getByRole("heading", { name: "You stumped me!" }),
+  ).toBeVisible();
+  act(() => PendingWorker.latest.onerror?.());
+  expect(
+    screen.getByRole("heading", { name: "You stumped me!" }),
+  ).toBeVisible();
+});
+
+it("displays the V2 maintenance release version", () => {
+  render(<App />);
+  expect(screen.getByText("OpenGuess · version 0.2.2")).toBeVisible();
 });

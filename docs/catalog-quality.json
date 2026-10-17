@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "requestedPerCategory": 100,
+  "categories": {
+    "people": {
+      "selected": 100,
+      "wikidataAssertions": 673,
+      "dbpediaSubjects": 98,
+      "dbpediaAssertions": 1779,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 672,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 99,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
+    },
+    "fictional": {
+      "selected": 100,
+      "wikidataAssertions": 438,
+      "dbpediaSubjects": 21,
+      "dbpediaAssertions": 64,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 337,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
+    },
+    "animals": {
+      "selected": 100,
+      "wikidataAssertions": 217,
+      "dbpediaSubjects": 26,
+      "dbpediaAssertions": 49,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 212,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
+    },
+    "objects": {
+      "selected": 100,
+      "wikidataAssertions": 182,
+      "dbpediaSubjects": 32,
+      "dbpediaAssertions": 71,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 181,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 100,
+        "full-universe-replay-pending": 100
+      }
+    },
+    "movies": {
+      "selected": 100,
+      "wikidataAssertions": 814,
+      "dbpediaSubjects": 97,
+      "dbpediaAssertions": 1577,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": [],
+      "compiledSubjects": 100,
+      "compiledPropositions": 814,
+      "screeningStatus": "executed; DBpedia and independent source template review pending",
+      "screeningRejections": {
+        "fewer-than-20-supported-propositions": 100,
+        "fewer-than-five-topic-families": 2,
+        "full-universe-replay-pending": 100
+      }
+    }
+  },
+  "sources": {
+    "eltontraits": {
+      "assertions": 290575,
+      "species": 15393,
+      "supported": 90412,
+      "imputed": 200163,
+      "storedSampleAssertions": 1949,
+      "storedSampleSpecies": 100,
+      "joinedToPilot": 0,
+      "note": "Scientific-name identity join and per-column metadata audit pending; not counted as pilot corroboration."
+    },
+    "wordnet": {
+      "artifactSensesAvailable": 11587,
+      "storedSampleSenses": 100,
+      "joinedToPilot": 0,
+      "note": "Synonyms are aliases, not extra subjects. Sense joins and familiar distinguishing propositions pending."
+    }
+  },
+  "qualifiedTotal": 0,
+  "limitations": [
+    "Pilot selection is deterministic by ID, not yet stratified by familiarity.",
+    "DBpedia and Wikidata share conservative Wikimedia origin; they are not independent corroboration.",
+    "Raw structured assertions are not reviewed familiar question propositions.",
+    "Complete-universe semantic replay has not run."
+  ],
+  "animalEnrichment": {
+    "queriedIds": 1100,
+    "taxonRows": 1098,
+    "exactSpeciesJoins": 133,
+    "subjectsWithSupportedNumericFacts": 94,
+    "supportedBooleanProjections": 376,
+    "evidenceGroups": 94,
+    "screened": 0,
+    "qualified": 0,
+    "failures": [],
+    "limitations": [
+      "Only species-rank Q7432 with one exact scientific-name match is joined.",
+      "Adult average mass questions share one evidence group; four thresholds are not four independent facts.",
+      "Mass-only enrichment has one topic and cannot meet twenty-proposition/five-topic qualification.",
+      "Mammal diet/activity ABC may include congeneric estimates; not compiled as verified.",
+      "No original curated animal identity is merged from a display label."
+    ]
+  },
+  "birdEnrichment": {
+    "zeroExplicitDistinctionPairs": 0,
+    "subjectsInZeroDistinctionPairs": 0,
+    "pairsWithFewerThanTwoEvidenceGroups": 10,
+    "collisionExamples": [],
+    "minimumNonTaxonomicPropositions": 24,
+    "sourceBirdSpecies": 9995,
+    "eligibleSourceRows": 7139,
+    "sampled": 100,
+    "unambiguousSpeciesJoins": 99,
+    "supportedProjections": 12079,
+    "twentyPropositionsFiveTopics": 99,
+    "screened": 64,
+    "qualified": 0,
+    "originalPrimaryBooksIndependentlyRead": false,
+    "failures": [],
+    "limitations": [
+      "Sample stratified across supplied families and source completeness, not a familiarity survey.",
+      "Diet/foraging percentage zero is explicit source evidence, not absent-claim completion.",
+      "Related thresholds and diet components retain shared evidence groups.",
+      "Upstream reference families grouped from publisher metadata/source index; original books not independently checked.",
+      "Body-mass thresholds are species adult means and may be difficult for humans to answer.",
+      "Opposing family negatives derive only from explicit functional family assignments within the same taxonomy version; missing claims stay unknown.",
+      "No full-universe replay receipt."
+    ]
+  }
+}

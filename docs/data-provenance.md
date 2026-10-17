@@ -26,3 +26,13 @@ Spelling and letter questions are excluded from gameplay and raw generation. The
 Review questions, source references, duplicate semantic signatures and missing-data coverage when updating packs. Retain stable IDs for collections, update versions/retrieval timestamps, and rerun data and semantic-replay checks. Photos need separate rights review and are not automatically imported through proposals.
 
 Curated film entries use canonical Wikidata IDs validated against imported titles and release years before merge. This removed thirteen duplicate film records; title/version distinctions such as the intended 1997 Titanic are explicit. The builder checks canonical names before merging. Other themes may still contain ambiguous labels or variants, so total counts are records, not an audited claim of globally distinct subjects.
+
+## V2 scale acquisition quarantine
+
+The new build-time pipeline in `scripts/knowledge/` records source assertions separately from reviewed question propositions. Its bounded DBpedia/Wikidata pilot and EltonTraits samples are quarantined under `scripts/knowledge/data/`; they do not change current default or experimental game counts. See `docs/catalog-quality.json` and `docs/data-pilot.md` for measured results and gaps.
+
+DBpedia ontology assertions retain DBpedia entity attribution URLs and response retrieval/hash receipts. DBpedia data is attributed to DBpedia and Wikipedia contributors under CC BY-SA 3.0; derived assertion files retain those data terms, independently of the application MIT license. DBpedia and legacy Wikidata assertions remain conservatively correlated as `wikimedia-unresolved`. Legacy truthy Wikidata export lacks individual statement/reference IDs and is marked accordingly; its retrieval dates come from the original export, not this pilot run.
+
+EltonTraits 1.0 is pinned to Wilman et al., Figshare article 3559887 version 1, with the distribution's CC0 license and published file MD5 verification. Per-trait species-level flags are preserved. Missing or imputed values cannot become verified species confirmations. Follow-up audited joins and scoped numeric projections are recorded in `docs/data-pilot.md`; the initial raw sample and any unmatched names remain quarantined. No new subject is promoted without rival screening and final-universe replay.
+
+Princeton WordNet 3.0 noun artifact samples retain sense IDs and synonym aliases under the WordNet license. The required copyright, permission and disclaimer text is preserved at `scripts/knowledge/data/wordnet-LICENSE.txt`. Definitions are excluded, synonyms do not count as separate subjects, and no automatic name-based object merge is claimed.

@@ -1,0 +1,45 @@
+"""Screen evidence conservatively; only an external full-universe replay can qualify."""
+import copy
+from pilot import digest, stable_json
+
+def universe_digest(subjects, questions):
+    semantic_subjects=[{k:v for k,v in subject.items() if k!='qualification'} for subject in subjects]
+    projection={'subjects':sorted(semantic_subjects,key=lambda s:s['id']),'questions':sorted(questions,key=lambda q:q['id'])}
+    def validate(value):
+        if isinstance(value,bool) or value is None or isinstance(value,str): return
+        if isinstance(value,(float,int)):
+            if not isinstance(value,int) or abs(value)>9007199254740991: raise ValueError('digest numbers must be safe integers')
+        elif isinstance(value,dict):
+            for item in value.values(): validate(item)
+        elif isinstance(value,list):
+            for item in value: validate(item)
+        else: raise ValueError('unsupported digest value')
+    validate(projection)
+    return digest(stable_json(projection).encode())
+
+def qualify(subjects, questions, replay=None):
+    if len({s['id'] for s in subjects}) != len(subjects):
+        raise ValueError('duplicate subject identity')
+    universe = universe_digest(subjects, questions)
+    topics = {q['id']:q['topic'] for q in questions}
+    output = copy.deepcopy(subjects)
+    for s in output:
+        reasons = []
+        supported = {q:v for q,v in s['traits'].items() if q in topics and any(e['status']=='supported' for e in s['factEvidence'].get(q,[]))}
+        if len(supported)<20: reasons.append('fewer-than-20-supported-propositions')
+        if len({topics[q] for q in supported})<5: reasons.append('fewer-than-five-topic-families')
+        if not s.get('id') or not s.get('name') or not s.get('scope'): reasons.append('incomplete-identity')
+        if len(subjects)<2: reasons.append('no-rival-universe')
+        for rival in subjects:
+            if rival['id']==s['id']: continue
+            # Unknown on either side cannot discriminate. Two evidence groups and
+            # two origins are a conservative proxy, not a human familiarity audit.
+            clues=[q for q,v in supported.items() if q in rival['traits'] and rival['traits'][q] is not v and any(e['status']=='supported' for e in rival['factEvidence'].get(q,[]))]
+            groups={e['evidenceGroup'] for q in clues for e in s['factEvidence'][q] if e['status']=='supported'}
+            origins={e['origin'] for q in clues for e in s['factEvidence'][q] if e['status']=='supported'}
+            if len(clues)<2 or len(groups)<2 or len(origins)<2:
+                reasons.append('insufficient-independent-distinction:'+rival['id'])
+        screened = not reasons
+        valid_replay = bool(replay and replay.get('universeDigest')==universe and len(set(replay.get('seeds',[])))>=5 and s['id'] in replay.get('exactSubjectIds',[]))
+        s['qualification']={'screened':screened,'qualified':screened and valid_replay,'reasons':reasons + ([] if valid_replay else ['full-universe-replay-pending']),'replay':{'status':'passed' if valid_replay else 'pending','universeDigest':universe,'seeds':replay['seeds'] if valid_replay else []}}
+    return output

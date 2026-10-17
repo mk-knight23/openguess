@@ -90,3 +90,214 @@ it("avoids an uncertain topic when another useful topic remains", () => {
     )?.question.id,
   ).toBe("z");
 });
+
+it("prefers an answer-conditioned follow-up among equally useful clues", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { origin: true, a: value, z: value },
+  }));
+  const questions = [
+    { id: "origin", text: "Game origin?", hint: "", topic: "origin" },
+    { id: "a", text: "Appearance?", hint: "", topic: "appearance" },
+    {
+      id: "z",
+      text: "Gameplay role?",
+      hint: "",
+      topic: "origin",
+      followUpTo: [{ questionId: "origin", value: true }],
+      prerequisites: [{ questionId: "origin", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "origin", answer: "yes" }];
+  expect(
+    selectQuestion(rankCandidates(pool, history), questions, history)?.question
+      .id,
+  ).toBe("z");
+});
+it("skips scoped established implications while leaving useful related distinctions", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { origin: true, a: value, z: value },
+  }));
+  const questions = [
+    {
+      id: "origin",
+      text: "World?",
+      hint: "",
+      scope: "work",
+      implications: [
+        { when: true, questionId: "a", value: true, scope: "work" },
+      ],
+    },
+    { id: "a", text: "Same world?", hint: "", scope: "work" },
+    { id: "z", text: "School role?", hint: "", scope: "work" },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "origin", answer: "yes" }];
+  expect(
+    selectQuestion(rankCandidates(pool, history), questions, history)?.question
+      .id,
+  ).toBe("z");
+});
+it("cannot recover a rejected parent from its own dependent child evidence", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: value, child: value, child2: value, z: value },
+  }));
+  const questions = [
+    { id: "parent", text: "Origin?", hint: "" },
+    ...["child", "child2", "z"].map((id) => ({
+      id,
+      text: id,
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    })),
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "child", answer: "yes" },
+    { questionId: "child2", answer: "yes" },
+  ];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    ),
+  ).toBeNull();
+});
+
+it("cannot disguise dependent child evidence behind equivalent propositions", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: {
+      parent: value,
+      child: value,
+      alias: value,
+      alias2: value,
+      z: value,
+    },
+  }));
+  const questions = [
+    { id: "parent", text: "Origin?", hint: "" },
+    {
+      id: "child",
+      text: "Child",
+      hint: "",
+      equivalenceGroup: "dependent",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+    ...["alias", "alias2"].map((id) => ({
+      id,
+      text: id,
+      hint: "",
+      equivalenceGroup: "dependent",
+    })),
+    {
+      id: "z",
+      text: "Next child",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "alias", answer: "yes" },
+    { questionId: "alias2", answer: "yes" },
+  ];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    ),
+  ).toBeNull();
+});
+
+it("does not recover a rejected common premise from a universal unrelated answer", () => {
+  const pool = Array.from({ length: 10 }, (_, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: i < 9, universal: true, child: i % 2 === 0 },
+  }));
+  const questions = [
+    { id: "parent", text: "Common origin?", hint: "" },
+    { id: "universal", text: "Universal fact", hint: "" },
+    {
+      id: "child",
+      text: "Child",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "universal", answer: "yes" },
+  ];
+  const ranked = rankCandidates(pool, history, [], questions);
+  expect(
+    ranked
+      .filter((c) => c.character.traits.parent)
+      .reduce((sum, c) => sum + c.probability, 0),
+  ).toBeLessThan(0.3);
+  expect(selectQuestion(ranked, questions, history)).toBeNull();
+});
+
+it("allows a useful child of an unasked unanimous catalog premise", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "real" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: true, universal: true, child: value },
+  }));
+  const questions = [
+    { id: "parent", text: "Is this a real person?", hint: "" },
+    { id: "universal", text: "Universal", hint: "" },
+    {
+      id: "child",
+      text: "Did they lead the Salt March?",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "universal", answer: "yes" }];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    )?.question.id,
+  ).toBe("child");
+});

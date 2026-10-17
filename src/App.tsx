@@ -1,3 +1,4 @@
+import { version } from "../package.json";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   Sparkles,
@@ -34,9 +35,10 @@ import { Genie } from "./components/Genie";
 import { Avatar } from "./components/Artwork";
 import { themeManifest } from "./data/manifest";
 import { loadTheme } from "./data/loadTheme";
-import { featuredPack } from "./data/featuredPack";
+import { playablePack, playableCounts } from "./data/playablePack";
 import { useInference } from "./useInference";
 import { deriveRoundMood } from "./roundPresentation";
+import { useRoundPresentation } from "./useRoundPresentation";
 import {
   readProgress,
   saveProgress,
@@ -145,47 +147,106 @@ export default function App() {
         : null,
     [pack, theme, progress.settings.familyMode],
   );
-  const featuredCount =
-    scopedPack?.characters.filter((c) => c.featured).length ?? 0;
+  const poolCounts = scopedPack ? playableCounts(scopedPack) : null;
   const activePack = useMemo(
     () =>
-      !scopedPack ||
-      expandedCatalog ||
-      !scopedPack.characters.some((c) => c.featured)
-        ? scopedPack
-        : featuredPack(scopedPack),
+      !scopedPack || expandedCatalog ? scopedPack : playablePack(scopedPack),
     [scopedPack, expandedCatalog],
   );
   const inference = useInference(activePack, history, rejected, roundSeed);
-  const { candidates, next, busy, error, readiness } = inference;
-  const displayedQuestion = useRef<{
-    pack: DataPack;
-    next: NonNullable<typeof next>;
-  } | null>(null);
-  useEffect(() => {
-    if (next && activePack)
-      displayedQuestion.current = { pack: activePack, next };
-  }, [next, activePack]);
-  const visibleNext =
-    next ??
-    (busy && displayedQuestion.current?.pack === activePack
-      ? displayedQuestion.current.next
-      : null);
+  const {
+    candidates: rawCandidates,
+    next: rawNext,
+    busy: inferenceBusy,
+    error,
+    readiness: rawReadiness,
+  } = inference;
+  const [selectedAnswer, setSelectedAnswer] = useState<Answer | null>(null);
   const informative = history.filter((h) => h.answer !== "unknown").length;
-  const readyToGuess = history.length > pausedAt && readiness?.ready === true;
-  const exhausted =
-    !busy &&
+  const readyToGuess =
+    history.length > pausedAt && rawReadiness?.ready === true;
+  const rawExhausted = Boolean(
+    !inferenceBusy &&
     !loading &&
     activePack &&
-    (candidates.length === 0 ||
-      ((!next || history.length >= MAX_QUESTIONS) && !readyToGuess));
-  const guess =
-    !busy &&
+    (rawCandidates.length === 0 ||
+      ((!rawNext || history.length >= MAX_QUESTIONS) && !readyToGuess)),
+  );
+  const rawGuess =
+    !inferenceBusy &&
     !error &&
-    candidates.length > 0 &&
+    rawCandidates.length > 0 &&
     phase === "question" &&
     readyToGuess;
+  function identity(evidence = history, recovery = recovering) {
+    return JSON.stringify([
+      view,
+      theme,
+      activePack?.version,
+      expandedCatalog,
+      progress.settings,
+      roundSeed,
+      evidence,
+      rejected,
+      phase,
+      pausedAt,
+      recovery,
+      loadAttempt,
+    ]);
+  }
+  const identityKey = identity();
+  const presentation = useRoundPresentation({
+    identityKey,
+    resultKey: inferenceBusy ? null : identityKey,
+    busy: inferenceBusy || loading,
+    error: error || loadError,
+    snapshot:
+      inferenceBusy || loading
+        ? null
+        : {
+            candidates: rawCandidates,
+            next: rawNext,
+            readiness: rawReadiness,
+            guess: rawGuess,
+            exhausted: rawExhausted,
+            answeredCount: history.length,
+            mood: deriveRoundMood({
+              status:
+                view !== "game"
+                  ? "home"
+                  : phase === "won"
+                    ? "won"
+                    : phase === "stumped" || rawExhausted
+                      ? "lost"
+                      : rawGuess
+                        ? "guess"
+                        : "playing",
+              confirming: rawReadiness?.phase === "confirming",
+              narrowing: rawReadiness?.phase === "narrowing",
+              rejectedGuess: recovering,
+              answeredCount: history.length,
+            }),
+          },
+  });
+  const {
+    candidates = [],
+    next: visibleNext = null,
+    readiness = null,
+    guess = false,
+    exhausted = false,
+    answeredCount = history.length,
+  } = presentation.snapshot ?? {};
+  const next = visibleNext;
+  const busy = phase === "question" && (inferenceBusy || presentation.thinking);
   const top = candidates[0];
+  function cancelPresentation() {
+    presentation.cancel();
+    setSelectedAnswer(null);
+  }
+  function goTo(nextView: View) {
+    cancelPresentation();
+    setView(nextView);
+  }
   const meta = themeManifest.find((m) => m.id === theme)!;
   const total = themeManifest.reduce((n, m) => n + m.count, 0);
   const visible = useMemo(
@@ -241,6 +302,7 @@ export default function App() {
     if (view === "game") focus.current?.focus();
   }, [history.length, view, phase, guess, busy]);
   function persist(p: Progress) {
+    cancelPresentation();
     setProgress(p);
     const saved = saveProgress(p);
     if (!saved)
@@ -250,6 +312,7 @@ export default function App() {
     return saved;
   }
   function start() {
+    cancelPresentation();
     if (!activePack || loading) return;
     setRoundSeed(crypto.getRandomValues(new Uint32Array(1))[0] || 1);
     setHistory([]);
@@ -259,9 +322,10 @@ export default function App() {
     setPhase("question");
     setExplain(false);
     setNotice("");
-    setView("game");
+    goTo("game");
   }
   function retry() {
+    cancelPresentation();
     setRecovering(false);
     setHistory([]);
     setRejected([]);
@@ -270,6 +334,7 @@ export default function App() {
     setLoadAttempt((n) => n + 1);
   }
   function changeTheme(id: Theme) {
+    cancelPresentation();
     setRecovering(false);
     setTheme(id);
     setHistory([]);
@@ -281,16 +346,26 @@ export default function App() {
   }
   function answer(value: Answer) {
     if (busy || guess || exhausted || !next || phase !== "question") return;
+    const updated = [
+      ...history,
+      { questionId: next.question.id, answer: value },
+    ];
+    // Recovery is part of the operation identity and clears with this answer.
+    const nextKey = identity(updated, false);
+    if (!presentation.accept(nextKey)) return;
+    setSelectedAnswer(value);
     setRecovering(false);
-    setHistory((h) => [...h, { questionId: next.question.id, answer: value }]);
+    setHistory(updated);
   }
   function undo() {
+    cancelPresentation();
     setRecovering(false);
     setHistory((h) => h.slice(0, -1));
     setPausedAt(history.length - 1);
     setPhase("question");
   }
   function reject() {
+    cancelPresentation();
     if (!top) return;
     setRecovering(true);
     setRejected((r) => [...r, top.character.id]);
@@ -298,6 +373,7 @@ export default function App() {
     setPhase("question");
   }
   function confirm() {
+    cancelPresentation();
     if (!top || phase === "won") return;
     persist(
       recordWin(progress, {
@@ -311,6 +387,7 @@ export default function App() {
     if (progress.settings.sound) playTone();
   }
   function surrender() {
+    cancelPresentation();
     if (top)
       persist(
         recordGame(progress, {
@@ -325,6 +402,7 @@ export default function App() {
     setPhase("stumped");
   }
   function setting(patch: Parameters<typeof updateProgress>[1]) {
+    cancelPresentation();
     try {
       if (persist(updateProgress(progress, patch))) setNotice("");
     } catch {
@@ -391,23 +469,13 @@ export default function App() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   });
-  const mood = deriveRoundMood({
-    status:
-      view !== "game"
-        ? "home"
-        : phase === "won"
-          ? "won"
-          : phase === "stumped" || exhausted
-            ? "lost"
-            : guess
-              ? "guess"
-              : "playing",
-    busy,
-    confirming: readiness?.phase === "confirming",
-    narrowing: readiness?.phase === "narrowing",
-    rejectedGuess: recovering,
-    answeredCount: history.length,
-  });
+  const mood =
+    phase === "stumped"
+      ? "stumped"
+      : presentation.thinking
+        ? "thinking"
+        : (presentation.snapshot?.mood ??
+          (view === "game" ? "thinking" : "idle"));
   const themePicker = (
     <div className="theme-picker" aria-label="Choose a universe">
       {themeManifest.map((m) => {
@@ -427,45 +495,50 @@ export default function App() {
       })}
     </div>
   );
-  const poolPicker = featuredCount > 0 && (
-    <div className="pool-picker">
-      <div role="group" aria-label="Gameplay knowledge pool">
-        <button
-          aria-pressed={!expandedCatalog}
-          onClick={() => {
-            setExpandedCatalog(false);
-            setHistory([]);
-            setRejected([]);
-            setPhase("question");
-            setPausedAt(-1);
-          }}
-        >
-          Featured discoveries
-        </button>
-        <button
-          aria-pressed={expandedCatalog}
-          onClick={() => {
-            setExpandedCatalog(true);
-            setHistory([]);
-            setRejected([]);
-            setPhase("question");
-            setPausedAt(-1);
-          }}
-        >
-          Full catalog (experimental)
-        </button>
+  const poolPicker = poolCounts &&
+    (poolCounts.quarantined > 0 ||
+      poolCounts.qualified > 0 ||
+      poolCounts.legacyFeatured > 0) && (
+      <div className="pool-picker">
+        <div role="group" aria-label="Gameplay knowledge pool">
+          <button
+            aria-pressed={!expandedCatalog}
+            onClick={() => {
+              cancelPresentation();
+              setExpandedCatalog(false);
+              setHistory([]);
+              setRejected([]);
+              setPhase("question");
+              setPausedAt(-1);
+            }}
+          >
+            Playable discoveries
+          </button>
+          <button
+            aria-pressed={expandedCatalog}
+            onClick={() => {
+              cancelPresentation();
+              setExpandedCatalog(true);
+              setHistory([]);
+              setRejected([]);
+              setPhase("question");
+              setPausedAt(-1);
+            }}
+          >
+            Full catalog (experimental)
+          </button>
+        </div>
+        <p>
+          {poolCounts.playable} playable choices with richer facts ·{" "}
+          {scopedPack?.characters.length.toLocaleString()} total records.
+        </p>
+        <p>
+          {expandedCatalog
+            ? "Experimental: many imported records have incomplete facts and may remain unresolved."
+            : "Default play uses well-described subjects and meaningful questions. Browse the full database in the library."}
+        </p>
       </div>
-      <p>
-        {featuredCount} featured choices with richer facts ·{" "}
-        {scopedPack?.characters.length.toLocaleString()} total records.
-      </p>
-      <p>
-        {expandedCatalog
-          ? "Experimental: many imported records have incomplete facts and may remain unresolved."
-          : "Default play uses well-described subjects and meaningful questions. Browse the full database in the library."}
-      </p>
-    </div>
-  );
+    );
   const loadingView = (
     <div className="loading-state" role="status">
       <Sparkles className="loading-spark" size={27} />
@@ -493,7 +566,7 @@ export default function App() {
       <header className="v2-header">
         <button
           className="v2-logo"
-          onClick={() => setView("home")}
+          onClick={() => goTo("home")}
           aria-label="OpenGuess home"
         >
           <Sparkles size={29} />
@@ -503,16 +576,16 @@ export default function App() {
           <sup>2</sup>
         </button>
         <nav aria-label="Main navigation">
-          <button onClick={() => setView("home")}>{t("play")}</button>
-          <button onClick={() => setView("library")}>
+          <button onClick={() => goTo("home")}>{t("play")}</button>
+          <button onClick={() => goTo("library")}>
             <BookOpen size={16} />
             <span>Library</span>
           </button>
-          <button onClick={() => setView("daily")}>
+          <button onClick={() => goTo("daily")}>
             <CalendarDays size={16} />
             <span>Daily challenge</span>
           </button>
-          <button onClick={() => setView("collection")}>
+          <button onClick={() => goTo("collection")}>
             <Trophy size={16} />
             <span>Collection</span>
           </button>
@@ -525,7 +598,7 @@ export default function App() {
           <button
             className="settings-button"
             aria-label="Settings"
-            onClick={() => setView("settings")}
+            onClick={() => goTo("settings")}
           >
             <Settings size={21} />
           </button>
@@ -615,10 +688,7 @@ export default function App() {
                     </>
                   )}
                 </div>
-                <button
-                  className="link-button"
-                  onClick={() => setView("library")}
-                >
+                <button className="link-button" onClick={() => goTo("library")}>
                   Not sure what to choose? Explore the library{" "}
                   <ArrowRight size={14} />
                 </button>
@@ -628,7 +698,7 @@ export default function App() {
               <span>
                 <ShieldCheck size={18} /> No ads. No subscriptions. No paid AI.
               </span>
-              <button onClick={() => setView("about")}>
+              <button onClick={() => goTo("about")}>
                 How does the magic work? <Info size={16} />
               </button>
               <a href={REPO} target="_blank" rel="noreferrer">
@@ -651,14 +721,14 @@ export default function App() {
             </div>
             <div className="game-content" aria-busy={busy}>
               <div className="round-header">
-                <button onClick={() => setView("home")}>
+                <button onClick={() => goTo("home")}>
                   <ArrowLeft size={16} /> Change universe
                 </button>
                 <span>
                   {history.length}/{MAX_QUESTIONS} clues
                 </span>
               </div>
-              {loadError || error ? (
+              {phase === "question" && (loadError || error) ? (
                 <div className="speech-bubble">
                   <h2 ref={focus} tabIndex={-1}>
                     The magic paused.
@@ -667,9 +737,7 @@ export default function App() {
                   <button className="big-play" onClick={retry}>
                     Retry universe
                   </button>
-                  <button onClick={() => setView("home")}>
-                    Return to setup
-                  </button>
+                  <button onClick={() => goTo("home")}>Return to setup</button>
                 </div>
               ) : loading || !activePack || (busy && !visibleNext) ? (
                 loadingView
@@ -691,7 +759,7 @@ export default function App() {
                     <button
                       onClick={() => {
                         setProposal((p) => ({ ...p, category: theme }));
-                        setView("contribute");
+                        goTo("contribute");
                       }}
                     >
                       Add a new possibility <Plus size={17} />
@@ -758,7 +826,7 @@ export default function App() {
                 <>
                   <div className="question-bubble speech-bubble">
                     <span className="question-number">
-                      {String(history.length + 1).padStart(2, "0")}
+                      {String(answeredCount + 1).padStart(2, "0")}
                     </span>
                     <div
                       className="question-transition"
@@ -788,6 +856,9 @@ export default function App() {
                       <button
                         key={c.value}
                         disabled={busy}
+                        aria-pressed={
+                          presentation.thinking && selectedAnswer === c.value
+                        }
                         onClick={() => answer(c.value)}
                         aria-keyshortcuts={c.number}
                       >
@@ -805,7 +876,7 @@ export default function App() {
               )}
               <div className="round-bottom">
                 {history.length > 0 && phase !== "won" && (
-                  <button onClick={undo} disabled={busy}>
+                  <button onClick={undo}>
                     <ArrowLeft size={16} />
                     {guess || phase === "stumped" || exhausted
                       ? "Undo last answer"
@@ -865,6 +936,7 @@ export default function App() {
                         </strong>
                         <button
                           onClick={() => {
+                            cancelPresentation();
                             setHistory(history.slice(0, i));
                             setPhase("question");
                             setPausedAt(i);
@@ -970,7 +1042,7 @@ export default function App() {
               className="link-button"
               onClick={() => {
                 setProposal((p) => ({ ...p, category: theme }));
-                setView("contribute");
+                goTo("contribute");
               }}
             >
               Suggest an entry, a question, or a licensed photo{" "}
@@ -1025,10 +1097,7 @@ export default function App() {
                 <Sparkles size={40} />
                 <h2>Your collection is waiting.</h2>
                 <p>Confirm a correct guess to collect your first discovery.</p>
-                <button
-                  className="solid-button"
-                  onClick={() => setView("home")}
-                >
+                <button className="solid-button" onClick={() => goTo("home")}>
                   Find a mystery
                 </button>
               </div>
@@ -1188,7 +1257,7 @@ export default function App() {
                     checked={progress.settings.familyMode}
                     onChange={(e) => {
                       setting({ familyMode: e.target.checked });
-                      setView("home");
+                      goTo("home");
                       setHistory([]);
                       setRejected([]);
                     }}
@@ -1468,9 +1537,9 @@ export default function App() {
       </main>
       <footer className="v2-footer">
         <span>
-          <Sparkles size={16} /> OpenGuess · version 0.2.1
+          <Sparkles size={16} /> OpenGuess · version {version}
         </span>
-        <button onClick={() => setView("about")}>About & data sources</button>
+        <button onClick={() => goTo("about")}>About & data sources</button>
         <a href={`${REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">
           MIT licensed
         </a>

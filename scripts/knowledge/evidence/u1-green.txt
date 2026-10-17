@@ -1,0 +1,9 @@
+test_cache_replays_exact_bytes_and_detects_corruption (test_pilot.SourceBoundaryTests) ... ok
+test_failed_acquisition_is_explicit_and_never_cached_as_success (test_pilot.SourceBoundaryTests) ... ok
+test_mirrors_retain_same_upstream_origin (test_pilot.SourceBoundaryTests) ... ok
+test_missing_license_is_rejected (test_pilot.SourceBoundaryTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK

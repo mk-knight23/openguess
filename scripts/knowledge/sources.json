@@ -1,0 +1,68 @@
+{
+  "wikidata": {
+    "name": "Wikidata structured claims",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+    "origin": "wikimedia-unresolved",
+    "homepage": "https://www.wikidata.org/",
+    "version": "retrieval snapshot pinned by response SHA-256",
+    "notes": "Reference-level upstream origins unavailable in legacy truthy queries; conservatively correlated with Wikipedia/DBpedia. Absence never false."
+  },
+  "dbpedia": {
+    "name": "DBpedia English structured facts",
+    "license": "CC-BY-SA-3.0",
+    "licenseUrl": "https://www.dbpedia.org/about/",
+    "origin": "wikimedia-unresolved",
+    "homepage": "https://dbpedia.org/",
+    "version": "public endpoint retrieval snapshot pinned by response SHA-256",
+    "notes": "Extracted from Wikipedia; not independent corroboration of Wikidata. No abstracts copied. Preserve attribution and share-alike terms for derived data."
+  },
+  "eltontraits": {
+    "name": "EltonTraits 1.0 mammal and bird traits",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://api.figshare.com/v2/articles/3559887/versions/1",
+    "origin": "eltontraits-1.0",
+    "homepage": "https://doi.org/10.6084/m9.figshare.3559887.v1",
+    "version": "Figshare article 3559887 version 1",
+    "notes": "Wilman et al. 2014. Preserve SpecLevel and certainty/imputation flags; imputed traits are unknown for qualification."
+  },
+  "wordnet": {
+    "name": "Princeton WordNet 3.0",
+    "license": "LicenseRef-WordNet-3.0",
+    "licenseUrl": "https://wordnet.princeton.edu/license-and-commercial-use",
+    "origin": "princeton-wordnet-3.0",
+    "homepage": "https://wordnet.princeton.edu/",
+    "version": "3.0",
+    "notes": "Preserve bundled LICENSE and copyright notice when distributing data. Synsets are senses; aliases do not count separately."
+  },
+  "eltontraits-dunning08": {
+    "name": "Dunning08 adult body mass via EltonTraits",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://api.figshare.com/v2/articles/3559887/versions/1",
+    "origin": "dunning08-body-mass",
+    "homepage": "https://doi.org/10.6084/m9.figshare.3559887.v1",
+    "version": "Figshare article 3559887 version 1",
+    "notes": "Data reused from CC0 EltonTraits distribution. Original source family recorded from publisher variable metadata/reference index; original publication not independently read. Do not treat derived numeric thresholds as new evidence groups.",
+    "family": "eltontraits"
+  },
+  "eltontraits-hbw": {
+    "name": "Handbook of the Birds of the World via EltonTraits",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://api.figshare.com/v2/articles/3559887/versions/1",
+    "origin": "handbook-birds-world",
+    "homepage": "https://doi.org/10.6084/m9.figshare.3559887.v1",
+    "version": "Figshare article 3559887 version 1",
+    "notes": "Data reused from CC0 EltonTraits distribution. Original source family recorded from publisher variable metadata/reference index; original publication not independently read. Do not treat derived numeric thresholds as new evidence groups.",
+    "family": "eltontraits"
+  },
+  "eltontraits-birdlife": {
+    "name": "BirdLife family classification via EltonTraits",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://api.figshare.com/v2/articles/3559887/versions/1",
+    "origin": "birdlife-taxonomy-BL3",
+    "homepage": "https://doi.org/10.6084/m9.figshare.3559887.v1",
+    "version": "Figshare article 3559887 version 1",
+    "notes": "Data reused from CC0 EltonTraits distribution. Original source family recorded from publisher variable metadata/reference index; original publication not independently read. Do not treat derived numeric thresholds as new evidence groups.",
+    "family": "eltontraits"
+  }
+}

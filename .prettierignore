@@ -1,0 +1,2 @@
+# Reproducible acquisition receipts use Python stable_json, checked by knowledge tests.
+scripts/knowledge/data/*.json

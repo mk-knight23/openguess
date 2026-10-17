@@ -1,0 +1,21 @@
+.............FF...
+======================================================================
+FAIL: test_duplicate_identity_is_rejected_before_replay (test_qualify.QualificationBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_qualify.py", line 28, in test_duplicate_identity_is_rejected_before_replay
+    qualify([subject('a',True),subject('a',False)],QUESTIONS)
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_unsupported_rival_value_does_not_distinguish (test_qualify.QualificationBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_qualify.py", line 32, in test_unsupported_rival_value_does_not_distinguish
+    self.assertFalse(qualify([a,b],QUESTIONS)[0]['qualification']['screened'])
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.013s
+
+FAILED (failures=2)
