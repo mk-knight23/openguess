@@ -45,8 +45,10 @@ export function buildConversationContext(
     while (changed && !conflict) {
       changed = false;
       for (const [id, fact] of [...established]) {
+        if (conflict) break;
         const source = byId.get(id)!;
         for (const rule of source.implications ?? []) {
+          if (conflict) break;
           const target = byId.get(rule.questionId);
           if (
             rule.when === fact.value &&
@@ -60,9 +62,10 @@ export function buildConversationContext(
             changed =
               add(rule.questionId, rule.value, fact.evidenceIds) || changed;
         }
-        if (source.equivalenceGroup)
+        if (!conflict && source.equivalenceGroup)
           for (const target of questions)
             if (
+              !conflict &&
               target.equivalenceGroup === source.equivalenceGroup &&
               target.scope === source.scope
             )
