@@ -1,13 +1,16 @@
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 const base = process.env.QA_URL || "http://127.0.0.1:4190";
 const output = process.env.QA_OUTPUT || "/tmp/openguess-scale-pacing";
 const browser = await chromium.launch({
   headless: true,
   executablePath:
     process.env.BROWSER_EXECUTABLE ||
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    (existsSync("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      : chromium.executablePath()),
 });
 const measurements = [];
 try {

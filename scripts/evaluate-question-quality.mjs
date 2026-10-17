@@ -1,7 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { resolve } from "node:path";
-import { evaluationPool } from "../src/data/evaluationPool.ts";
 const root =
   process.env.EVAL_ROOT ?? fileURLToPath(new URL("..", import.meta.url));
 const output =
@@ -11,6 +10,9 @@ const output =
   );
 if (!root || !output) throw Error("EVAL_ROOT and EVAL_OUTPUT required");
 const engine = await import(pathToFileURL(resolve(root, "src/engine.ts")));
+const { evaluationPool } = await import(
+  pathToFileURL(resolve(root, "src/data/evaluationPool.ts"))
+);
 const varietyBand = Number(process.env.EVAL_BAND ?? 0.05);
 if (!Number.isFinite(varietyBand) || varietyBand < 0 || varietyBand > 0.2)
   throw Error("EVAL_BAND must be between0 and0.2");

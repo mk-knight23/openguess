@@ -21,12 +21,12 @@ python3 -m unittest discover -s scripts/knowledge -p 'test_*.py'
 This first cohort selects 100 existing Wikidata identities per category in deterministic ID order. It is separate from the later stratified and bird cohorts.
 
 | Category | Selected | Legacy Wikidata assertions | DBpedia matched subjects | DBpedia assertions | Newly replay qualified |
-|---|---:|---:|---:|---:|---:|
-| People | 100 | 673 | 98 | 1,779 | 0 |
-| Fiction | 100 | 438 | 21 | 64 | 0 |
-| Animals | 100 | 217 | 26 | 49 | 0 |
-| Objects | 100 | 182 | 32 | 71 | 0 |
-| Movies | 100 | 814 | 97 | 1,577 | 0 |
+| -------- | -------: | -------------------------: | -----------------------: | -----------------: | ---------------------: |
+| People   |      100 |                        673 |                       98 |              1,779 |                      0 |
+| Fiction  |      100 |                        438 |                       21 |                 64 |                      0 |
+| Animals  |      100 |                        217 |                       26 |                 49 |                      0 |
+| Objects  |      100 |                        182 |                       32 |                 71 |                      0 |
+| Movies   |      100 |                        814 |                       97 |              1,577 |                      0 |
 
 All 25 bounded DBpedia batch queries succeeded. Matching coverage is weak for fiction, animals and objects. Technical ontology properties contribute to raw counts; these are not all familiar gameplay clues. DBpedia and Wikidata remain conservatively correlated as one Wikimedia origin. Missing matches stay missing. Legacy Wikidata truthy exports lack original statement/reference IDs; this limitation and original retrieval dates are retained.
 

@@ -1,0 +1,9 @@
+# Premise recovery and cancellation during inference
+
+The V2 conversation upgrade exposed two different premise cases. An unasked premise can be supported by the current candidate universe: all people in a pool may be real even though asking that question offers no information. Reopening a premise the player explicitly rejected requires useful independent evidence after the rejection. A universal unrelated answer must not restore that premise solely through catalog prevalence. Apply the stronger recovery gate only to rejected premises; applying it to every premise prevents recognizable signature clues from becoming eligible.
+
+Implication closure must settle incoming evidence before propagating consequences. Iterating a snapshot of facts can propagate a fact after a preceding implication has invalidated it. Ordering implication nodes topologically, with equivalent propositions grouped, prevents a conflicted intermediate proposition from deleting an independently observed downstream answer. Metadata cycles remain invalid.
+
+The presentation deadline and inference request are separate. Answers launch inference immediately and retain the previous atomic screen snapshot until at least 2,200 ms. Cancellation ends that presentation operation synchronously. Terminal user actions such as Give up must also bypass inference loading and late worker errors; otherwise a cancelled round can still wait for a calculation or show a stale failure. App and real-browser delayed-worker regressions cover this boundary.
+
+Finally, evaluation must load its cohort projection, engine and packs from the same requested source tree. A seemingly convenient runner-local import can silently contaminate historical measurements. A sentinel-tree regression now checks this behavior. Qualification manifests separately hash the final playable union at the build boundary; matching two stored strings alone is insufficient after facts or rivals change.
