@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "requestedPerCategory": 100,
+  "categories": {
+    "people": {
+      "selected": 100,
+      "wikidataAssertions": 673,
+      "dbpediaSubjects": 98,
+      "dbpediaAssertions": 1779,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": []
+    },
+    "fictional": {
+      "selected": 100,
+      "wikidataAssertions": 438,
+      "dbpediaSubjects": 21,
+      "dbpediaAssertions": 64,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": []
+    },
+    "animals": {
+      "selected": 100,
+      "wikidataAssertions": 217,
+      "dbpediaSubjects": 26,
+      "dbpediaAssertions": 49,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": []
+    },
+    "objects": {
+      "selected": 100,
+      "wikidataAssertions": 182,
+      "dbpediaSubjects": 32,
+      "dbpediaAssertions": 71,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": []
+    },
+    "movies": {
+      "selected": 100,
+      "wikidataAssertions": 814,
+      "dbpediaSubjects": 97,
+      "dbpediaAssertions": 1577,
+      "sourceFamiliesAcquired": 2,
+      "independentOrigins": 1,
+      "screened": 0,
+      "replayQualified": 0,
+      "target": 5000,
+      "failures": []
+    }
+  },
+  "sources": {
+    "eltontraits": {
+      "assertions": 290575,
+      "species": 15393,
+      "supported": 90412,
+      "imputed": 200163,
+      "storedSampleAssertions": 1949,
+      "storedSampleSpecies": 100,
+      "joinedToPilot": 0,
+      "note": "Scientific-name identity join and per-column metadata audit pending; not counted as pilot corroboration."
+    },
+    "wordnet": {
+      "artifactSensesAvailable": 11587,
+      "storedSampleSenses": 100,
+      "joinedToPilot": 0,
+      "note": "Synonyms are aliases, not extra subjects. Sense joins and familiar distinguishing propositions pending."
+    }
+  },
+  "qualifiedTotal": 0,
+  "limitations": [
+    "Pilot selection is deterministic by ID, not yet stratified by familiarity.",
+    "DBpedia and Wikidata share conservative Wikimedia origin; they are not independent corroboration.",
+    "Raw structured assertions are not reviewed familiar question propositions.",
+    "Complete-universe semantic replay has not run."
+  ]
+}
