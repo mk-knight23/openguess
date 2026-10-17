@@ -1,4 +1,4 @@
-import { buildConversationContext } from "./conversation";
+import { buildConversationContext } from "./conversation.ts";
 import type {
   Answer,
   AnswerRecord,
