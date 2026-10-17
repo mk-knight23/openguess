@@ -1,0 +1,47 @@
+EE....E
+======================================================================
+ERROR: test_compile (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_compile
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_compile.py", line 2, in <module>
+    from compile import compile_subjects, validate_questions
+ModuleNotFoundError: No module named 'compile'
+
+
+======================================================================
+ERROR: test_normalize (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_normalize
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_normalize.py", line 2, in <module>
+    from normalize import normalize
+ModuleNotFoundError: No module named 'normalize'
+
+
+======================================================================
+ERROR: test_qualify (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_qualify
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_qualify.py", line 2, in <module>
+    from qualify import qualify, universe_digest
+ModuleNotFoundError: No module named 'qualify'
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.004s
+
+FAILED (errors=3)
