@@ -608,3 +608,8 @@ it("shows Give up immediately while the calculation worker is still pending", as
     screen.getByRole("heading", { name: "You stumped me!" }),
   ).toBeVisible();
 });
+
+it("displays the V2 maintenance release version", () => {
+  render(<App />);
+  expect(screen.getByText("OpenGuess · version 0.2.2")).toBeVisible();
+});

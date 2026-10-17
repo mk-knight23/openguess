@@ -1,3 +1,4 @@
+import { version } from "../package.json";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   Sparkles,
@@ -1536,7 +1537,7 @@ export default function App() {
       </main>
       <footer className="v2-footer">
         <span>
-          <Sparkles size={16} /> OpenGuess · version 0.2.1
+          <Sparkles size={16} /> OpenGuess · version {version}
         </span>
         <button onClick={() => goTo("about")}>About & data sources</button>
         <a href={`${REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">

@@ -1,8 +1,8 @@
 # V2 scale and conversation upgrade status — 2026-10-17
 
-Draft PR: https://github.com/mk-knight23/openguess/pull/3
+Release PR: https://github.com/mk-knight23/openguess/pull/3
 
-The upgrade is not complete and has not replaced the published website. The target is 5,000 playable subjects in each of People, Characters, Animals, Objects and Films. Default play currently preserves 128 legacy profiles. No newly acquired profile has passed final-universe replay qualification or entered default gameplay.
+V2 maintenance release 0.2.2 publishes the conversation, pacing and source-pipeline improvements described here. The larger catalog expansion is not complete. The target is 5,000 playable subjects in each of People, Characters, Animals, Objects and Films. Default play currently preserves 128 legacy profiles. No newly acquired profile has passed final-universe replay qualification or entered default gameplay.
 
 Implemented changes include scoped conversation closure, bounded answer-conditioned follow-ups, suppression of equivalent questions, recovery from mistaken premises using useful independent evidence, immediate calculation with a 2,200 ms atomic presentation gate, synchronous duplicate-answer protection, and cancellation that ignores stale worker results/errors after Give up. Default gameplay, daily targets, counts and evaluation share the accepted pool projection. Production builds reject stale qualification manifests.
 
@@ -10,7 +10,7 @@ The acquisition pilot retrieves actual DBpedia facts for 100 existing identities
 
 Local verification on Node 24.19.0:
 
-- 182 JavaScript tests and 32 Python tests passed.
+- 183 JavaScript tests and 32 Python tests passed.
 - Production build and formatting passed; dependency audit reported zero vulnerabilities. Existing Vite chunk-size warnings remain.
 - Browser smoke passed 24 checks, including all five themes, result correction, collection, library, daily challenges, backup/restore, mobile, accessibility and 40 unknown answers ending without a forced guess.
 - Experience QA passed five viewport configurations and five supported target rounds. Visual inspection covered the mobile question layout.

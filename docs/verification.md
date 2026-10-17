@@ -2,6 +2,10 @@
 
 This upgrade extends the verified 0.1 foundation, but old test counts, screenshots and REA digests do not authenticate the final 0.2 build. Record final revision, runtime, checks and live deployment below before declaring release complete.
 
+## Current release: V2 · 0.2.2
+
+Release evidence and remaining catalog work are summarized in [the V2 status record](v2-scale-status.md). Source: [PR #3](https://github.com/mk-knight23/openguess/pull/3). The 0.2.0 and 0.2.1 sections below are historical and do not certify the current build. The release process runs fresh tests and checks the deployed footer and gameplay before announcing publication.
+
 ## Required release evidence
 
 - Unit/integration checks for sparse data, optimized inference, worker lifecycle, local progress validation, localization and optional cloud boundaries.

@@ -4,9 +4,11 @@ A free, open-source guessing game with an original blue genie, adaptive question
 
 [Play](https://mk-knight23.github.io/openguess/) · [Source](https://github.com/mk-knight23/openguess) · [Research](docs/research/akinator.md) · [Verification](docs/verification.md)
 
-## Version 0.2.1
+## V2 · release 0.2.2
 
-This V2 upgrade adds 384 original signature clues, contextual follow-ups, independent confirmation and a light glass stage. The same 128 featured profiles remain the default. [Upgrade results and limits](docs/question-quality-upgrade.md) compare question variety, uncertainty and mistaken-answer recovery against the previous release.
+The latest V2 maintenance release improves answer-conditioned question selection, scoped follow-ups and recovery from mistaken premises. A 2.2-second reveal lets you see the selected answer while calculation starts immediately. Undo, Restart and Give up cancel pending reveals, including when the calculation worker is slow. Equivalent questions are suppressed within a round.
+
+The repository now includes reproducible multi-source acquisition, explicit fact scope and uncertainty, a shared playable-pool projection and build-time qualification checks. **The 5,000 playable subjects per category expansion is unfinished.** A 99-bird pilot has 64 mechanically screened profiles, with none yet replay-qualified or added to default play. See [release notes](CHANGELOG.md), [verification and limits](docs/v2-scale-status.md), [source pilot](docs/data-pilot.md) and [catalog quality](docs/catalog-quality.json).
 
 Five themes default to **128 featured profiles** with independently authored semantic facts: 32 people, 36 fictional characters, and 20 each of animals, objects and films. The full sourced catalog contains **5,584 records** (1,123 people, 1,114 fictional characters and 1,120 each in animals and objects, and 1,107 films) and is available through an explicit **Experimental** opt-in and the library. Its sparse imported profiles are not equivalent to the featured game's quality or worldwide coverage.
 
@@ -30,6 +32,7 @@ Use **Node.js 24** and npm.
 npm ci
 npm run dev
 npm test
+python3 -m unittest discover -s scripts/knowledge -p 'test_*.py'
 npm run typecheck
 npm run build
 npm run preview
@@ -41,10 +44,10 @@ Static output is in `dist/`. GitHub Pages builds use `DEPLOY_BASE=/openguess/`; 
 
 ## How it works
 
-The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The current featured-profile oracle recovered all 128 targets over 20 seeds with zero wrong or unresolved rounds and at most eleven questions in that sample. This tests closed authored facts, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
+The purpose is to infer the subject a player is thinking of through relevant facts. Asking users to encode a name letter by letter does not meet that purpose. An earlier 50-round replay depended on 614 spelling answers and is superseded, not release evidence. The current evaluation covers 12,800 authored-answer rounds over 128 targets, 20 seeds and five answer policies. Exact and probable-answer policies recovered every target. The one-mistake policy produced four wrong guesses and four unresolved rounds; partial-unknown answers left 30 unresolved. [Main results](docs/conversation-evaluation.json) and [held-out results](docs/conversation-heldout-evaluation.json) record the limits. These are closed authored-fact diagnostics, not human accuracy, broad experimental-catalog recovery or an independent fact audit.
 
 Bayesian updates rank candidates from authored/imported traits. Information gain chooses unasked questions. A worker keeps larger-pack inference off the interface thread. “Don't know” adds no evidence; absent Wikidata claims remain unknown. Model percentages are relative weights within the chosen pack, not calibrated chances of a correct answer.
 
 See [architecture](docs/architecture.md), [scaling](docs/scaling.md), [feature ledger](docs/feature-ledger.md), [roadmap](docs/roadmap.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 
-REA investigation observed Akinator's public browser interface, including question/answer transitions. Its server algorithm and database remain unknown. OpenGuess includes no Akinator code, assets or scraped database. Application code is [MIT licensed](LICENSE); raw imported structured data is CC0 and original semantic annotations are MIT and dependencies retain their [notices](THIRD_PARTY_NOTICES.md). Free software does not mean unlimited free hosting.
+REA investigation observed Akinator's public browser interface, including question/answer transitions. Its server algorithm and database remain unknown. OpenGuess includes no Akinator code, assets or scraped database. Application code is [MIT licensed](LICENSE); the runtime catalog combines CC0 Wikidata statements and MIT semantic annotations. Quarantined source-pilot data retains its own terms, including DBpedia attribution/share-alike and the WordNet notice; see [data provenance](docs/data-provenance.md) and [third-party notices](THIRD_PARTY_NOTICES.md). Free software does not mean unlimited free hosting.

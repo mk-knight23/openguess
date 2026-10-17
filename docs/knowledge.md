@@ -29,3 +29,9 @@ Validate all generated pack metadata, not only positive clue coverage. Explicit 
 Hold the current question during real worker processing, disable its controls, and make QA await the actual not-busy state. Merely waiting for visible question text can observe the retained previous question after Undo and produce a false failure.
 
 The corrected default uses 128 rich semantic profiles. Imported record counts alone failed the user experience: letter questions dominated, and semantic-only replay of the full pool remained unresolved. Keep raw catalog scope separate from effective playable scope. Seed only near-equal useful questions; preserve replay through undo. Film annotations must merge into validated canonical identities rather than create duplicate records. Variant-sensitive facts use unknown rather than invented negatives.
+
+## V2 0.2.2 maintenance release
+
+The [premise recovery and cancellation record](solutions/logic/premise-recovery-and-round-cancellation.md) captures the new regression lessons: distinguish unasked from rejected premises, settle implication conflicts before propagation, and let terminal player actions bypass pending worker loading/errors. Evaluation must load its engine, pool projection and packs from the same requested revision. Final playable-universe digests must bind actual content, not only matching receipt strings.
+
+The new acquisition pilot remains quarantined. Mechanical fact screening is separate from human answerability, independent source audit and final-universe replay. Shipping the conversation/pacing improvements does not satisfy the unfinished 5,000-playable-subjects-per-category expansion.
