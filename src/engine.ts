@@ -146,22 +146,39 @@ function independentPremiseSupport(
     (r) => !excluded.has(r.questionId) && r.answer !== "unknown",
   );
   if (!independent.length) return false;
-  const reranked = rankCandidates(
-    candidates.map((c) => c.character),
-    independent,
-    [],
-    questions,
-  );
-  return (
-    reranked.reduce(
+  const profiles = candidates.map((c) => c.character);
+  const support = (records: AnswerRecord[]) =>
+    rankCandidates(profiles, records, [], questions).reduce(
       (sum, c) =>
         sum +
         (c.character.traits[prerequisite.questionId] === prerequisite.value
           ? c.probability
           : 0),
       0,
-    ) >= 0.8
+    );
+  const posterior = support(independent);
+  const prior =
+    profiles.filter(
+      (c) => c.traits[prerequisite.questionId] === prerequisite.value,
+    ).length / profiles.length;
+  // Catalog prevalence is not corroboration: retained evidence must actually
+  // increase support, and a new contradiction needs subsequent useful evidence.
+  if (posterior < 0.8 || posterior <= prior + 1e-10) return false;
+  const lastContradiction = history.reduce(
+    (last, record, index) =>
+      record.questionId === prerequisite.questionId &&
+      (prerequisite.value ? record.answer === "no" : record.answer === "yes")
+        ? index
+        : last,
+    -1,
   );
+  if (lastContradiction >= 0) {
+    const before = history
+      .slice(0, lastContradiction)
+      .filter((r) => !excluded.has(r.questionId) && r.answer !== "unknown");
+    if (posterior <= support(before) + 1e-10) return false;
+  }
+  return true;
 }
 export function selectQuestion(
   candidates: Candidate[],

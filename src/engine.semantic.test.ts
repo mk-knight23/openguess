@@ -236,3 +236,37 @@ it("cannot disguise dependent child evidence behind equivalent propositions", ()
     ),
   ).toBeNull();
 });
+
+it("does not recover a rejected common premise from a universal unrelated answer", () => {
+  const pool = Array.from({ length: 10 }, (_, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: i < 9, universal: true, child: i % 2 === 0 },
+  }));
+  const questions = [
+    { id: "parent", text: "Common origin?", hint: "" },
+    { id: "universal", text: "Universal fact", hint: "" },
+    {
+      id: "child",
+      text: "Child",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "universal", answer: "yes" },
+  ];
+  const ranked = rankCandidates(pool, history, [], questions);
+  expect(
+    ranked
+      .filter((c) => c.character.traits.parent)
+      .reduce((sum, c) => sum + c.probability, 0),
+  ).toBeLessThan(0.3);
+  expect(selectQuestion(ranked, questions, history)).toBeNull();
+});
