@@ -14,65 +14,86 @@ export function buildConversationContext(
   history: AnswerRecord[],
 ) {
   const byId = new Map(questions.map((q) => [q.id, q]));
-  const blocked = new Set<string>();
-  let established = new Map<string, EstablishedProposition>();
-  // A conflicting proposition and its descendants must be retracted before
-  // propagation resumes. Bound the outer loop by the number of propositions.
-  for (let pass = 0; pass <= questions.length; pass++) {
-    established = new Map();
-    let conflict = false;
-    const add = (id: string, value: boolean, evidenceIds: string[]) => {
-      if (blocked.has(id) || !byId.has(id)) return false;
-      const previous = established.get(id);
-      if (previous && previous.value !== value) {
-        blocked.add(id);
-        established.delete(id);
-        conflict = true;
-        return false;
-      }
-      const merged = [
-        ...new Set([...(previous?.evidenceIds ?? []), ...evidenceIds]),
-      ].sort();
-      if (previous && merged.length === previous.evidenceIds.length)
-        return false;
-      established.set(id, { value, evidenceIds: merged });
-      return true;
-    };
-    for (const record of history)
-      if (record.answer === "yes" || record.answer === "no")
-        add(record.questionId, record.answer === "yes", [record.questionId]);
-    let changed = true;
-    while (changed && !conflict) {
-      changed = false;
-      for (const [id, fact] of [...established]) {
-        if (conflict) break;
-        const source = byId.get(id)!;
-        for (const rule of source.implications ?? []) {
-          if (conflict) break;
-          const target = byId.get(rule.questionId);
-          if (
-            rule.when === fact.value &&
-            rule.scope &&
-            rule.scope === source.scope &&
-            rule.scope === target?.scope &&
-            (!source.themes ||
-              !target.themes ||
-              source.themes.some((t) => target.themes!.includes(t)))
-          )
-            changed =
-              add(rule.questionId, rule.value, fact.evidenceIds) || changed;
-        }
-        if (!conflict && source.equivalenceGroup)
-          for (const target of questions)
-            if (
-              !conflict &&
-              target.equivalenceGroup === source.equivalenceGroup &&
-              target.scope === source.scope
-            )
-              changed = add(target.id, fact.value, fact.evidenceIds) || changed;
-      }
+  // Collapse equivalent propositions before ordering implications. Every
+  // incoming premise is settled before a proposition can emit consequences.
+  // This prevents a subsequently conflicted ancestor from poisoning a direct
+  // observation downstream, independently of history or metadata order.
+  const nodeFor = new Map(
+    questions.map((q) => [
+      q.id,
+      q.equivalenceGroup
+        ? `equivalent:${JSON.stringify([q.scope, q.equivalenceGroup])}`
+        : `id:${q.id}`,
+    ]),
+  );
+  const members = new Map<string, Question[]>();
+  for (const q of questions) {
+    const node = nodeFor.get(q.id)!;
+    members.set(node, [...(members.get(node) ?? []), q]);
+  }
+  const outgoing = new Map<
+    string,
+    { target: string; when: boolean; value: boolean }[]
+  >();
+  const indegree = new Map([...members.keys()].map((node) => [node, 0]));
+  for (const q of questions)
+    for (const rule of q.implications ?? []) {
+      const target = byId.get(rule.questionId);
+      if (
+        !target ||
+        !rule.scope ||
+        rule.scope !== q.scope ||
+        rule.scope !== target.scope ||
+        (q.themes &&
+          target.themes &&
+          !q.themes.some((t) => target.themes!.includes(t)))
+      )
+        continue;
+      const sourceNode = nodeFor.get(q.id)!;
+      const targetNode = nodeFor.get(target.id)!;
+      outgoing.set(sourceNode, [
+        ...(outgoing.get(sourceNode) ?? []),
+        { target: targetNode, when: rule.when, value: rule.value },
+      ]);
+      indegree.set(targetNode, indegree.get(targetNode)! + 1);
     }
-    if (!conflict) break;
+  const facts = new Map<string, EstablishedProposition | null>();
+  const add = (node: string, value: boolean, evidenceIds: string[]) => {
+    const previous = facts.get(node);
+    if (previous === null) return; // Conflicting incoming evidence establishes nothing.
+    if (previous && previous.value !== value) {
+      facts.set(node, null);
+      return;
+    }
+    facts.set(node, {
+      value,
+      evidenceIds: [
+        ...new Set([...(previous?.evidenceIds ?? []), ...evidenceIds]),
+      ].sort(),
+    });
+  };
+  for (const record of history) {
+    const node = nodeFor.get(record.questionId);
+    if (node && (record.answer === "yes" || record.answer === "no"))
+      add(node, record.answer === "yes", [record.questionId]);
+  }
+  const queue = [...members.keys()].filter((node) => indegree.get(node) === 0);
+  for (let i = 0; i < queue.length; i++) {
+    const node = queue[i];
+    const fact = facts.get(node);
+    for (const rule of outgoing.get(node) ?? []) {
+      if (fact && fact.value === rule.when)
+        add(rule.target, rule.value, fact.evidenceIds);
+      indegree.set(rule.target, indegree.get(rule.target)! - 1);
+      if (indegree.get(rule.target) === 0) queue.push(rule.target);
+    }
+  }
+  // Invalid cyclic implication metadata cannot propagate; normal validated
+  // packs are acyclic. Direct observations still remain available as evidence.
+  const established = new Map<string, EstablishedProposition>();
+  for (const [node, group] of members) {
+    const fact = facts.get(node);
+    if (fact) for (const q of group) established.set(q.id, fact);
   }
   const recent = history.slice(-3);
   return {

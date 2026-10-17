@@ -97,3 +97,36 @@ it("retains directly observed C when conflicting B is retracted before propagati
     evidenceIds: ["c"],
   });
 });
+
+it("resolves upstream conflicts before downstream facts regardless of history order", () => {
+  const chain: Question[] = [
+    {
+      id: "a",
+      text: "A",
+      hint: "",
+      scope: "work",
+      implications: [
+        { when: true, questionId: "b", value: true, scope: "work" },
+      ],
+    },
+    {
+      id: "b",
+      text: "B",
+      hint: "",
+      scope: "work",
+      implications: [
+        { when: false, questionId: "c", value: false, scope: "work" },
+      ],
+    },
+    { id: "c", text: "C", hint: "", scope: "work" },
+  ];
+  const context = buildConversationContext(chain, [
+    { questionId: "b", answer: "no" },
+    { questionId: "c", answer: "yes" },
+    { questionId: "a", answer: "yes" },
+  ]);
+  expect(context.established.get("c")).toEqual({
+    value: true,
+    evidenceIds: ["c"],
+  });
+});
