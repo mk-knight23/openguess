@@ -566,8 +566,12 @@ it("includes replay-qualified nonfeatured subjects in default gameplay", async (
 
 it("shows Give up immediately while the calculation worker is still pending", async () => {
   class PendingWorker {
+    static latest: PendingWorker;
+    constructor() {
+      PendingWorker.latest = this;
+    }
     onmessage: ((event: { data: unknown }) => void) | null = null;
-    onerror = null;
+    onerror: (() => void) | null = null;
     pack: any;
     postMessage(message: any) {
       if (message.type === "hydrate") this.pack = message.pack;
@@ -594,8 +598,12 @@ it("shows Give up immediately while the calculation worker is still pending", as
     await screen.findByRole("button", { name: "Start guessing" }),
   );
   await screen.findByTestId("question-text");
-  fireEvent.click(screen.getByRole("button", { name: "Yes", exact: true }));
-  fireEvent.click(screen.getByRole("button", { name: "Give up", exact: true }));
+  fireEvent.click(screen.getByRole("button", { name: "Yes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Give up" }));
+  expect(
+    screen.getByRole("heading", { name: "You stumped me!" }),
+  ).toBeVisible();
+  act(() => PendingWorker.latest.onerror?.());
   expect(
     screen.getByRole("heading", { name: "You stumped me!" }),
   ).toBeVisible();

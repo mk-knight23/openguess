@@ -727,7 +727,7 @@ export default function App() {
                   {history.length}/{MAX_QUESTIONS} clues
                 </span>
               </div>
-              {loadError || error ? (
+              {phase === "question" && (loadError || error) ? (
                 <div className="speech-bubble">
                   <h2 ref={focus} tabIndex={-1}>
                     The magic paused.

@@ -70,6 +70,8 @@ describe("featured semantic gameplay", () => {
             ),
           ).toBe(true);
         }
-    });
+      // Each theme replays every profile under three seeds, hundreds of engine
+      // calls rather than one interaction; allow CI contention for this batch.
+    }, 20000);
   }
 });
