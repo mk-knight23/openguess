@@ -1,18 +1,16 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { evaluationPool } from "../src/data/evaluationPool.ts";
 const root =
   process.env.EVAL_ROOT ?? fileURLToPath(new URL("..", import.meta.url));
 const output =
   process.env.EVAL_OUTPUT ??
   fileURLToPath(
-    new URL("../docs/question-quality-matrix.json", import.meta.url),
+    new URL("../docs/conversation-evaluation.json", import.meta.url),
   );
 if (!root || !output) throw Error("EVAL_ROOT and EVAL_OUTPUT required");
 const engine = await import(pathToFileURL(resolve(root, "src/engine.ts")));
-const { featuredPack } = await import(
-  pathToFileURL(resolve(root, "src/data/featuredPack.ts"))
-);
 const varietyBand = Number(process.env.EVAL_BAND ?? 0.05);
 if (!Number.isFinite(varietyBand) || varietyBand < 0 || varietyBand > 0.2)
   throw Error("EVAL_BAND must be between0 and0.2");
@@ -23,19 +21,36 @@ const policies = [
   "probably",
   "one-mistake",
 ];
+const cohort = process.env.EVAL_COHORT ?? "playable";
+if (!["playable", "legacy-isolated", "legacy-expanded"].includes(cohort))
+  throw Error("Unknown evaluation cohort");
+const minimumTargets = Number(process.env.EVAL_MIN_TARGETS ?? 1);
+const seeds = process.env.EVAL_SEEDS
+  ? process.env.EVAL_SEEDS.split(",").map(Number)
+  : Array.from({ length: 20 }, (_, i) => i + 1);
+if (
+  !seeds.length ||
+  new Set(seeds).size !== seeds.length ||
+  seeds.some((seed) => !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff)
+)
+  throw Error("Evaluation seeds must be distinct unsigned integers");
 const rows = [];
 const exampleRounds = [];
 for (const theme of ["people", "fictional", "animals", "objects", "movies"]) {
-  const pack = featuredPack(
-    JSON.parse(
-      await readFile(resolve(root, `src/data/packs/${theme}.json`), "utf8"),
-    ),
+  const sourcePack = JSON.parse(
+    await readFile(resolve(root, `src/data/packs/${theme}.json`), "utf8"),
   );
-  const characters = pack.characters.filter((c) => c.featured);
+  const { universe: pack, targets: characters } = evaluationPool(
+    sourcePack,
+    cohort,
+    minimumTargets,
+  );
   for (const policy of policies) {
     const row = {
       theme,
       policy,
+      targetSubjects: characters.length,
+      universeSubjects: pack.characters.length,
       rounds: 0,
       correctFirstGuess: 0,
       wrongFirstGuess: 0,
@@ -50,7 +65,7 @@ for (const theme of ["people", "fictional", "animals", "objects", "movies"]) {
     };
     const sequences = new Set();
     for (const target of characters)
-      for (let seed = 1; seed <= 20; seed++) {
+      for (const seed of seeds) {
         const history = [];
         let informative = 0;
         const seenGroups = new Set();
@@ -58,7 +73,7 @@ for (const theme of ["people", "fictional", "animals", "objects", "movies"]) {
           streak = 0;
         for (;;) {
           const candidates = engine.rankCandidates(
-            characters,
+            pack.characters,
             history,
             [],
             pack.questions,
@@ -161,9 +176,12 @@ await writeFile(
     {
       measuredAt: new Date().toISOString(),
       varietyBand,
+      cohort,
+      seeds,
+      minimumTargets,
       sourceCommit: process.env.EVAL_COMMIT ?? null,
       methodology:
-        "All featured profiles, seeds1-20, five deterministic authored-answer policies, 40 question limit, no forced guesses. Not human accuracy. Identity checked against target ID, distinctiveness uses authored metadata.",
+        "All subjects in the declared target cohort against its declared candidate universe, explicit seeds, five deterministic authored-answer policies, 40 question limit, no forced guesses. Not human accuracy. Identity checked against target ID, distinctiveness uses authored metadata.",
       results: rows,
       exampleRounds,
     },

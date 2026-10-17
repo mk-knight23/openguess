@@ -421,10 +421,10 @@ it("defaults to featured facts while keeping the full catalog visible and opt-in
   const u = userEvent.setup();
   render(<App />);
   const featured = await screen.findByRole("button", {
-    name: "Featured discoveries",
+    name: "Playable discoveries",
   });
   expect(featured).toHaveAttribute("aria-pressed", "true");
-  expect(screen.getByText(/2 featured choices/)).toBeVisible();
+  expect(screen.getByText(/2 playable choices/)).toBeVisible();
   await u.click(screen.getByRole("button", { name: "Library" }));
   expect(screen.getByRole("heading", { name: "Experimental C" })).toBeVisible();
   await u.click(screen.getByRole("button", { name: "Play" }));
@@ -509,4 +509,56 @@ describe("answer presentation pacing", () => {
     if (action === "Library" || action === "Settings")
       expect(screen.queryByTestId("question-text")).not.toBeInTheDocument();
   });
+});
+
+it("includes replay-qualified nonfeatured subjects in default gameplay", async () => {
+  const digest = "d".repeat(64);
+  const old = {
+    ...characters[0],
+    id: "legacy",
+    name: "Legacy subject",
+    featured: true,
+    traits: { clue: false },
+  };
+  const added = {
+    ...old,
+    id: "supported",
+    name: "New supported subject",
+    featured: false,
+    traits: { clue: true },
+    qualification: {
+      screened: true,
+      qualified: true,
+      replay: {
+        status: "passed" as const,
+        universeDigest: digest,
+        seeds: [1, 2, 3, 4, 5],
+      },
+    },
+  };
+  vi.mocked(loadTheme).mockResolvedValueOnce({
+    theme: "people",
+    version: "qualified-test",
+    characters: [old, added],
+    questions: [
+      {
+        id: "clue",
+        text: "Does this person make music?",
+        hint: "An ordinary property.",
+        tier: "broad",
+        answerability: "familiar",
+      },
+    ],
+    source: {
+      url: "https://example.org",
+      license: "CC0-1.0",
+      retrievedAt: "2026-10-17",
+    },
+    quality: { qualifiedUniverseDigest: digest },
+  });
+  const u = userEvent.setup();
+  render(<App />);
+  await u.click(await screen.findByRole("button", { name: "Start guessing" }));
+  await u.click(await screen.findByRole("button", { name: "Detective notes" }));
+  expect(screen.getByText("New supported subject")).toBeVisible();
 });

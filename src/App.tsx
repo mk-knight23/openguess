@@ -34,7 +34,7 @@ import { Genie } from "./components/Genie";
 import { Avatar } from "./components/Artwork";
 import { themeManifest } from "./data/manifest";
 import { loadTheme } from "./data/loadTheme";
-import { featuredPack } from "./data/featuredPack";
+import { playablePack, playableCounts } from "./data/playablePack";
 import { useInference } from "./useInference";
 import { deriveRoundMood } from "./roundPresentation";
 import { useRoundPresentation } from "./useRoundPresentation";
@@ -146,15 +146,10 @@ export default function App() {
         : null,
     [pack, theme, progress.settings.familyMode],
   );
-  const featuredCount =
-    scopedPack?.characters.filter((c) => c.featured).length ?? 0;
+  const poolCounts = scopedPack ? playableCounts(scopedPack) : null;
   const activePack = useMemo(
     () =>
-      !scopedPack ||
-      expandedCatalog ||
-      !scopedPack.characters.some((c) => c.featured)
-        ? scopedPack
-        : featuredPack(scopedPack),
+      !scopedPack || expandedCatalog ? scopedPack : playablePack(scopedPack),
     [scopedPack, expandedCatalog],
   );
   const inference = useInference(activePack, history, rejected, roundSeed);
@@ -495,47 +490,50 @@ export default function App() {
       })}
     </div>
   );
-  const poolPicker = featuredCount > 0 && (
-    <div className="pool-picker">
-      <div role="group" aria-label="Gameplay knowledge pool">
-        <button
-          aria-pressed={!expandedCatalog}
-          onClick={() => {
-            cancelPresentation();
-            setExpandedCatalog(false);
-            setHistory([]);
-            setRejected([]);
-            setPhase("question");
-            setPausedAt(-1);
-          }}
-        >
-          Featured discoveries
-        </button>
-        <button
-          aria-pressed={expandedCatalog}
-          onClick={() => {
-            cancelPresentation();
-            setExpandedCatalog(true);
-            setHistory([]);
-            setRejected([]);
-            setPhase("question");
-            setPausedAt(-1);
-          }}
-        >
-          Full catalog (experimental)
-        </button>
+  const poolPicker = poolCounts &&
+    (poolCounts.quarantined > 0 ||
+      poolCounts.qualified > 0 ||
+      poolCounts.legacyFeatured > 0) && (
+      <div className="pool-picker">
+        <div role="group" aria-label="Gameplay knowledge pool">
+          <button
+            aria-pressed={!expandedCatalog}
+            onClick={() => {
+              cancelPresentation();
+              setExpandedCatalog(false);
+              setHistory([]);
+              setRejected([]);
+              setPhase("question");
+              setPausedAt(-1);
+            }}
+          >
+            Playable discoveries
+          </button>
+          <button
+            aria-pressed={expandedCatalog}
+            onClick={() => {
+              cancelPresentation();
+              setExpandedCatalog(true);
+              setHistory([]);
+              setRejected([]);
+              setPhase("question");
+              setPausedAt(-1);
+            }}
+          >
+            Full catalog (experimental)
+          </button>
+        </div>
+        <p>
+          {poolCounts.playable} playable choices with richer facts ·{" "}
+          {scopedPack?.characters.length.toLocaleString()} total records.
+        </p>
+        <p>
+          {expandedCatalog
+            ? "Experimental: many imported records have incomplete facts and may remain unresolved."
+            : "Default play uses well-described subjects and meaningful questions. Browse the full database in the library."}
+        </p>
       </div>
-      <p>
-        {featuredCount} featured choices with richer facts ·{" "}
-        {scopedPack?.characters.length.toLocaleString()} total records.
-      </p>
-      <p>
-        {expandedCatalog
-          ? "Experimental: many imported records have incomplete facts and may remain unresolved."
-          : "Default play uses well-described subjects and meaningful questions. Browse the full database in the library."}
-      </p>
-    </div>
-  );
+    );
   const loadingView = (
     <div className="loading-state" role="status">
       <Sparkles className="loading-spark" size={27} />
