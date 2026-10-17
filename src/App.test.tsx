@@ -1,4 +1,12 @@
-import { render, screen, cleanup, waitFor } from "@testing-library/react";
+import {
+  act,
+  configure,
+  fireEvent,
+  render,
+  screen,
+  cleanup,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { characters, questions } from "./data/catalog";
@@ -8,7 +16,10 @@ vi.mock("./data/loadTheme", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./data/loadTheme")>();
   return { loadTheme: vi.fn(actual.loadTheme) };
 });
+configure({ asyncUtilTimeout: 4000 });
+vi.setConfig({ testTimeout: 120000 });
 afterEach(() => {
+  vi.useRealTimers();
   cleanup();
   localStorage.clear();
 });
@@ -439,4 +450,63 @@ it("allows retrying the same backup file after an invalid import", async () => {
   expect(input.value).toBe("");
   await u.upload(input, file);
   await waitFor(() => expect(read).toHaveBeenCalledTimes(2));
+});
+
+describe("answer presentation pacing", () => {
+  async function begin() {
+    const u = userEvent.setup();
+    render(<App />);
+    await u.click(
+      await screen.findByRole("button", { name: "Start guessing" }),
+    );
+    await screen.findByTestId("question-text");
+    vi.useFakeTimers();
+    return screen.getByTestId("question-text").textContent;
+  }
+  it("acknowledges one answer immediately and holds the clue for the complete deadline", async () => {
+    const first = await begin();
+    const yes = screen.getByRole("button", { name: "Yes" });
+    act(() => {
+      fireEvent.click(yes);
+      fireEvent.keyDown(window, { key: "1" });
+    });
+    expect(yes).toHaveAttribute("aria-pressed", "true");
+    expect(yes).toBeDisabled();
+    expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    expect(screen.getByText("Connecting the clues…")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Detective notes" }));
+    expect(
+      screen.getAllByRole("button", { name: "Correct from here" }),
+    ).toHaveLength(1);
+    act(() => vi.advanceTimersByTime(2199));
+    expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.getByTestId("question-text").textContent).not.toBe(first);
+    expect(screen.queryByText("Connecting the clues…")).not.toBeInTheDocument();
+  });
+  it.each([
+    "Undo",
+    "Restart",
+    "Give up",
+    "Library",
+    "Settings",
+    "Correct from here",
+  ])("cancels a pending reveal through %s", async (action) => {
+    const first = await begin();
+    fireEvent.click(screen.getByRole("button", { name: "Yes" }));
+    if (action === "Correct from here")
+      fireEvent.click(screen.getByRole("button", { name: "Detective notes" }));
+    fireEvent.click(screen.getByRole("button", { name: action }));
+    act(() => vi.advanceTimersByTime(3000));
+    expect(screen.queryByText("Connecting the clues…")).not.toBeInTheDocument();
+    if (action === "Undo" || action === "Correct from here")
+      expect(screen.getByTestId("question-text")).toHaveTextContent(first!);
+    if (action === "Give up")
+      expect(
+        screen.getByRole("heading", { name: "You stumped me!" }),
+      ).toBeVisible();
+    if (action === "Library" || action === "Settings")
+      expect(screen.queryByTestId("question-text")).not.toBeInTheDocument();
+  });
 });
