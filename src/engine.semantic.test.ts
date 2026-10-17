@@ -90,3 +90,96 @@ it("avoids an uncertain topic when another useful topic remains", () => {
     )?.question.id,
   ).toBe("z");
 });
+
+it("prefers an answer-conditioned follow-up among equally useful clues", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { origin: true, a: value, z: value },
+  }));
+  const questions = [
+    { id: "origin", text: "Game origin?", hint: "", topic: "origin" },
+    { id: "a", text: "Appearance?", hint: "", topic: "appearance" },
+    {
+      id: "z",
+      text: "Gameplay role?",
+      hint: "",
+      topic: "origin",
+      followUpTo: [{ questionId: "origin", value: true }],
+      prerequisites: [{ questionId: "origin", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "origin", answer: "yes" }];
+  expect(
+    selectQuestion(rankCandidates(pool, history), questions, history)?.question
+      .id,
+  ).toBe("z");
+});
+it("skips scoped established implications while leaving useful related distinctions", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { origin: true, a: value, z: value },
+  }));
+  const questions = [
+    {
+      id: "origin",
+      text: "World?",
+      hint: "",
+      scope: "work",
+      implications: [
+        { when: true, questionId: "a", value: true, scope: "work" },
+      ],
+    },
+    { id: "a", text: "Same world?", hint: "", scope: "work" },
+    { id: "z", text: "School role?", hint: "", scope: "work" },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "origin", answer: "yes" }];
+  expect(
+    selectQuestion(rankCandidates(pool, history), questions, history)?.question
+      .id,
+  ).toBe("z");
+});
+it("cannot recover a rejected parent from its own dependent child evidence", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: value, child: value, child2: value, z: value },
+  }));
+  const questions = [
+    { id: "parent", text: "Origin?", hint: "" },
+    ...["child", "child2", "z"].map((id) => ({
+      id,
+      text: id,
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    })),
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "child", answer: "yes" },
+    { questionId: "child2", answer: "yes" },
+  ];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    ),
+  ).toBeNull();
+});

@@ -240,3 +240,56 @@ it("unknown or missing signature facts preserve supported confirmation", () => {
     ).toBe(true);
   }
 });
+
+it("derived implications never add independent evidence or a signature confirmation", () => {
+  const questions: Question[] = [
+    {
+      ...broad[0],
+      scope: "original",
+      implications: ["b", "c", "s", "t", "a0"].map((questionId) => ({
+        when: true,
+        questionId,
+        value: true,
+        scope: "original",
+      })),
+    },
+    ...[
+      ...broad.slice(1),
+      signature,
+      { ...signature, id: "t" },
+      { ...signature, id: "a0" },
+    ].map((q) => ({ ...q, scope: "original" })),
+  ];
+  const evidence: AnswerRecord[] = [{ questionId: "a", answer: "yes" }];
+  const ranked = rankCandidates(characters, evidence, [], questions);
+  const readiness = getRoundReadiness(ranked, evidence, questions);
+  expect(readiness.independentEvidence).toBe(1);
+  expect(readiness.confirmed).toBe(false);
+  expect(readiness.ready).toBe(false);
+  expect(selectQuestion(ranked, questions, evidence)).toBeNull();
+});
+it("a contextual follow-up cannot promote an uninformative clue", () => {
+  const pool = characters.map((c) => ({
+    ...c,
+    traits: { ...c.traits, origin: true, irrelevant: true },
+  }));
+  const questions: Question[] = [
+    { id: "origin", text: "Origin", hint: "", topic: "world" },
+    {
+      id: "irrelevant",
+      text: "Already universal trait",
+      hint: "",
+      topic: "world",
+      followUpTo: [{ questionId: "origin", value: true }],
+    },
+    signature,
+  ];
+  const evidence: AnswerRecord[] = [{ questionId: "origin", answer: "yes" }];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, evidence, [], questions),
+      questions,
+      evidence,
+    )?.question.id,
+  ).toBe("s");
+});
