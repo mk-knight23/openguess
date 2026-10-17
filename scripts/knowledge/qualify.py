@@ -6,6 +6,8 @@ def universe_digest(subjects, questions):
     return digest(stable_json({'subjects':sorted(subjects,key=lambda s:s['id']),'questions':sorted(questions,key=lambda q:q['id'])}).encode())
 
 def qualify(subjects, questions, replay=None):
+    if len({s['id'] for s in subjects}) != len(subjects):
+        raise ValueError('duplicate subject identity')
     universe = universe_digest(subjects, questions)
     topics = {q['id']:q['topic'] for q in questions}
     output = copy.deepcopy(subjects)
@@ -20,7 +22,7 @@ def qualify(subjects, questions, replay=None):
             if rival['id']==s['id']: continue
             # Unknown on either side cannot discriminate. Two evidence groups and
             # two origins are a conservative proxy, not a human familiarity audit.
-            clues=[q for q,v in supported.items() if q in rival['traits'] and rival['traits'][q] is not v]
+            clues=[q for q,v in supported.items() if q in rival['traits'] and rival['traits'][q] is not v and any(e['status']=='supported' for e in rival['factEvidence'].get(q,[]))]
             groups={e['evidenceGroup'] for q in clues for e in s['factEvidence'][q] if e['status']=='supported'}
             origins={e['origin'] for q in clues for e in s['factEvidence'][q] if e['status']=='supported'}
             if len(clues)<2 or len(groups)<2 or len(origins)<2:

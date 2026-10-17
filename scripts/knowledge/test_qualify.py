@@ -21,3 +21,12 @@ class QualificationTests(unittest.TestCase):
         receipt={'universeDigest':universe_digest(rows,QUESTIONS),'seeds':[1,2,3,4,5],'exactSubjectIds':['a','b']}
         self.assertTrue(qualify(rows,QUESTIONS,receipt)[0]['qualification']['qualified'])
         self.assertFalse(qualify(rows+[subject('c',True)],QUESTIONS,receipt)[0]['qualification']['qualified'])
+
+class QualificationBoundaryTests(unittest.TestCase):
+    def test_duplicate_identity_is_rejected_before_replay(self):
+        with self.assertRaisesRegex(ValueError,'duplicate'):
+            qualify([subject('a',True),subject('a',False)],QUESTIONS)
+    def test_unsupported_rival_value_does_not_distinguish(self):
+        a,b=subject('a',True),subject('b',False)
+        b['factEvidence']={}
+        self.assertFalse(qualify([a,b],QUESTIONS)[0]['qualification']['screened'])
