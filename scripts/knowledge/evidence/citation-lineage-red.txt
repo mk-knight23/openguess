@@ -1,0 +1,13 @@
+...........E.................
+======================================================================
+ERROR: test_upstream_citation_is_retained_without_claiming_origin_independence (test_compile.CompileTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_compile.py", line 35, in test_upstream_citation_is_retained_without_claiming_origin_independence
+    self.assertEqual(result['factEvidence']['q'][0]['upstreamReference'],'Dunning08')
+KeyError: 'upstreamReference'
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.149s
+
+FAILED (errors=1)

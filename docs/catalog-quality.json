@@ -145,5 +145,77 @@
       "Mammal diet/activity ABC may include congeneric estimates; not compiled as verified.",
       "No original curated animal identity is merged from a display label."
     ]
+  },
+  "birdEnrichment": {
+    "zeroExplicitDistinctionPairs": 103,
+    "subjectsInZeroDistinctionPairs": 51,
+    "pairsWithFewerThanTwoEvidenceGroups": 1005,
+    "collisionExamples": [
+      [
+        "Hartlaub's Spurfowl",
+        "Orange-footed Scrubfowl"
+      ],
+      [
+        "Hartlaub's Spurfowl",
+        "Rock Partridge"
+      ],
+      [
+        "Orange-footed Scrubfowl",
+        "Rock Partridge"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Francolinus schlegelii"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Nothura darwinii"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Yellow-legged Tinamou"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Chinese Francolin"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Francolinus albogularis"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Chukar Partridge"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Francolinus streptophorus"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Francolinus shelleyi"
+      ],
+      [
+        "Rusty-necklaced Partridge",
+        "Arabian Partridge"
+      ]
+    ],
+    "sourceBirdSpecies": 9995,
+    "eligibleSourceRows": 7139,
+    "sampled": 100,
+    "unambiguousSpeciesJoins": 96,
+    "supportedProjections": 2112,
+    "twentyPropositionsFiveTopics": 96,
+    "screened": 0,
+    "qualified": 0,
+    "originalPrimaryBooksIndependentlyRead": false,
+    "failures": [],
+    "limitations": [
+      "Source-rich ordered sample, not a familiarity survey.",
+      "Diet/foraging percentage zero is explicit source evidence, not absent-claim completion.",
+      "Related thresholds and diet components retain shared evidence groups.",
+      "Upstream reference families grouped from publisher metadata/source index; original books not independently checked.",
+      "No full-universe replay receipt."
+    ]
   }
 }

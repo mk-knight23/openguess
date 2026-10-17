@@ -30,3 +30,7 @@ class CompileTests(unittest.TestCase):
         questions=[{'id':'q','topic':'size','proposition':'average-adult-mass','scope':'species adult average'}]
         result=compile_subjects([{'id':'a','name':'A','scope':'species identity'}],[assertion(True,scope='species adult average')],questions,SOURCE)
         self.assertEqual(result['subjects'][0]['traits'],{'q':True})
+    def test_upstream_citation_is_retained_without_claiming_origin_independence(self):
+        result=self.build([assertion(True,upstreamReference='Dunning08')])
+        self.assertEqual(result['factEvidence']['q'][0]['upstreamReference'],'Dunning08')
+        self.assertEqual(result['factEvidence']['q'][0]['origin'],'upstream')

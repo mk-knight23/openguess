@@ -1,18 +1,26 @@
-# V2 scale pilot: acquisition milestone, qualification incomplete
+# V2 scale pilot: measured enrichment, qualification incomplete
 
-The reproducible command is `python3 scripts/knowledge/acquire.py --limit 100`. The report in `catalog-quality.json` is derived from actual cached responses. The pilot selects 100 existing Wikidata identities in each category in deterministic ID order. This establishes a reproducible acquisition sample; the planned familiar/middle/difficult stratification and close-variant audit remain incomplete.
+The pipeline acquired and compiled a bounded 100-subject Wikidata/DBpedia cohort in every category, audited independent animal traits and recorded a separate featured/middle-density/sparse-tail cohort. A new source-rich bird pilot joins 96 species, each with 22 supported propositions across five topics. None is newly qualified or promoted: the bird cohort still has 103 pairs with no explicit distinguishing answer, and complete-universe semantic replay remains pending. The requested 5,000 qualified subjects per category / 25,000 total is incomplete.
 
-Every category has a real DBpedia query, retaining actual ontology assertions where the identity joins. Unmatched subjects remain unmatched. DBpedia and Wikidata are two source families with potentially shared upstream facts; the report conservatively counts one independent origin. No absence is converted to false. DBpedia resource URLs and hashes preserve attribution and retrieval lineage. Original legacy Wikidata statement/reference IDs cannot be recovered from the existing truthy export.
+Reproduce acquisition and screening in this order:
 
-The independently sourced EltonTraits acquisition preserves uncertainty flags and verifies published file checksums. Its scientific-name identity join, per-column semantics and familiar question templates still need review. Its acquisition total is not a count of playable animals.
+```sh
+python3 scripts/knowledge/acquire.py --limit 100
+python3 scripts/knowledge/build_pilot.py
+python3 scripts/knowledge/enrich_animals.py
+python3 scripts/knowledge/enrich_birds.py
+python3 scripts/knowledge/stratify.py
+python3 scripts/knowledge/probe_featured.py
+python3 -m unittest discover -s scripts/knowledge -p 'test_*.py'
+```
 
-No newly acquired subject is declared semantically or replay qualified. There are still zero newly replay-qualified subjects toward the 5,000-per-category requirement. The mechanical screening code and full-universe replay receipt boundary are implemented and tested, but the new raw assertions do not yet satisfy twenty familiar propositions across five topics, independent rival distinctions and five complete-universe replay seeds. No incomplete record enters default play.
+`catalog-quality.json` records measured counts. Cached response receipts retain URL, retrieval timestamp and SHA-256; EltonTraits downloads additionally match published MD5. All new outputs remain quarantine under `scripts/knowledge/data/`, outside default gameplay. A source-rich profile is not automatically familiar, distinct or replay-qualified.
 
-Next acquisition work must broaden and independently substantiate people, fiction and movies; join audited animal traits; evaluate object sense sources with their notices; stratify and audit representative pilot subjects; then compile reviewed proposition templates before measured expansion. A larger Wikidata/DBpedia row count alone cannot complete the target. The requested 25,000 qualified playable catalog remains incomplete.
+## Original bounded multi-source cohort
 
-## Measured bounded run
+This first cohort selects 100 existing Wikidata identities per category in deterministic ID order. It is separate from the later stratified and bird cohorts.
 
-| Category | Selected identities | Legacy Wikidata assertions | DBpedia matched subjects | DBpedia assertions | Replay qualified |
+| Category | Selected | Legacy Wikidata assertions | DBpedia matched subjects | DBpedia assertions | Newly replay qualified |
 |---|---:|---:|---:|---:|---:|
 | People | 100 | 673 | 98 | 1,779 | 0 |
 | Fiction | 100 | 438 | 21 | 64 | 0 |
@@ -20,26 +28,42 @@ Next acquisition work must broaden and independently substantiate people, fictio
 | Objects | 100 | 182 | 32 | 71 | 0 |
 | Movies | 100 | 814 | 97 | 1,577 | 0 |
 
-All 25 bounded DBpedia batch queries succeeded. Matching coverage is weak for fiction, animals and objects; listing DBpedia in a manifest would have concealed that limitation. Assertions include technical ontology properties, so raw counts overstate familiar gameplay yield.
+All 25 bounded DBpedia batch queries succeeded. Matching coverage is weak for fiction, animals and objects. Technical ontology properties contribute to raw counts; these are not all familiar gameplay clues. DBpedia and Wikidata remain conservatively correlated as one Wikimedia origin. Missing matches stay missing. Legacy Wikidata truthy exports lack original statement/reference IDs; this limitation and original retrieval dates are retained.
 
-The checked EltonTraits distributions contain 290,575 retained numeric trait assertions across 15,393 scientific names. A 100-species sample stores 1,949 assertions; the rest remains reproducible from the external cached distribution. 200,163 assertions lack a confirmed species-level flag and remain conservatively imputed/uncertain; 90,412 carry species-level support flags. Those flags are not an independent factual audit, and these records have not been joined to the game. The initial UTF-8 decode failed on the published mammal file; the adapter now uses its Windows-1252 text and tests the actual hyphenated column schema while preserving certainty flags.
+`build_pilot.py` compiles existing structured Wikidata positive claims against existing question templates and executes conservative screening for all 500 identities. DBpedia proposition mapping remains pending. Two consecutive builds produced byte-identical compiled packs. Every profile in this original cohort fails the qualified-playable gate; detailed rejection counts remain in the report.
 
-WordNet 3.0 was acquired from Princeton's distribution: 11,587 noun artifact senses are available, with 100 stored as a bounded sense sample. Each sense stores synonyms as aliases and taxonomic pointers; definitions are excluded. The required Princeton notice accompanies the sample in `scripts/knowledge/data/wordnet-LICENSE.txt`. No label-only join to existing objects is made. WordNet taxonomy alone does not supply the required twenty familiar propositions.
+## Independent animal acquisition and enrichment
 
-Twenty Python behavioral tests pass, covering license rejection, exact cache replay/corruption, failure reporting, mirror origin correlation, scope-safe normalization, alias collisions, conflict/unknown compilation, metadata cycles, duplicate/rival screening, replay-universe invalidation, real EltonTraits columns, and WordNet synonym/license preservation. RED/GREEN evidence for the new compilation/qualification and EltonTraits schema regressions is under `scripts/knowledge/evidence/`. The independent factual audit sample remains pending.
+The checked EltonTraits distributions contain 290,575 retained numeric assertions across 15,393 scientific names. A bounded 100-name sample stores 1,949 assertions. The initial parser conservatively labels 200,163 assertions without confirmed species-level flags uncertain/imputed and 90,412 with support flags; subsequent reviewed bird mappings additionally interpret documented certainty A correctly. These are metadata flags, not independently verified biological facts. The published mammal file requires Windows-1252 decoding; tests cover its actual hyphenated columns and certainty fields.
 
-## Actual compilation and screening
+`enrich_animals.py` queried P225 scientific names and P105 rank for 1,100 animal QIDs. Eleven successful requests returned 1,098 taxon rows, producing 133 exact, unambiguous species-rank joins and 94 acceptable species-level adult-average mass measurements. Four explicit thresholds per measurement produce 376 projections in 94 evidence groups. Raw source numbers, methods, flags and identity receipts are retained. Imputed genus/family/phylogenetic values and length-derived PrimScale methods are rejected. Four mass thresholds remain one topic and one evidence group, so this enrichment alone cannot qualify a profile.
 
-`python3 scripts/knowledge/build_pilot.py` now compiles and screens all 500 pilot identities against the existing structured Wikidata question templates. Unknown values remain absent from Boolean traits, source evidence stays explicit, and no aliases add to the subject count. DBpedia and independent-source proposition mapping remains pending. The resulting five `*-compiled.json` files remain acquisition quarantine. Two consecutive builds produced byte-identical compiled packs. The report records actual proposition counts and screening rejections; every pilot profile still fails the qualified-playable gate.
+Publisher variable documentation was inspected before compiling traits. Mammal Diet/Activity certainty ABC can include congeneric estimates, so those columns remain uncertain for species confirmation. A measurement's scope binds the fact and question without replacing entity/portrayal scope. No missing value creates a negative.
 
-## Independent animal enrichment and reviewed scope
+## Bird pilot: sufficient topic coverage, insufficient distinction
 
-A follow-up `python3 scripts/knowledge/enrich_animals.py` queried P225 scientific names and P105 rank for 1,100 animal identities. Eleven successful bounded requests returned 1,098 taxon rows. Exact single-name species-rank joins found 133 EltonTraits species; 94 had acceptable species-level adult-average mass facts. The resulting 376 explicit threshold projections retain 94 evidence groups, published source numbers/methods/flags, metadata receipts and numeric scopes. Zero new profiles qualify: four thresholds from one mass measurement are one evidence group and one topic. Genus/family/phylogenetic imputations and length-derived PrimScale methods are rejected. Missing claims never supply negatives.
+The 9,995-row bird distribution contains 7,139 rows satisfying Diet-Certainty A, ForStrat-SpecLevel 1, BodyMass-SpecLevel 1 and the Dunning08 mass method. The source-rich ordered sample of 100 rows produced 96 unambiguous Wikidata species/name joins, with no acquisition failures. These 96 subjects each have 22 supported propositions: nine dietary components, seven foraging strata, four adult-average mass thresholds, main nighttime activity and the supplied family classification. All 96 meet the mechanical 20-proposition/five-topic coverage minimum; this is an observed pilot yield, not a long-tail qualification estimate.
 
-The publisher's variable documentation was inspected before this enrichment: mammal Diet/Activity certainty ABC can include congeneric estimates, so those columns have not been promoted into verified species confirmations. Adult mean mass is explicitly distinct from the size of every individual. Fact/question scope is bound to that measurement without incorrectly replacing the subject's entity scope.
+Explicit recorded percentage zero supplies a negative; omission and imputation supply none. Diet components share a diet evidence group, foraging strata share a foraging group and mass thresholds share one mass group. Publisher source indexes and variable metadata identify upstream reference families: Handbook of the Birds of the World, Dunning08 body mass and the supplied BirdLife classification. Their lineage stays distinct while they share the EltonTraits CC0 distribution. The original books/datasets were not independently read or fact-audited; source-family attribution is not an independent verification claim.
 
-The source/identity yield is 133/1,100 exact species joins and 94/1,100 supported numeric enrichments. This is a measured yield for a mammal-heavy legacy cohort, not an estimate that 5,000 adequately distinguished subjects are now available. The next useful animal work is audited species-level bird foraging/diet/activity mappings plus broad accepted taxonomy and independent species records; importing extra thresholds cannot repair missing evidence topics.
+Despite topic coverage, 51 of the 96 subjects participate in 103 pairs with no explicit opposed proposition; 1,005 pairs have fewer than two distinguishing evidence groups. For example, Hartlaub's Spurfowl and Orange-footed Scrubfowl have no explicit distinguishing answer in this projection. An unknown family claim on the other subject does not count as false. The stricter rival screen therefore accepts zero profiles, and no complete-universe replay receipt exists. Numeric minima cannot repair indistinguishable near-rivals.
 
-`python3 scripts/knowledge/stratify.py` also records a 100-subject cohort per theme, including all existing 128 featured profiles plus middle source-density and sparse-tail strata. Source density is a transparent proxy for data difficulty, not a measured familiarity ranking; human familiarity and version-scope audits remain required.
+The next high-yield animal work is reviewed appearance, geographic range and behavior distinctions from compatible primary species datasets, preserving exact taxon/version matches and upstream references. More coarse mass thresholds or taxonomy aliases cannot remedy these measured collisions. Broader bird acquisition should follow a successful near-rival repair pilot, rather than advertise thousands of source-rich rows as playable.
 
-`python3 scripts/knowledge/probe_featured.py` probed all 128 existing featured source links: 22 existing QIDs matched DBpedia, 104 authored source pages produced Wikidata identity candidates and 2 remained unmatched, with no query failures. None was automatically merged. Source pages sometimes describe a work or broad group rather than the intended character portrayal/species/object sense; accepting those sameAs candidates without a scope audit would inflate identity claims.
+## Objects, stratification and existing featured identities
+
+Princeton WordNet 3.0 provides 11,587 noun artifact senses; a bounded 100-sense sample retains aliases, hypernyms and the required notice at `scripts/knowledge/data/wordnet-LICENSE.txt`. Definitions are excluded. Synonyms do not inflate counts, and no label-only object merge is made. Taxonomy alone does not supply twenty familiar propositions. The next object source must add sense-matched uses, materials, locations and parts, with genuinely separate upstream lineage; ConceptNet's WordNet-derived edges would remain correlated with WordNet.
+
+`stratify.py` records 100 subjects per category, including all existing 128 featured profiles plus middle source-density and sparse-tail strata. Source density is a proxy for data difficulty, not measured human familiarity. Human familiarity, close-rival and portrayal/sense audits remain required.
+
+`probe_featured.py` checked all 128 featured source links: 22 existing QIDs matched DBpedia, 104 authored source pages produced identity candidates and two stayed unmatched, with no query failures. None was automatically merged. A source page may describe a work, broad animal group, object sense or another portrayal. Taylor Swift's page, for example, yields multiple QID candidates and cannot safely establish a unique canonical identity alone.
+
+People, fiction and movies still need independently useful, reusable domain-source evidence and reviewed proposition mappings. MusicBrainz core identity facts are a plausible musician subset, not a source for all people; a live known-ID probe returned Taylor Swift's artist record, but those facts are not yet ingested or certified independent of Wikimedia. Fiction's 21/100 DBpedia match rate makes publisher/domain-source curation the concrete bottleneck. More Wikidata rows alone cannot complete this target.
+
+## Verification and limits
+
+Thirty Python behavioral tests pass. They cover source licenses, exact cache replay/corruption/failures, upstream mirror correlation, identity/scope/alias collisions, unknown/conflict compilation, metadata cycles, measurement scopes, citation lineage, duplicate and rival screening, digest/replay-universe invalidation, cross-language safe-number constraints, actual EltonTraits columns, bird uncertainty and explicit zeroes, a 20/five-topic profile with correlated mass thresholds, WordNet notices and stratified uniqueness. RED/GREEN evidence is under `scripts/knowledge/evidence/`.
+
+Independent factual audit and final-universe engine replay are pending. No new incomplete record enters default play; zero newly acquired profiles count toward the release requirement.
+
+Source availability probes are retained in `scripts/knowledge/data/source-availability.json`. The bounded ConceptNet hammer endpoint probe returned HTTP 502 and yielded no assertions; its failed response body was not retained. MusicBrainz's successful known-ID probe has a checksum/retrieval receipt. Neither probe is counted as completed enrichment.
