@@ -236,7 +236,7 @@ export default function App() {
     answeredCount = history.length,
   } = presentation.snapshot ?? {};
   const next = visibleNext;
-  const busy = inferenceBusy || presentation.thinking;
+  const busy = phase === "question" && (inferenceBusy || presentation.thinking);
   const top = candidates[0];
   function cancelPresentation() {
     presentation.cancel();
@@ -468,9 +468,13 @@ export default function App() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   });
-  const mood = presentation.thinking
-    ? "thinking"
-    : (presentation.snapshot?.mood ?? (view === "game" ? "thinking" : "idle"));
+  const mood =
+    phase === "stumped"
+      ? "stumped"
+      : presentation.thinking
+        ? "thinking"
+        : (presentation.snapshot?.mood ??
+          (view === "game" ? "thinking" : "idle"));
   const themePicker = (
     <div className="theme-picker" aria-label="Choose a universe">
       {themeManifest.map((m) => {

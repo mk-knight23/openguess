@@ -20,6 +20,7 @@ configure({ asyncUtilTimeout: 4000 });
 vi.setConfig({ testTimeout: 120000 });
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllGlobals();
   cleanup();
   localStorage.clear();
 });
@@ -561,4 +562,41 @@ it("includes replay-qualified nonfeatured subjects in default gameplay", async (
   await u.click(await screen.findByRole("button", { name: "Start guessing" }));
   await u.click(await screen.findByRole("button", { name: "Detective notes" }));
   expect(screen.getByText("New supported subject")).toBeVisible();
+});
+
+it("shows Give up immediately while the calculation worker is still pending", async () => {
+  class PendingWorker {
+    onmessage: ((event: { data: unknown }) => void) | null = null;
+    onerror = null;
+    pack: any;
+    postMessage(message: any) {
+      if (message.type === "hydrate") this.pack = message.pack;
+      if (message.type === "compute" && message.history.length === 0)
+        queueMicrotask(() =>
+          this.onmessage?.({
+            data: {
+              requestId: message.requestId,
+              candidates: this.pack.characters.map((c: any) => ({
+                id: c.id,
+                probability: 1 / this.pack.characters.length,
+              })),
+              questionId: this.pack.questions[0].id,
+              informationGain: 0.1,
+            },
+          }),
+        );
+    }
+    terminate() {}
+  }
+  vi.stubGlobal("Worker", PendingWorker);
+  render(<App />);
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Start guessing" }),
+  );
+  await screen.findByTestId("question-text");
+  fireEvent.click(screen.getByRole("button", { name: "Yes", exact: true }));
+  fireEvent.click(screen.getByRole("button", { name: "Give up", exact: true }));
+  expect(
+    screen.getByRole("heading", { name: "You stumped me!" }),
+  ).toBeVisible();
 });
