@@ -112,23 +112,30 @@ function independentPremiseSupport(
     )
   )
     return false;
-  const parent = questions.find((q) => q.id === prerequisite.questionId);
-  const children = new Map<string, string[]>();
-  const link = (from: string, to: string) =>
+  type Node = string | symbol;
+  const children = new Map<Node, Node[]>();
+  const groups = new Map<string, symbol>();
+  const link = (from: Node, to: Node) =>
     children.set(from, [...(children.get(from) ?? []), to]);
   for (const q of questions) {
     for (const p of [...(q.prerequisites ?? []), ...(q.followUpTo ?? [])])
       link(p.questionId, q.id);
     for (const rule of q.implications ?? []) link(q.id, rule.questionId);
-    if (
-      (parent?.equivalenceGroup &&
-        q.equivalenceGroup === parent.equivalenceGroup) ||
-      (parent?.relatedGroup && q.relatedGroup === parent.relatedGroup)
-    )
-      link(prerequisite.questionId, q.id);
+    // Group hubs prevent an equivalent or correlated child from being used
+    // as independent evidence for the premise on which that child depends.
+    for (const key of [
+      q.equivalenceGroup && `equivalent:${q.scope}:${q.equivalenceGroup}`,
+      q.relatedGroup && `related:${q.relatedGroup}`,
+    ]) {
+      if (!key) continue;
+      if (!groups.has(key)) groups.set(key, Symbol(key));
+      const hub = groups.get(key)!;
+      link(q.id, hub);
+      link(hub, q.id);
+    }
   }
-  const excluded = new Set([prerequisite.questionId]);
-  const queue = [prerequisite.questionId];
+  const excluded = new Set<Node>([prerequisite.questionId]);
+  const queue: Node[] = [prerequisite.questionId];
   for (let i = 0; i < queue.length; i++)
     for (const id of children.get(queue[i]) ?? [])
       if (!excluded.has(id)) {

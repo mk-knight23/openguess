@@ -183,3 +183,56 @@ it("cannot recover a rejected parent from its own dependent child evidence", () 
     ),
   ).toBeNull();
 });
+
+it("cannot disguise dependent child evidence behind equivalent propositions", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "fictional" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: {
+      parent: value,
+      child: value,
+      alias: value,
+      alias2: value,
+      z: value,
+    },
+  }));
+  const questions = [
+    { id: "parent", text: "Origin?", hint: "" },
+    {
+      id: "child",
+      text: "Child",
+      hint: "",
+      equivalenceGroup: "dependent",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+    ...["alias", "alias2"].map((id) => ({
+      id,
+      text: id,
+      hint: "",
+      equivalenceGroup: "dependent",
+    })),
+    {
+      id: "z",
+      text: "Next child",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [
+    { questionId: "parent", answer: "no" },
+    { questionId: "alias", answer: "yes" },
+    { questionId: "alias2", answer: "yes" },
+  ];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    ),
+  ).toBeNull();
+});
