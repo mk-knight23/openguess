@@ -161,9 +161,9 @@ function independentPremiseSupport(
     profiles.filter(
       (c) => c.traits[prerequisite.questionId] === prerequisite.value,
     ).length / profiles.length;
-  // Catalog prevalence is not corroboration: retained evidence must actually
-  // increase support, and a new contradiction needs subsequent useful evidence.
-  if (posterior < 0.8 || posterior <= prior + 1e-10) return false;
+  // An unasked premise may be supported by the candidate universe. Reopening
+  // a rejected premise needs corroboration beyond catalog prevalence.
+  if (posterior < 0.8) return false;
   const lastContradiction = history.reduce(
     (last, record, index) =>
       record.questionId === prerequisite.questionId &&
@@ -173,6 +173,7 @@ function independentPremiseSupport(
     -1,
   );
   if (lastContradiction >= 0) {
+    if (posterior <= prior + 1e-10) return false;
     const before = history
       .slice(0, lastContradiction)
       .filter((r) => !excluded.has(r.questionId) && r.answer !== "unknown");

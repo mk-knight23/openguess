@@ -270,3 +270,34 @@ it("does not recover a rejected common premise from a universal unrelated answer
   ).toBeLessThan(0.3);
   expect(selectQuestion(ranked, questions, history)).toBeNull();
 });
+
+it("allows a useful child of an unasked unanimous catalog premise", () => {
+  const pool = [true, false].map((value, i) => ({
+    id: String(i),
+    name: String(i),
+    category: "real" as const,
+    description: "",
+    tags: [],
+    color: "",
+    initials: "",
+    traits: { parent: true, universal: true, child: value },
+  }));
+  const questions = [
+    { id: "parent", text: "Is this a real person?", hint: "" },
+    { id: "universal", text: "Universal", hint: "" },
+    {
+      id: "child",
+      text: "Did they lead the Salt March?",
+      hint: "",
+      prerequisites: [{ questionId: "parent", value: true }],
+    },
+  ];
+  const history: AnswerRecord[] = [{ questionId: "universal", answer: "yes" }];
+  expect(
+    selectQuestion(
+      rankCandidates(pool, history, [], questions),
+      questions,
+      history,
+    )?.question.id,
+  ).toBe("child");
+});
