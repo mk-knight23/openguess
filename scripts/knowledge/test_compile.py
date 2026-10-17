@@ -26,3 +26,7 @@ class CompileTests(unittest.TestCase):
             validate_questions([{'id':'a','topic':'x','proposition':'a','implies':['b']},{'id':'b','topic':'x','proposition':'b','implies':['a']}])
         self.assertEqual(self.build([assertion(True)])['traits'], {'q':True})
         self.assertEqual(self.build([assertion(True)]), self.build([assertion(True)]))
+    def test_measurement_scope_is_bound_to_question_not_entire_entity(self):
+        questions=[{'id':'q','topic':'size','proposition':'average-adult-mass','scope':'species adult average'}]
+        result=compile_subjects([{'id':'a','name':'A','scope':'species identity'}],[assertion(True,scope='species adult average')],questions,SOURCE)
+        self.assertEqual(result['subjects'][0]['traits'],{'q':True})

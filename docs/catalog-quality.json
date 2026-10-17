@@ -127,5 +127,23 @@
     "DBpedia and Wikidata share conservative Wikimedia origin; they are not independent corroboration.",
     "Raw structured assertions are not reviewed familiar question propositions.",
     "Complete-universe semantic replay has not run."
-  ]
+  ],
+  "animalEnrichment": {
+    "queriedIds": 1100,
+    "taxonRows": 1098,
+    "exactSpeciesJoins": 133,
+    "subjectsWithSupportedNumericFacts": 94,
+    "supportedBooleanProjections": 376,
+    "evidenceGroups": 94,
+    "screened": 0,
+    "qualified": 0,
+    "failures": [],
+    "limitations": [
+      "Only species-rank Q7432 with one exact scientific-name match is joined.",
+      "Adult average mass questions share one evidence group; four thresholds are not four independent facts.",
+      "Mass-only enrichment has one topic and cannot meet twenty-proposition/five-topic qualification.",
+      "Mammal diet/activity ABC may include congeneric estimates; not compiled as verified.",
+      "No original curated animal identity is merged from a display label."
+    ]
+  }
 }

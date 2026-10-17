@@ -1,0 +1,13 @@
+..................F.......
+======================================================================
+FAIL: test_digest_rejects_numbers_that_cannot_serialize_identically_in_js (test_qualify.QualificationBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mkazi/Documents/ChatGPT/Reverse 2/openguess-v2-scale/scripts/knowledge/test_qualify.py", line 40, in test_digest_rejects_numbers_that_cannot_serialize_identically_in_js
+    with self.assertRaisesRegex(ValueError,'safe integer'): universe_digest(rows,QUESTIONS)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.015s
+
+FAILED (failures=1)

@@ -36,7 +36,7 @@ def compile_subjects(rows, assertions, questions, registry):
         if a['question'] not in index: raise ValueError('unresolved question')
         s = by_id[aliases[a['subject']]]
         status = a.get('status','supported')
-        if a.get('scope','default') != s['scope']: status = 'out-of-scope'
+        if a.get('scope','default') != index[a['question']].get('scope',s['scope']): status = 'out-of-scope'
         if a.get('value') is not True and a.get('value') is not False: status = 'unknown'
         s['factEvidence'].setdefault(a['question'],[]).append({'assertionId':a['id'],'source':a['source'],'origin':origin,'evidenceGroup':a.get('evidenceGroup',a['id']),'status':status,'scope':a.get('scope','default'),'value':a.get('value')})
     for s in subjects:

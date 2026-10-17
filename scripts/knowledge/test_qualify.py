@@ -30,3 +30,13 @@ class QualificationBoundaryTests(unittest.TestCase):
         a,b=subject('a',True),subject('b',False)
         b['factEvidence']={}
         self.assertFalse(qualify([a,b],QUESTIONS)[0]['qualification']['screened'])
+    def test_replay_digest_excludes_derived_qualification_status(self):
+        rows=[subject('a',True),subject('b',False)]
+        screened=qualify(rows,QUESTIONS)
+        self.assertEqual(universe_digest(rows,QUESTIONS),universe_digest(screened,QUESTIONS))
+    def test_digest_rejects_numbers_that_cannot_serialize_identically_in_js(self):
+        rows=[subject('a',True)]
+        rows[0]['weight']=1.5
+        with self.assertRaisesRegex(ValueError,'safe integer'): universe_digest(rows,QUESTIONS)
+        rows[0]['weight']=9007199254740992
+        with self.assertRaisesRegex(ValueError,'safe integer'): universe_digest(rows,QUESTIONS)

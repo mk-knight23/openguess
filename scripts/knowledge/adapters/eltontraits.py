@@ -16,5 +16,5 @@ def parse_traits(text):
             flag=row.get(prefix+separator+'SpecLevel',row.get('SpecLevel',''))
             status='supported' if flag=='1' else 'imputed'
             key=digest((scientific+'|'+predicate+'|'+value).encode())
-            facts.append({'id':'eltontraits:'+key,'subject':scientific,'predicate':predicate,'object':value,'source':'eltontraits','origin':'eltontraits-1.0','status':status,'speciesLevelFlag':flag,'certaintyFlag':row.get(prefix+separator+'Certainty','')})
+            facts.append({'id':'eltontraits:'+key,'subject':scientific,'predicate':predicate,'object':value,'source':'eltontraits','origin':'eltontraits-1.0','status':status,'speciesLevelFlag':flag,'certaintyFlag':row.get(prefix+separator+'Certainty',''),'sourceMethod':row.get(prefix+separator+'Source','')})
     return facts

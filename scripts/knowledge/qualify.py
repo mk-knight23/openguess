@@ -3,7 +3,19 @@ import copy
 from pilot import digest, stable_json
 
 def universe_digest(subjects, questions):
-    return digest(stable_json({'subjects':sorted(subjects,key=lambda s:s['id']),'questions':sorted(questions,key=lambda q:q['id'])}).encode())
+    semantic_subjects=[{k:v for k,v in subject.items() if k!='qualification'} for subject in subjects]
+    projection={'subjects':sorted(semantic_subjects,key=lambda s:s['id']),'questions':sorted(questions,key=lambda q:q['id'])}
+    def validate(value):
+        if isinstance(value,bool) or value is None or isinstance(value,str): return
+        if isinstance(value,(float,int)):
+            if not isinstance(value,int) or abs(value)>9007199254740991: raise ValueError('digest numbers must be safe integers')
+        elif isinstance(value,dict):
+            for item in value.values(): validate(item)
+        elif isinstance(value,list):
+            for item in value: validate(item)
+        else: raise ValueError('unsupported digest value')
+    validate(projection)
+    return digest(stable_json(projection).encode())
 
 def qualify(subjects, questions, replay=None):
     if len({s['id'] for s in subjects}) != len(subjects):
